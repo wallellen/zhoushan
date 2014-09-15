@@ -1,0 +1,620 @@
+<style>
+    		 #three-area{
+				  width : 100%;
+				  max-height: 600px; 
+				  height : 600px ;
+    			 }
+
+     		#info {
+      			color: #000000;
+      			position: absolute;
+      			top: 0;
+      			width: 100%;
+      			padding: 5px;
+      			z-index: 100;
+    		}
+			
+			input[type="text"].m-wrap {
+			  border:1px solid #e5e5e5 !important ;
+			}
+			
+			.divider {
+				border-bottom: 1px solid #eee;
+				margin-bottom: 10px;
+			}
+
+			.tile.image > .tile-body > img {
+			    min-height: 60%;
+			} 
+
+			.tile .tile-object > .name {
+			    color: #1F1E1E;
+			    margin-left: 40px;
+			}
+			    		
+</style>
+
+<div class="row-fluid">
+	<div class="span9">
+		<div class="portlet">
+			<div class="portlet-title">
+				<h4 >仓库名称xx-xx公司</h4>
+				<div id="bt-actions" class="actions">
+					<a id="switchbt-box" class="btn grey mini" ><i class="icon-share icon-black"></i>货物</a>
+					<a id="switchbt-sensor" class="btn grey mini" ><i class="icon-share icon-black"></i>温度传感器</a>
+					<a id="switchbt-reader" class="btn grey mini" ><i class="icon-share icon-black"></i>RFID阅读器</a>
+				</div>
+			</div>
+			<div class="portlet-body span9" id="three-area">
+			</div>
+		</div>
+		<div class="space10"></div>
+		<div> 
+			<h5> 图标说明 :<h5>
+			<div class="tiles">
+				<div class="tile image">
+					<div class="tile-body"><img src="$!request.getContextPath()/public/images/icon_box.png"></img></div>
+					<div class="tile-object">
+					<div class="name">货物</div>
+					</div>
+				</div>		
+				<div class="tile image">
+					<div class="tile-body"><img src="$!request.getContextPath()/public/images/icon_reader.png"></img></div>
+					<div class="tile-object">
+						<div class="name">阅读器</div>
+					</div>
+				</div>
+				<div class="tile image">
+					<div class="tile-body"><img src="$!request.getContextPath()/public/images/icon_sensor.png"></img></div>
+					<div class="tile-object">
+						<div class="name">传感器</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	
+	</div>
+	<div class="span3">
+		<div class="portlet">
+			<div class="portlet-title">
+				<h4 id="info-name">位置信息</h4>
+			</div>
+			<div class="portlet-body" id="info-area">
+				<ul class="span3 unstyled">
+					<li >
+						<div class="input-append ">                
+                          <button class="btn green" type="button">物体信息</button>
+					      <input class="m-wrap" type="text" id="object-info" readonly="readonly">
+                        </div>
+                    </li>
+					<li>
+						<div class="input-append ">                
+                          <button class="btn blue" type="button">X坐标</button>
+					      <input class="m-wrap" type="text" id="coordinate-info-x" readonly="readonly">
+                        </div>
+						<div class="input-append ">                
+                          <button class="btn blue" type="button">Y坐标</button>
+					      <input class="m-wrap" type="text" id="coordinate-info-y"  readonly="readonly">
+                        </div>
+						<div class="input-append ">                
+                          <button class="btn blue" type="button">Z坐标</button>
+					      <input class="m-wrap" type="text" id="coordinate-info-z"  readonly="readonly">
+                        </div>
+                    </li>
+
+				</ul>
+			</div>
+		</div>
+		<div class="portlet">
+			<div class="portlet-title">
+				<h4 id="info-name">详细信息</h4>
+				<div class="actions tools" id="info-btns">
+					<a class="btn grey mini" id="edit" style="display:none"><i class="icon-share icon-black"></i>编辑</a>
+					<a class="btn grey mini" id="open" style="display:none"><i class="icon-share icon-black"></i>开启</a>
+					<a class="btn grey mini" id="close" style="display:none"><i class="icon-share icon-black"></i>关闭</a>
+					<a id="switch" href="javascript:;" class="expand"></a>
+				</div>
+			</div>
+			<div class="portlet-body" id="detail-area" style="display:none">
+				    		    	
+    			<!--仓库信息DIV-->
+				 <div id = "info-area-storage" style="display:none">
+				    <div class="input-append ">                
+                       <button class="btn blue" type="button">仓库别名</button>
+					   <input class="m-wrap" type="text"  id='storage-name' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">仓库长度</button>
+					   <input class="m-wrap" type="text" id='storage-length' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">仓库宽度</button>
+					   <input class="m-wrap" type="text" id='storage-width' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">仓库高度</button>
+					   <input class="m-wrap" type="text" id='storage-height' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">仓库容量</button>
+					   <input class="m-wrap" type="text" id='storage-capacity' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">仓库使用</button>
+					   <input class="m-wrap" type="text" id='storage-used' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">最高温度</button>
+					   <input class="m-wrap" type="text" id='storage-maxTemp' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">最低温度</button>
+					   <input class="m-wrap" type="text" id='storage-minTemp' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">创建时间</button>
+					   <input class="m-wrap" type="text" id='storage-time' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">&nbsp&nbsp&nbsp&nbsp创建人</button>
+					   <input class="m-wrap" type="text" id='storage-creator' readonly="readonly">
+                    </div>
+				 </div>
+				 <!-- 仓库信息DIV -->
+				 
+				<!--商品信息DIV-->
+				 <div id = "info-area-pro" style="display:none">
+				    <div class="input-append ">                
+                       <button class="btn blue" type="button">商品名称</button>
+					   <input class="m-wrap" type="text"  id='pro-name' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">商品总数</button>
+					   <input class="m-wrap" type="text" id='pro-sum' readonly="readonly">
+                    </div>
+		
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">商品介绍</button>
+					   <textarea rows="2" type="text" id='pro-msg' ></textarea>
+                    </div>
+					<div id="chart"></div>
+				 </div>
+				 <!-- 商品信息DIV -->
+
+				 <!-- 货架信息DIV -->
+				 <div id = "info-area-track" style="display:none">
+				    <div class="input-append ">                
+                       <button class="btn blue" type="button">货架商品</button>
+					   <input class="m-wrap" type="text"  id='track-pro' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">&nbsp&nbsp&nbsp&nbsp货架ID</button>
+					   <input class="m-wrap" type="text" id='track-id' readonly="readonly">
+                    </div>
+                    <div class="input-append ">                
+                       <button class="btn blue" type="button">货物箱数</button>
+					   <input class="m-wrap" type="text" id='track-boxCount' >
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">此类货架总数</button>
+					   <input class="m-wrap" type="text" id='track-sum' readonly="readonly">
+                    </div>
+					
+				 </div>
+				 <!-- 货架信息DIV -->
+				 
+				 <!--阅读器信息DIV-->
+				 <div id = "info-area-reader" style="display:none">
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">&nbsp&nbsp&nbsp&nbsp型号&nbsp&nbsp&nbsp&nbsp</button>
+					   <input class="m-wrap" type="text" id='reader-type' readonly="readonly">
+                    </div>
+				    <div class="input-append ">                
+                       <button class="btn blue" type="button">工作状态</button>
+					   <input class="m-wrap" type="text"  id='reader-state' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">工作功率</button>
+					   <input class="m-wrap" type="text" id='reader-power' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">最大频率</button>
+					   <input class="m-wrap" type="text" id='reader-maxFm' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">最小频率</button>
+					   <input class="m-wrap" type="text" id='reader-minFm' readonly="readonly">
+                    </div>
+		
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">查询时间</button>
+					   <input class="m-wrap" type="text" id='reader-scanTime' readonly="readonly">
+                    </div>
+					<div class="divider" ></div>
+					<!--
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">端口编号</button>
+					   <input class="m-wrap" type="text" id='reader-number' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">端口地址</button>
+					   <input class="m-wrap" type="text" id='reader-addr' readonly="readonly">
+                    </div>
+                    -->
+				 </div>
+				 <!-- 阅读器信息DIV -->
+				 
+				 <!--传感器信息DIV-->
+				<div id = "info-area-sensor" style="display:none">
+				    <div class="input-append ">                
+                       <button class="btn blue" type="button">传感器别名</button>
+					   <input class="m-wrap" type="text"  id='sensor-name' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">传感器Mac</button>
+					   <input class="m-wrap" type="text" id='sensor-mac' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">传感器IP&nbsp&nbsp&nbsp&nbsp</button>
+					   <input class="m-wrap" type="text" id='sensor-ip' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">父节点IP&nbsp&nbsp&nbsp&nbsp</button>
+					   <input class="m-wrap" type="text" id='sensor-parentIp' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">传感器类型</button>
+					   <input class="m-wrap" type="text" id='sensor-type' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">传感器状态</button>
+					   <input class="m-wrap" type="text" id='sensor-state' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">所属仓库&nbsp&nbsp&nbsp&nbsp</button>
+					   <input class="m-wrap" type="text" id='sensor-storage' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">传感器位置</button>
+					   <input class="m-wrap" type="text" id='sensor-position' readonly="readonly">
+                    </div>
+					<div class="divider" ></div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">创建者&nbsp&nbsp&nbsp&nbsp</button>
+					   <input class="m-wrap" type="text" id='sensor-creator' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">创建时间</button>
+					   <input class="m-wrap" type="text" id='sensor-creatTime' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">维护者&nbsp&nbsp&nbsp&nbsp</button>
+					   <input class="m-wrap" type="text" id='sensor-mender' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">维护时间</button>
+					   <input class="m-wrap" type="text" id='sensor-mendTime' readonly="readonly">
+                    </div>
+					<div class="input-append ">                
+                       <button class="btn blue" type="button">工作时长</button>
+					   <input class="m-wrap" type="text" id='sensor-workTime' readonly="readonly">
+                    </div>
+					
+				</div>
+				<!-- 传感器信息DIV -->
+    			
+    		</div>
+		</div>
+	</div>
+</div>
+
+<script src="$!request.getContextPath()/public/threeD/three.js"></script>
+<script src="$!request.getContextPath()/public/threeD/ColladaLoader.js"></script>
+<script src="$!request.getContextPath()/public/threeD/THREEx.FullScreen.js"></script>
+<script src="$!request.getContextPath()/public/threeD/Three.FirstPersonControls.js"></script>
+<script src="$!request.getContextPath()/public/threeD/warahouse2.js"></script>
+<script src="$!request.getContextPath()/public/js/socket.io.js"></script>
+
+<script>
+  $(function(){ 
+
+      var container = document.getElementById('three-area');
+	  var d3warahouse = Warahouse2();
+
+	  //socket.io
+  	  var socketCmd =  null , readerInfo ;
+
+  	  var getReaderInfo = function () {
+        
+        if(socketCmd == null) {
+        	socketCmd = io.connect('ws://192.168.2.105:9900');
+        	socketCmd.emit('register', {'storageId': $!{workStorage} });
+			 
+			socketCmd.on('6',function (msg){
+        	readerInfo = msg;
+        	fillReader();
+        });	  
+        }
+
+       		
+	}
+	
+	  d3warahouse.init( container );
+	  container.addEventListener('click', function ( evt ) {
+				getMouseInfo(evt);
+				
+      	}, false);
+			
+	  $('#bt-actions a').click( function (){
+	     toggle($(this));
+	  });
+	 
+	  $('#open').click ( function(){
+	      open();
+	  });
+	  $('#close').click ( function(){
+	      close();
+	  });
+	  
+	  function open() {
+	  
+	     var id = $('#detail-area > div:visible').get(0).id;
+		 if( id == 'info-area-reader')
+		    openReader();
+		 else if ( id == 'info-area-sensor')
+		    openSensor();
+		 
+	  }
+	  
+	  function close() {
+	     var id = $('#detail-area > div:visible').get(0).id;
+		 if( id == 'info-area-reader')
+		    closeReader();
+		 else if ( id == 'info-area-sensor')
+		    closeSensor();
+	  }
+	  
+	  
+	  function setPortState(datas)
+	  {
+		if(datas.res == 0)
+		{
+			$('#port-state').val('打开');
+			$('#port-num').val('COM'+datas.port);
+			$('#port-adr').val(datas.adr);
+		}
+		else
+		{
+			var tmp = $('#port-state').val();
+			if( tmp == ''){
+			$('#port-state').val('关闭');
+			}
+		}
+	  }
+	  
+	  function openReader () {
+	     jQuery.ajax({
+			type:"POST",
+			url:'$pageAbsUrl'+'/warahouse/reader?action=open',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+			    var datas = JSON.parse(res);
+				if( datas.res == 0)
+				   alert('打开成功');
+				else 
+				   alert('打开失败');
+			    setPortState(datas);
+			}
+		});
+	  }
+	  
+	  function toggle( btnClick ){
+	  
+	     //var btnClick = $(btn[0]) ;
+		 var flag = btnClick.hasClass('grey');
+		 
+		 if( flag ){
+		     btnClick.removeClass('grey');
+		     btnClick.addClass('green'); 
+		 }
+		 else {
+		     btnClick.removeClass('green');
+			 btnClick.addClass('grey'); 
+		 }
+		
+		 var id = btnClick.get(0).id;
+		 if( id == 'switchbt-box' )
+		 	d3warahouse.toggleBox(flag);
+		 else if ( id == 'switchbt-reader' )
+		    d3warahouse.toggleReader(flag);
+		 else if ( id == 'switchbt-sensor' )
+		    d3warahouse.toggleSensor(flag);
+		
+		
+	  }
+		
+	  function getMouseInfo ( evt )
+	  {
+	    //获取鼠标点击
+		var info = d3warahouse.getMouseClickInfo( evt );
+		console.log(info);
+		
+		//填充基本信息
+		if( !info ) ;
+		else {
+		   $('#coordinate-info-x').val( info.x );
+		   $('#coordinate-info-y').val(info.y );
+		   $('#coordinate-info-z').val(info.z );
+		   
+		   fillInfo(info);
+		}	
+		
+	  }
+	  
+	  function fillInfo (info){
+	     
+	     var cnName ;
+		 var callback ; 
+	     switch (info.name){
+		   case 'warahouse':
+		       cnName = '仓库';
+			   callback = fillStorage;
+			   break;
+		   case 'box':
+		       cnName = '货物';
+			   callback = fillProducts;
+			   break;
+		   case 'reader':
+		       cnName = '阅读器';
+			   callback = fillReader;
+			   break;
+		   case 'sensor':
+		       cnName = '传感器';
+			   callback = fillSensor;
+			   break;
+		   case 'palletrack':
+		       cnName = '货架';
+		       callback = fillTrack;
+		       break;		     
+		 }
+	  
+		  $('#object-info').val(cnName);
+		  hideOthers();
+		  hideBtns();
+		  
+		  if( typeof(callback) === 'function')  callback( info );
+	  }
+	  
+	  	  
+	  //隐藏其他所有具体信息
+	  function hideOthers () 
+	  {
+	    $('#detail-area').show();
+		$('#switch').removeClass('expand');
+		$('#switch').addClass('collapse');
+		
+	    var others = $('#detail-area > div:visible');
+		
+		for( var i = others.length - 1 ; i >= 0 ; i-- ){
+		    $(others[i]).hide();
+		}
+	  }
+	  
+	  //隐藏其他所有按钮
+	  function hideBtns () 
+	  {
+	    var btns = $('#info-btns .btn');
+		
+		for( var i = btns.length - 1 ; i >= 0 ; i-- ){
+		    $(btns[i]).hide();
+		}
+	  }
+
+	  function fillTrack( info )
+	  {
+	      $('#info-area-track').show();
+	      $('#edit').hide();
+
+	      var trackInfo = info.userData.trackInfo;
+	      $('#track-pro').val(trackInfo.name);
+	      $('#track-id').val(trackInfo.index);
+	      $('#track-boxCount').val(trackInfo.boxCount);
+	      $('#track-sum').val(trackInfo.trackSum);
+	  }
+	  
+	  function fillSensor( info )
+	  {
+	     $('#info-area-sensor').show();
+		 $('#edit').hide(); 
+		  
+		 var sensorInfo = info.userData.sensorInfo;
+		 $('#sensor-name').val(sensorInfo.name);
+		 $('#sensor-mac').val(sensorInfo.extAddr);
+		 $('#sensor-ip').val(sensorInfo.shortAddr);
+		 $('#sensor-parentIp').val(sensorInfo.fatherNode);
+		 $('#sensor-type').val(sensorInfo.nodeTypes);
+		 $('#sensor-state').val(sensorInfo.workStatus);
+		 $('#sensor-storage').val(sensorInfo.storageId);
+		 $('#sensor-position').val(sensorInfo.position);
+		 $('#sensor-creator').val(sensorInfo.creator);
+		 $('#sensor-creatTime').val(sensorInfo.createTime);
+		 $('#sensor-mender').val(sensorInfo.mender);
+		 $('#sensor-mendTime').val(sensorInfo.mendTime);
+		 $('#sensor-workTime').val(sensorInfo.workTime);
+		 
+	  }
+	  
+	  // 填写商品的详细信息
+	  function fillProducts ( info )
+	  {
+	    
+		  $('#info-area-pro').show();
+		  $('#edit').show(); 
+		  
+		  //填写商品信息
+		  var proInfo = info.userData.proInfo ;
+		  $('#pro-name').val(proInfo.name);
+		  $('#pro-id').val(proInfo.id);
+		  $('#pro-sum').val(proInfo.count);
+		  $('#pro-unit').val(proInfo.unit);
+		  $('#pro-msg').val(proInfo.msg ? proInfo.msg : '无备注');
+	  }
+	  
+	  function fillReader (){
+	     //reader info just get from socket.io form here
+	     if( !readerInfo ) getReaderInfo();
+	     
+	     else{
+
+	         $('#info-area-reader').show();
+		
+			 if( readerInfo.res == 48 ){
+			     $('#reader-state').val('关闭');
+				 $('#open').show();
+				 $('#close').hide();
+			 }
+			 else{
+			     $('#reader-state').val('打开');
+				 $('#open').hide();
+				 $('#close').show();
+				 
+			     $('#reader-type').val(readerInfo.readerType);
+				 $('#reader-power').val(readerInfo.powerBm);
+				 $('#reader-maxFm').val(readerInfo.dmaxFre);
+				 $('#reader-minFm').val(readerInfo.dminFre);
+				 $('#reader-scanTime').val(readerInfo.scanTime);
+				 $('#reader-number').val(readerInfo.portNum);
+				 $('#reader-adr').val(readerInfo.portAdr);
+			 }
+		}
+		   
+	  }
+	  
+	  function fillStorage ()
+	  { 
+	  	
+		$('#info-area-storage').show();
+		//$('#edit').show();	 
+		
+		 //填写仓库信息
+		$('#storage-name').val('$storage.name');
+	    $('#storage-length').val('$storage.length');
+		$('#storage-width').val('$storage.width');
+		$('#storage-height').val('$storage.high');
+		$('#storage-capacity').val('$storage.capacity');
+		$('#storage-used').val('$storage.used');
+		$('#storage-maxTemp').val('$storage.maxTemp');
+		$('#storage-minTemp').val('$storage.minTemp');
+		$('#storage-time').val('$storage.createTime');
+		$('#storage-creator').val('$storage.creator');
+	  }
+	  
+		
+  });
+ 
+</script>
+
+

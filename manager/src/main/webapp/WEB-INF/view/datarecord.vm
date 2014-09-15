@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+	<meta charset="utf-8" />
+	<title>Metronic | Admin Dashboard Template</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta content="" name="description" />
+	<meta content="" name="author" />
+	
+  <!-- BEGIN JAVASCRIPTS -->    
+   <!-- Load javascripts at bottom, this will reduce page load time -->
+   <script src="$!request.getContextPath()/public/js/jquery-1.8.3.min.js"></script>    
+   <script src="$!request.getContextPath()/public/breakpoints/breakpoints.js"></script>       
+   <script src="$!request.getContextPath()/public/bootstrap/js/bootstrap.min.js"></script>
+   <script src="$!request.getContextPath()/public/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+   <script src="$!request.getContextPath()/public/js/jquery.blockui.js"></script>
+   <script src="$!request.getContextPath()/public/js/jquery.cookie.js"></script>
+   <!-- ie8 fixes -->
+   <!--[if lt IE 9]>
+   <script src="assets/js/excanvas.js"></script>
+   <script src="assets/js/respond.js"></script>
+   <![endif]-->
+   <script type="text/javascript" src="$!request.getContextPath()/public/chosen-bootstrap/chosen/chosen.jquery.min.js"></script>
+   <script type="text/javascript" src="$!request.getContextPath()/public/uniform/jquery.uniform.min.js"></script>
+   <script type="text/javascript" src="$!request.getContextPath()/public/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script> 
+   <script type="text/javascript" src="$!request.getContextPath()/public/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+   <script type="text/javascript" src="$!request.getContextPath()/public/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js"></script>
+   <script type="text/javascript" src="$!request.getContextPath()/public/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+   <script type="text/javascript" src="$!request.getContextPath()/public/bootstrap-daterangepicker/date.js"></script>
+   <script type="text/javascript" src="$!request.getContextPath()/public/bootstrap-daterangepicker/daterangepicker.js"></script> 
+   <script type="text/javascript" src="$!request.getContextPath()/public/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>  
+   <script type="text/javascript" src="$!request.getContextPath()/public/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+   
+   <script src="$!request.getContextPath()/public/js/app.js"></script> 
+	
+	<!--<link href="$!request.getContextPath()/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/metro.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style_responsive.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style_light.css" rel="stylesheet" id="style_color" />
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link href="$!request.getContextPath()/public/font-awesome/css/font-awesome.css" rel="stylesheet">-->
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+
+<body class="fixed-top">
+	<!--script>
+
+   	jQuery = jQuery.noConflict(true);
+
+
+
+   
+	jQuery(function(){
+		 App.init();
+	});
+
+   <!-- END JAVASCRIPTS >  
+</script-->
+	<div class="row-fluid">
+               <div class="span12">
+                  <div class="portlet box blue" id="form_wizard_1">
+                     <div class="portlet-title">
+                        <h4>
+                           <i class="icon-reorder"></i> Form Wizard - <span class="step-title">Step 1 of 4</span>
+                        </h4>
+                        <div class="tools hidden-phone">
+                           <a href="javascript:;" class="collapse"></a>
+                           <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                           <a href="javascript:;" class="reload"></a>
+                           <a href="javascript:;" class="remove"></a>
+                        </div>
+                     </div>
+                     <div class="portlet-body form">
+                        <form action="#" class="form-horizontal">
+                           <div class="form-wizard">
+                              <div class="navbar steps">
+                                 <div class="navbar-inner">
+                                    <ul class="row-fluid nav nav-pills">
+                                       <li class="span3 active">
+                                          <a href="#tab1" data-toggle="tab" class="step active">
+                                          <span class="number">1</span>
+                                          <span class="desc"><i class="icon-ok"></i> 生产数据</span>   
+                                          </a>
+                                       </li>
+                                       <li class="span3">
+                                          <a href="#tab2" data-toggle="tab" class="step">
+                                          <span class="number">2</span>
+                                          <span class="desc"><i class="icon-ok"></i> 仓储数据</span>   
+                                          </a>
+                                       </li>
+                                       <li class="span3">
+                                          <a href="#tab3" data-toggle="tab" class="step">
+                                          <span class="number">3</span>
+                                          <span class="desc"><i class="icon-ok"></i> 运输数据</span>   
+                                          </a>
+                                       </li>
+                                       <li class="span3">
+                                          <a href="#tab4" data-toggle="tab" class="step">
+                                          <span class="number">4</span>
+                                          <span class="desc"><i class="icon-ok"></i> 二维码</span>   
+                                          </a> 
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </div>
+                              <div id="bar" class="progress progress-success progress-striped">
+                                 <div class="bar" style="width: 25%;"></div>
+                              </div>
+                              <div class="tab-content">
+                                 <div class="tab-pane active" id="tab1">
+                                    <div class="control-group">
+                                       <label class="control-label">原材料名</label>
+                                       <div class="controls">
+                                          <input type="text" class="span6 m-wrap">
+                                       </div>
+                                    </div>
+                                    <div class="control-group">
+                                       <label class="control-label">原材料厂商</label>
+                                       <div class="controls">
+                                          <input type="text" class="span6 m-wrap">
+                                       </div>
+                                    </div>
+                                    <div class="control-group">
+                                       <label class="control-label">原材料产地</label>
+                                       <div class="controls">
+                                          <input type="text" class="span6 m-wrap">
+                                       </div>
+                                    </div>
+									<div class="control-group">
+                                       <label class="control-label">原材料生产日期</label>
+                                       <div class="controls">
+                                         <input type="text" placeholder="日期选择" class="span6 m-wrap" onfocus="HS_setDate(this)">
+                                       </div>
+                                    </div>
+									<div class="control-group">
+                                       <label class="control-label">成品生产日期</label>
+                                       <div class="controls">
+                                          <input type="text" placeholder="日期选择" class="span6 m-wrap" onfocus="HS_setDate(this)">
+                                       </div>
+                                    </div>
+									<div class="control-group">
+                                       <label class="control-label">二维码</label>
+                                       <div class="controls">
+                                          <select class="small m-wrap" tabindex="1">
+                                             <option value="Category 1">Category 1</option>
+                                             <option value="Category 2">Category 2</option>
+                                             <option value="Category 3">Category 3</option>
+                                             <option value="Category 4">Category 4</option>
+                                          </select>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="tab-pane" id="tab2">
+                                    <div class="control-group">
+                                       <label class="control-label">仓储位置</label>
+                                       <div class="controls">
+                                          <input type="text" class="span6 m-wrap">
+                                          <span class="help-inline">Provide your fullname</span>
+                                       </div>
+                                    </div>
+                                    <div class="control-group">
+                                       <label class="control-label">仓储时长</label>
+                                       <div class="controls">
+										  <input type="text" placeholder="YYYY-MM-DD" class="m-wrap small" onfocus="HS_setDate(this)">
+                                          <span class="help-inline">至</span>
+										  <input type="text" placeholder="YYYY-MM-DD" class="m-wrap small" onfocus="HS_setDate(this)">
+                                       </div>
+                                    </div>
+                                    <div class="control-group">
+                                       <label class="control-label">仓储温控</label>
+                                       <div class="controls">
+                                          <input type="text" class="span6 m-wrap">
+                                          <span class="help-inline">Provide your phone number</span>
+                                       </div>
+                                    </div>                                 
+                                 </div>
+                                 <div class="tab-pane" id="tab3">
+                                    <div class="control-group">
+                                       <label class="control-label">运输始发地</label>
+                                       <div class="controls">
+                                          <input type="text" class="span6 m-wrap">
+                                          <span class="help-inline">Provide your fullname</span>
+                                       </div>
+                                    </div>
+                                    <div class="control-group">
+                                       <label class="control-label">运输时长</label>
+                                       <div class="controls">
+										  <input type="text" placeholder="YYYY-MM-DD" class="m-wrap small" onfocus="HS_setDate(this)">
+                                          <span class="help-inline">至</span>
+										  <input type="text" placeholder="YYYY-MM-DD" class="m-wrap small" onfocus="HS_setDate(this)">
+                                       </div>
+                                    </div>
+									<div class="control-group">
+                                       <label class="control-label">运输区间</label>
+                                       <div class="controls">
+										  <input type="text" placeholder="始发地" class="m-wrap small">
+                                          <span class="help-inline">至</span>
+										  <input type="text" placeholder="终到地" class="m-wrap small">
+                                       </div>
+                                    </div>
+                                    <div class="control-group">
+                                       <label class="control-label">运输温控</label>
+                                       <div class="controls">
+                                          <input type="text" class="span6 m-wrap">
+                                          <span class="help-inline">Provide your phone number</span>
+                                       </div>
+                                    </div>           
+                                 </div>
+                                 <div class="tab-pane" id="tab4">
+                                    <div class="control-group">
+                                       <label class="control-label">二维码</label>
+                                       <div class="controls">
+                                          <select class="small m-wrap" tabindex="1">
+                                             <option value="Category 1">Category 1</option>
+                                             <option value="Category 2">Category 2</option>
+                                             <option value="Category 3">Category 3</option>
+                                             <option value="Category 4">Category 4</option>
+                                          </select>
+										  <span class="help-inline">请关联产品的二维码</span>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="form-actions clearfix">
+                                 <a href="javascript:;" class="btn button-previous" style="display: none;">
+                                 <i class="m-icon-swapleft"></i> Back 
+                                 </a>
+                                 <a href="javascript:;" class="btn blue button-next" style="display: inline-block;">
+                                 Continue <i class="m-icon-swapright m-icon-white"></i>
+                                 </a>
+                                 <a href="javascript:;" class="btn green button-submit" style="display: none;">
+                                 Submit <i class="m-icon-swapright m-icon-white"></i>
+                                 </a>
+                              </div>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+     
+</body>
+<!-- END BODY -->
+</html>
+
+
+
+
+   
+
+  

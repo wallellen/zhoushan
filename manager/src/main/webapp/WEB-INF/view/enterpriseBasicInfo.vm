@@ -1,0 +1,56 @@
+<body>
+	<div style="height: auto;"  class="span12">
+		<form action="#">
+			<label class="control-label">企业ID号</label>
+			<input type="text" placeholder="1000" class="m-wrap span8" id="input_id">
+			<label class="control-label">企业名称</label>
+			<input type="text" placeholder="杭州太极" class="m-wrap span8" id="input_name">
+			<label class="control-label">联系电话</label>
+			<input type="text" placeholder="+1 646 580 DEMO (6284)" class="m-wrap span8" id="input_phone">
+			<label class="control-label">联系邮箱</label>
+			<input type="text" placeholder="test@admin.com" class="m-wrap span8" id="input_email">
+			<label class="control-label">简介</label>
+			<textarea class="span8 m-wrap" rows="3" id="input_about"></textarea>
+			<label class="control-label">网站链接</label>
+			<input type="text" placeholder="http://www.mywebsite.com" class="m-wrap span8" id="input_website">
+			<div class="submit-btn">
+				<a href="#" class="btn green" id="bt_save_basic">Save Changes</a>
+				<a href="#" class="btn">Cancel</a>
+			</div>
+		</form>
+	</div>
+</body>
+<script>
+	jQuery(function(){
+		setBasicInfo();
+	});
+
+	function setBasicInfo()
+	{
+		jQuery.ajax({
+			type:"GET",
+			url:'$pageAbsUrl'+'/maintainManager/enterpriseBasic?action=get_basic',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+				console.log(JSON.parse(res));
+				setBasic(JSON.parse(res));
+			}
+		});
+	}
+
+	var setBasic = function(data)
+	{
+		$('#input_id').val(data.id);
+		$('#input_name').val(data.name);
+		$('#input_phone').val(data.phone);
+		$('#input_email').val(data.email);
+		$('#input_about').val(data.description);
+		$('#input_website').val("无");
+
+		$('#level_storage').val(data.storageService);
+		$('#level_temp').val(data.tempService);
+		$('#level_trace').val(data.traceService);
+	}
+</script>

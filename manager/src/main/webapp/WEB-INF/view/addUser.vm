@@ -1,0 +1,144 @@
+<body>
+	<div class="span12">
+		<div style="height: auto;" id="accordion1-1" class="accordion">
+			<form action="#">
+			    <div style="border-bottom: 1px solid #eee;">
+					<label class="control-label">用户ID</label>
+					<input type="text" placeholder="神行太保" class="m-wrap span8" id="input_id">
+					<label class="control-label">用户姓名</label>
+					<input type="text" placeholder="戴宗" class="m-wrap span8" id="input_name">
+					<label class="control-label">用户密码</label>
+					<input type="text" placeholder="123" class="m-wrap span8" id="input_passwd">
+					<label class="control-label">性别</label>
+					<div class="btn-group row-fluid" style="margin-bottom: 10px;">
+						<a class="btn span2 green" id="bt_sex">男</a>
+					</div>
+					<label class="control-label">权限配置</label>
+					<div class="btn-group row-fluid" style="margin-bottom: 10px;">
+	    				<a class="btn span2 bt_privilege red" id="bt_privilege_storage">仓储服务</a>
+	    				<a class="btn span2 bt_privilege red" id="bt_privilege_temp">温控服务</a>
+	    				<a class="btn span2 bt_privilege red" id="bt_privilege_trace">溯源服务</a>
+	    			</div>
+    			<div>
+
+    			<div class="space10"></div>
+    			<div class="profile-settings">
+        			<h4> 可用仓库 </h4>
+        			<table class="table table-bordered table-hover" id="table_storage">
+						<thead>
+							<tr>
+								<th>仓库ID</th>
+								<th>仓库名</th>
+								<th>长</th>
+								<th>宽</th>
+								<th>高</th>
+								<th>容量</th>
+								<th>已用</th>
+								<th>最高温度</th>
+								<th>最低温度</th>
+							</tr>
+						</thead>
+						<tbody>
+						 </tbody>
+						</table>
+				</div>
+
+				<div class="profile-settings ">
+					<label class="control-label">仓库分配</label>
+					<div class="chat-form">
+	                    <div class="input-cont" id="storage_to_add">   
+	                      <span class='label label-important'>NOTE!</span>
+	                    </div>
+                 	</div>
+					<label class="control-label">缺省仓库</label>
+					<input type="text" placeholder="1" class="m-wrap span8" id="input_website">
+					<div class="submit-btn">
+						<a href="#" class="btn green" id="bt_save_basic">提交</a>
+						<a href="#" class="btn">取消</a>
+					</div>
+				</div>
+			</form>
+				
+		</div>
+	</div>
+</body>
+<script>
+	jQuery(function(){
+
+      $('#bt_sex').click(function () {
+      	toggeleGR($(this),['女','男']);
+      });
+
+      $('.bt_privilege').click(function(){
+      	toggeleGR($(this));
+      });
+
+      $('#table_storage tbody').on('click', 'tr td.td_id', function(){
+      	var chosen = $(this);
+      	var span = chosen.children('span');
+      	if (span.hasClass('label-success'))
+      	{
+      		span.removeClass('label-success');
+      		$('#storage_to_add #selected_storage_'+span.text()).remove();
+      	}
+      	else
+      	{
+      		span.addClass('label-success');
+      		$('#storage_to_add').append("<span class='label label-success'  id='selected_storage_"+span.text()+ "' style='margin-right:2px'>"+$(this).text()+"</span>");
+      	}
+      });
+
+      setStorageTable();
+
+	});
+
+	var addStorageTable = function(storage)
+	{
+		var trString = "<tr><td class='td_id'><span class='label'>"+storage.id+"</span></td>";
+ 		var array_index = ['name', 'length', 'width','high','capacity', 'used', 'maxTemp', 'minTemp'];
+ 		for (var i in array_index) {
+ 			trString += "<td>"+storage[array_index[i]]+"</td>";
+ 		};
+ 		trString +="</tr>";
+ 		return trString;
+	}
+
+	var setTable = function(datas)
+	{
+		var table = $('#table_storage tbody');
+		for (var i = datas.length - 1; i >= 0; i--) {
+			table.append(addStorageTable(datas[i]));
+		};
+	}
+
+	function setStorageTable()
+	{
+		jQuery.ajax({
+			type:"GET",
+			url:'$pageAbsUrl'+'/userManager/storageCont?action=get_all',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+				console.log(JSON.parse(res));
+				setTable(JSON.parse(res));
+			}
+		});
+	}
+
+	function toggeleGR(chosen, array_text)
+	{
+		if(chosen.hasClass('green'))
+		{
+			chosen.removeClass('green');
+			chosen.addClass('red');
+			if(array_text) chosen.text(array_text[0]);
+		}
+		else if(chosen.hasClass('red'))
+		{
+			chosen.removeClass('red');
+			chosen.addClass('green');
+			if(array_text) chosen.text(array_text[1]);
+		}
+	}
+</script>

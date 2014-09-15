@@ -1,0 +1,647 @@
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+	<meta charset="utf-8" />
+	<title>智能仓库管理平台</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta content="" name="description" />
+	<meta content="" name="author" />
+	<link href="$!request.getContextPath()/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/metro.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style_responsive.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style_light.css" rel="stylesheet" id="style_color" />
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link href="$!request.getContextPath()/public/font-awesome/css/font-awesome.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="$!request.getContextPath()/public/css/style_product_query.css" />
+	<script src="$!request.getContextPath()/public/js/jquery-1.8.3.min.js"></script>
+	<script src="$!request.getContextPath()/public/bootstrap/js/bootstrap.min.js"></script>
+	<script src="$!request.getContextPath()/public/js/socket.io.js"></script>
+	<style >
+		.workStorageClass {
+			background:green;
+		}
+		.selectStorage{
+			vertical-align:middle;
+		}
+		.storagelable {
+			margin-bottom: 0px !important;
+			padding-bottom : 5px !important;
+		}
+    </style>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="fixed-top">
+	#set($pageAbsUrl = "$!request.getServerName()"+"$!request.getContextPath()"+"$!request.getServletPath()")
+	<!-- BEGIN HEADER -->
+	<div class="header navbar navbar-inverse navbar-fixed-top">
+		<!-- BEGIN TOP NAVIGATION BAR -->
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<!-- BEGIN LOGO -->
+				<p class="brand" >
+				智能仓库管理平台  
+				</p>
+				<!-- END LOGO -->
+				<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+				<a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+				<img src="$pageAbsUrl/public/img/menu-toggler.png" alt="" />
+				</a>          
+				<!-- END RESPONSIVE MENU TOGGLER -->				
+				<!-- BEGIN TOP NAVIGATION MENU -->					
+				<ul class="nav pull-right">
+					<!-- BEGIN NOTIFICATION DROPDOWN -->	
+					<li class="dropdown" id="header_notification_bar">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="icon-warning-sign"></i>
+						<span class="badge">6</span>
+						</a>
+						<ul class="dropdown-menu extended notification">
+							<li>
+								<p>You have 14 new notifications</p>
+							</li>
+							<li>
+								<a href="javascript:;" onclick="App.onNotificationClick(1)">
+								<span class="label label-success"><i class="icon-plus"></i></span>
+								New user registered. 
+								<span class="time">Just now</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="label label-important"><i class="icon-bolt"></i></span>
+								Server #12 overloaded. 
+								<span class="time">15 mins</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="label label-warning"><i class="icon-bell"></i></span>
+								Server #2 not respoding.
+								<span class="time">22 mins</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="label label-info"><i class="icon-bullhorn"></i></span>
+								Application error.
+								<span class="time">40 mins</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="label label-important"><i class="icon-bolt"></i></span>
+								Database overloaded 68%. 
+								<span class="time">2 hrs</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="label label-important"><i class="icon-bolt"></i></span>
+								2 user IP blocked.
+								<span class="time">5 hrs</span>
+								</a>
+							</li>
+							<li class="external">
+								<a href="#">See all notifications <i class="m-icon-swapright"></i></a>
+							</li>
+						</ul>
+					</li>
+					<!-- END NOTIFICATION DROPDOWN -->
+					<!-- BEGIN INBOX DROPDOWN -->
+					<li class="dropdown" id="header_inbox_bar">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="icon-envelope-alt"></i>
+						<span class="badge " id="badge_msg_number">0</span>
+						</a>
+						<ul class="dropdown-menu extended inbox" id="message_container">
+							<li>
+								<p>你有<span>0</span>封短信</p>
+							</li>
+							
+							<li class="external" id="message_end">
+								<a href="#">查看所有消息 <i class="m-icon-swapright"></i></a>
+							</li>
+						</ul>
+					</li>
+					<!-- END INBOX DROPDOWN -->
+					<!-- BEGIN TODO DROPDOWN -->
+					<li class="dropdown" id="header_task_bar">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="icon-tasks"></i>
+						<span class="badge">5</span>
+						</a>
+						<ul class="dropdown-menu extended tasks">
+							<li>
+								<p>You have 12 pending tasks</p>
+							</li>
+							<li>
+								<a href="#">
+								<span class="task">
+								<span class="desc">New release v1.2</span>
+								<span class="percent">30%</span>
+								</span>
+								<span class="progress progress-success ">
+								<span style="width: 30%;" class="bar"></span>
+								</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="task">
+								<span class="desc">Application deployment</span>
+								<span class="percent">65%</span>
+								</span>
+								<span class="progress progress-danger progress-striped active">
+								<span style="width: 65%;" class="bar"></span>
+								</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="task">
+								<span class="desc">Mobile app release</span>
+								<span class="percent">98%</span>
+								</span>
+								<span class="progress progress-success">
+								<span style="width: 98%;" class="bar"></span>
+								</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="task">
+								<span class="desc">Database migration</span>
+								<span class="percent">10%</span>
+								</span>
+								<span class="progress progress-warning progress-striped">
+								<span style="width: 10%;" class="bar"></span>
+								</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="task">
+								<span class="desc">Web server upgrade</span>
+								<span class="percent">58%</span>
+								</span>
+								<span class="progress progress-info">
+								<span style="width: 58%;" class="bar"></span>
+								</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+								<span class="task">
+								<span class="desc">Mobile development</span>
+								<span class="percent">85%</span>
+								</span>
+								<span class="progress progress-success">
+								<span style="width: 85%;" class="bar"></span>
+								</span>
+								</a>
+							</li>
+							<li class="external">
+								<a href="#">See all tasks <i class="m-icon-swapright"></i></a>
+							</li>
+						</ul>
+					</li>
+					<!-- END TODO DROPDOWN -->
+					<!-- BEGIN USER LOGIN DROPDOWN -->
+					<li class="dropdown user" id="userLi">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="openUser">
+						<img alt="" src="$pageAbsUrl/public/img/avatar1_small.jpg" />
+						<span class="username">${userName}</span>
+						<i class="icon-angle-down"></i>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="extra_profile.html"><i class="icon-user"></i> My Profile</a></li>
+							<li><a href="calendar.html"><i class="icon-calendar"></i> My Calendar</a></li>
+							<li><a href="#"><i class="icon-tasks"></i> My Tasks</a></li>
+							<li class="divider"></li>
+							<li><a href="$pageAbsUrl/logout"><i class="icon-key"></i> Log Out</a></li>
+						</ul>
+						
+					</li>
+					<!-- END USER LOGIN DROPDOWN -->
+				</ul>
+				<!-- END TOP NAVIGATION MENU -->	
+			</div>
+		</div>
+		<!-- END TOP NAVIGATION BAR -->
+	</div>
+	<!-- END HEADER -->
+	<!-- BEGIN CONTAINER -->
+	<div class="page-container row-fluid">
+		<!-- BEGIN SIDEBAR -->
+		<div class="page-sidebar nav-collapse collapse">
+			<!-- BEGIN SIDEBAR MENU -->        	
+			<ul>
+				<li>
+					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+					<div class="sidebar-toggler hidden-phone"></div>
+					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+				</li>
+	            <li><p> </p></li>
+				#if($!{userPosition} == 2)
+    				<li id="dashboard" class="start">
+    					<a href="$pageAbsUrl/dashboard">
+    					<i class="icon-home"></i> 
+    					<span class="title">主页</span>
+    					<span class="selected"></span>
+    					</a>
+    				</li>
+    				<li id="warahouse" class="has-sub ">
+    					<a href="javascript:;">
+    					<i class="icon-truck"></i> 
+    					<span class="title">仓库管理</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+    						<li id="in"><a href="$pageAbsUrl/warahouse/inventoryInOut">出入库管理</a></li>
+    						<li id="repository"><a href="$pageAbsUrl/warahouse/repository">仓库预览</a></li>
+    						<li id="product"><a href="$pageAbsUrl/warahouse/inventory">商品管理</a></li>
+    						<li id="reader"><a href="$pageAbsUrl/warahouse/rfidReader">阅读器管理</a></li>
+    					</ul>
+    				</li>
+    
+    				<li id="TempMonitor" class="has-sub ">
+    					<a href="javascript:;">
+    					<i class="icon-bar-chart"></i> 
+    					<span class="title">温控管理</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+    						<li id="realTimeData"><a href="$pageAbsUrl/TempMonitor/realTimeData">实时温度</a></li>
+    						<li id="historyData"><a href="$pageAbsUrl/TempMonitor/historyData">历史温度</a></li>
+    						<li id="exceptionData"><a href="$pageAbsUrl/TempMonitor/exceptionData">异常历史</a></li>
+    						<li id="sensorManager"><a href="$pageAbsUrl/TempMonitor/sensorManager">传感器管理</a></li>
+    						<li id="storageManager"><a href="$pageAbsUrl/TempMonitor/storageManager">仓库管理</a></li>
+    						<li id="tmDownload"><a href="$pageAbsUrl/TempMonitor/tmDownload">移动监控平台</a></li>
+    					</ul>
+    				</li>
+    
+    				<li class="has-sub " id="Traceability">
+    					<a href="javascript:;">
+    					<i class="icon-table"></i> 
+    					<span class="title">溯源管理</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+							<li id="rawmaterialManager"><a href="$pageAbsUrl/Traceability/rawmaterialManager">原料管理</a></li>
+
+							<li id="productionManager"><a href="$pageAbsUrl/Traceability/productionManager">产品管理</a></li>
+
+							<li id="dataManager"><a href="$pageAbsUrl/Traceability/dataManager">数据管理</a></li>
+
+    						<li id="productionStatistics"><a href="$pageAbsUrl/Traceability/productionStatistics">产品统计</a></li>
+							<li ><a href="$pageAbsUrl/Traceability/datarecord">数据录入</a></li>
+    						<li ><a href="$pageAbsUrl/Traceability/dataquery">数据查询</a></li>
+    						<li ><a href="#">移动APP</a></li>
+    					</ul>
+    				</li>
+    	
+    				<li class="has-sub " id="commonFunction">
+    					<a href="javascript:;">
+    					<i class="icon-briefcase"></i> 
+    					<span class="title">其他</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+						<li id="messageManager"><a href="$pageAbsUrl/commonFunction/messageManager">消息管理</a></li>
+    						<li ><a href="$pageAbsUrl/extra/userinfo">用户信息</a></li>
+    						<li ><a href="#">用户管理</a></li>
+    						<li ><a href="#">数据库管理</a></li>
+    						<li ><a href="error_404">404 Page</a></li>
+    						<li ><a href="500.html">500 Page</a></li>
+    						<li ><a href="#">Full Width Page</a></li>
+    					</ul>
+    				</li>
+    				<li class="">
+    					<a href="$pageAbsUrl/index.html">
+    					<i class="icon-user"></i> 
+    					<span class="title">登陆</span>
+    					</a>
+    				</li>
+				#elseif($!{userPosition} == 1)
+					<li id="dashboard" class="start">
+    					<a href="$pageAbsUrl/dashboard">
+    					<i class="icon-home"></i> 
+    					<span class="title">主页</span>
+    					<span class="selected"></span>
+    					</a>
+    				</li>
+					
+					<li id="maintainManager" class="has-sub ">
+    					<a href="javascript:;">
+    					<i class="icon-bar-chart"></i> 
+    					<span class="title">维护管理</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+    						<li id=""><a href="$pageAbsUrl/maintainManager/enterpriseBasic">基本信息</a></li>
+							<li id="realTimeData"><a href="$pageAbsUrl/maintainManager/storageService">仓储权限</a></li>
+							<li id="realTimeData"><a href="$pageAbsUrl/maintainManager/tempService">温控权限</a></li>
+							<li id="realTimeData"><a href="$pageAbsUrl/maintainManager/traceService">溯源权限</a></li>
+    					</ul>
+    				</li>
+					
+					<li id="userManager" class="has-sub ">
+    					<a href="javascript:;">
+    					<i class="icon-bar-chart"></i> 
+    					<span class="title">用户管理</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+    						<li id="userList"><a href="$pageAbsUrl/userManager/userList">用户列表</a></li>
+							<li id="addUser"><a href="$pageAbsUrl/userManager/addUser">添加用户</a></li>
+    					</ul>
+    				</li>
+					
+					<li id="messageManager" class="has-sub ">
+    					<a href="javascript:;">
+    					<i class="icon-table"></i>
+    					<span class="title">消息管理</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+    						<li id="realTimeData"><a href="$pageAbsUrl/messageManager/messageList">消息列表</a></li>
+    					</ul>
+    				</li>
+				#elseif($!{userPosition} == 0)
+					<li id="dashboard" class="start">
+    					<a href="$pageAbsUrl/dashboard">
+    					<i class="icon-home"></i> 
+    					<span class="title">主页</span>
+    					<span class="selected"></span>
+    					</a>
+    				</li>
+					
+					<li id="enterpriseManager" class="has-sub ">
+    					<a href="javascript:;">
+    					<i class="icon-bar-chart"></i> 
+    					<span class="title">企业管理</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+    						<li id="enterpriseList"><a href="$pageAbsUrl/enterpriseManager/enterpriseList">企业列表</a></li>
+							<li id="enterpriseMaintain"><a href="$pageAbsUrl/enterpriseManager/enterpriseMaintain">企业维护</a></li>
+    					</ul>
+    				</li>
+					
+					<li id="privilegeManager" class="has-sub ">
+    					<a href="javascript:;">
+    					<i class="icon-table"></i>
+    					<span class="title">权限管理</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+    						<li id="privilegeTree"><a href="$pageAbsUrl/privilegeManager/privilegeTree">权限树</a></li>
+							<li id="privilegeSet"><a href="$pageAbsUrl/privilegeManager/privilegeSet">权限配置</a></li>
+    					</ul>
+    				</li>
+
+    				<li id="messageHandle" class="has-sub ">
+    					<a href="javascript:;">
+    					<i class="icon-table"></i>
+    					<span class="title">申请管理</span>
+    					<span class="arrow "></span>
+    					</a>
+    					<ul class="sub">
+    						<li id="realTimeData"><a href="#">注册申请</a></li>
+							<li id="realTimeData"><a href="#">服务申请</a></li>
+    					</ul>
+    				</li>	
+			
+				#end
+			</ul>
+			<!-- END SIDEBAR MENU -->
+		</div>
+		<!-- END SIDEBAR -->
+		<!-- BEGIN PAGE -->
+		<div class="page-content">
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+			<div id="portlet-config" class="modal hide">
+				<div class="modal-header">
+					<button data-dismiss="modal" class="close" type="button"></button>
+					<h3>Widget Settings</h3>
+				</div>
+				<div class="modal-body">
+					<p>Here will be a configuration form</p>
+				</div>
+			</div>
+			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+			<!-- BEGIN PAGE CONTAINER-->
+			<div class="container-fluid">
+				<!-- BEGIN PAGE HEADER-->
+				<div class="row-fluid">
+					<div class="span12">
+						<!-- BEGIN STYLE CUSTOMIZER -->
+						<div class="color-panel hidden-phone">
+							<div class="color-mode-icons icon-color tooltips" data-placement="left" data-original-title="一键切换仓库"></div>
+							<div class="color-mode-icons icon-color-close tooltips" ></div>
+							<div class="color-mode">
+								<p>切换仓库</p>
+								
+								#foreach($storage in ${storageList})
+									#if($!{storage.id} ==$!{workStorage})
+										#set($workStorageClass="workStorageClass")
+									#else
+										#set($workStorageClass="")
+									#end
+								<label class="hidden-phone storagelable ${workStorageClass}">
+								<span class="color-mode-label selectStorage " workstorageid='${storage.id}'>${storage.name}</span>
+								</label>
+								#end
+								
+							</div>
+						</div>
+						<!-- END BEGIN STYLE CUSTOMIZER -->   	
+						<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
+						<h3 class="page-title">
+						        <!-- 用于路径导航中文化 -->
+							<script type="text/javascript">
+								var currentLocations = [];
+							</script>
+							<!-- location-->
+							<small>$!location_info</small>
+						</h3>
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home"></i>
+								<a href="$pageAbsUrl/dashboard">主页</a> 
+							</li>
+							
+							#set($currentController = "")
+							#set($i = 0)
+							#foreach($elem in $locations)
+							    #if($elem != '')
+									<script type="text/javascript">
+										
+										currentLocations.push('$elem');
+									</script>	
+								#end
+								#if($elem != '' && $i != ${locations.size()} - 1)
+									#set($currentController = $currentController + ${elem}+'/')
+								#else
+									#set($currentController = $currentController + ${elem})
+								#end
+								#set($i = $i + 1)
+								
+							#end
+
+						</ul>
+						<!-- END PAGE TITLE & BREADCRUMB-->
+					</div>
+				</div>
+				<!-- END PAGE HEADER-->
+				<div id="content">
+				<!-- -引用的位置如：/WEB-INF/view/hello.vm-->
+				#parse($!content_page)
+				</div>
+			</div>
+			<!-- END PAGE CONTAINER-->		
+		</div>
+		<!-- END PAGE -->
+	</div>
+	<!-- END CONTAINER -->
+	<!-- BEGIN FOOTER -->
+	<div class="footer">
+		2013 &copy; CCNT.
+		<div class="span pull-right">
+			<span class="go-top"><i class="icon-angle-up"></i></span>
+		</div>
+	</div>
+	<!-- END FOOTER -->
+	<!-- BEGIN JAVASCRIPTS -->
+
+	<!--Next is for model use-->
+	<div id="message_model" style="display:none;">
+		<li>
+			<a href="{0}">
+			<span class="photo"><img src="$pageAbsUrl/public/img/avatar2.jpg" alt="" /></span>
+			<span class="subject">
+			<span class="from">{1}</span>
+			<span class="time">{2}</span>
+			</span>
+			<span class="message">
+			{3}
+			</span>  
+			</a>
+		</li>
+	</div>
+	<!--model is over-->
+	<!-- Load javascripts at bottom, this will reduce page load time -->
+	<!--[if lt IE 9]>
+	<script src="public/js/excanvas.js"></script>
+	<script src="public/js/respond.js"></script>	
+	<![endif]-->	
+	<script src="$!request.getContextPath()/public/breakpoints/breakpoints.js"></script>		
+	<script src="$!request.getContextPath()/public/jquery-ui/jquery-ui-1.10.1.custom.min.js"></script>	
+	<script src="$!request.getContextPath()/public/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="$!request.getContextPath()/public/js/jquery.blockui.js"></script>	
+	<script src="$!request.getContextPath()/public/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="$!request.getContextPath()/public/js/jquery.pulsate.min.js"></script>
+	<script src="$!request.getContextPath()/public/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+	<script src="$!request.getContextPath()/public/ConstantJs/ConstantVariable.js"></script>
+	<script src="$!request.getContextPath()/public/js/app.js"></script>				
+	<script type="text/javascript">
+
+		String.prototype.format = function()
+		{
+		    var args = arguments;
+		    return this.replace(/\{(\d+)\}/g,                
+		        function(m,i){
+		            return args[i];
+		        });
+		};
+		//设置当前路径面包屑导航		
+		function setBreadCrumb()
+		{
+			if(currentLocations.length > 0)
+				jQuery('.page-title').prepend(locationArray[currentLocations[currentLocations.length-1]]+'    ');
+				
+			for(var location in currentLocations)
+			{
+			 jQuery('.breadcrumb').append("<li><i class='icon-angle-right'></i><a href='#'>"+locationArray[currentLocations[location]]+"</a></li>");
+			}
+		}
+		
+		//设置左侧导航
+		function setSidebar()
+		{
+		    var currentLocation = '$!{currentController}';
+			var locationList = currentLocation.split("/");
+			for(var i=0;i<locationList.length;i++){
+				if(locationList[i] != '' &&locationList[i] != ' '){
+					jQuery("#"+locationList[i]).addClass("active");
+				}
+			}
+		}
+
+		function setWorkingStorage(){
+			jQuery(".selectStorage").click(function(){
+				jQuery.ajax({
+					type:"POST",
+					url:"$!request.getContextPath()/TempMonitor/storageManager",
+					data:{action:'changeWorkStorage',storageId:jQuery(this).attr("workstorageid")},
+					success:function(data){
+						if(data == "success"){
+							location.href="$!request.getContextPath()/$!{currentController}";
+						}
+					}
+					
+				});
+			});
+		}
+
+		function connectSysMsg(){
+			var msgEnd = jQuery("#message_end");
+			msgEnd.children().attr("href","$pageAbsUrl/commonFunction/messageManager");
+			var sysMsg = io.connect('ws://localhost:9004');
+			sysMsg.on('connect',function(){
+				sysMsg.emit('whoami', '$!{userName}');
+				sysMsg.on('pushMsg', function(data){
+					if (data.totalMsg != undefined) {
+						msgEnd.children().text("您一共有" + data.totalMsg + "条未读短信");
+						msgEnd.children().append("<i class='m-icon-swapright'></i>");
+					}else {
+						addMsg(data);
+					}			
+				});
+			});
+		}
+
+		function addMsg(data){
+			var msgNumberJ = jQuery("#message_container>li:first>p>span");
+			msgNumberJ.text(parseInt(msgNumberJ.text()) + 1);
+			jQuery("#badge_msg_number").text(msgNumberJ.text());
+			var msgEnd = jQuery("#message_end");
+			var msgModel = jQuery("#message_model").html();
+			msgEnd.before(msgModel.format("$pageAbsUrl/commonFunction/messageManager?messageId="+data.messageId,data.fromWho,data.time,data.title));
+		}
+
+		jQuery(document).ready(function() {	
+
+			App.init(); // init the rest of plugins and element
+			
+			//设置位置导航
+			setBreadCrumb();
+			setSidebar();
+			//仓库选择绑定	
+			setWorkingStorage();
+
+			//连接消息组件获取实时消息
+			connectSysMsg();
+		});
+	</script>
+	<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

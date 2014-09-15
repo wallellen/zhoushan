@@ -1,0 +1,376 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<style >
+		@-webkit-keyframes twinkle {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		@-moz-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		@-ms-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		.twinkle{
+            -webkit-animation: twinkle 1s alternate infinite;
+            -moz-animation: twinkle 1s alternate infinite;
+            -ms-animation: twinkle 1s alternate infinite;
+		}
+		th,td,label {
+			text-align:center !important;
+		}
+		.myColor {
+			background-color:#28b779 !important;
+		}
+		.progress .bar {
+			color:#000000 !important;
+			text-align:center !important;
+		}
+    </style>
+	<link href="$!request.getContextPath()/public/css/validate.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/data-tables/DT_bootstrap.css" rel="stylesheet" />
+</head>
+
+<script type="text/javascript">
+	
+	jQuery(function(){
+		var i = 1;
+		for(;i<=storageNumber;i++){ //storageNumber变量在仓库列表循环完毕时赋值
+			jQuery("#updateStorage"+i).click(function(){
+	
+				var updateId = jQuery(this).attr("updateId");	
+				var storageId = jQuery(this).attr("storageId");
+				jQuery("#storageId").val(storageId);
+				jQuery("#storageName").val(jQuery("#dname"+updateId).text());
+				jQuery("#storageLength").val(jQuery("#dlength"+updateId).text());
+				jQuery("#storageWidth").val(jQuery("#dwidth"+updateId).text());
+				jQuery("#storageHigh").val(jQuery("#dhigh"+updateId).text());
+				jQuery("#storageCapacity").val(jQuery("#dcapacity"+updateId).attr("value"));
+				jQuery("#storageUsed").val(jQuery("#dused"+updateId).attr("value"));
+				jQuery("#storageMaxTemp").val(jQuery("#dmaxTemp"+updateId).text());
+				jQuery("#storageMinTemp").val(jQuery("#dminTemp"+updateId).text());
+				jQuery("#updateForm").addClass("twinkle");				
+			});
+		}
+		//循环结束
+		jQuery("#updateMaxAndMin").click(function(){
+	
+			jQuery.ajax({
+				type:"POST",
+				url:"$!request.getContextPath()/TempMonitor/storageManager",
+				data:{
+					action:"updateMaxAndMin",
+					storageId:jQuery("#quickStorageId").val(),
+					maxTemp:jQuery("#quickMaxTemp").val(),
+					minTemp:jQuery("#quickMinTemp").val()
+				},
+				success:function(data){
+					if(data == "success"){
+							location.href="$!request.getContextPath()/TempMonitor/storageManager";
+						}else if(data == "notexsit"){
+							alert("需更新的仓库不存在");
+						}
+						else if(data == "needlogin"){
+							alert("您未登陆或者无权限")						
+						}else{
+							alert("未知原因出错")
+						}
+				},
+				async:true 
+			});
+		});
+		jQuery("#updateAStorage").click(function(){
+			if(jQuery("#updateForm").hasClass("twinkle")){
+				jQuery("#updateForm").removeClass("twinkle");
+			}
+			jQuery.ajax({
+                    type:"POST",
+                    url:"$!request.getContextPath()/TempMonitor/storageManager",
+                    data:{
+						action:"update",
+						storageId:jQuery("#storageId").val(),
+						storageName:jQuery("#storageName").val(),
+						storageLength:jQuery("#storageLength").val(),
+						storageWidth:jQuery("#storageWidth").val(),
+						storageHigh:jQuery("#storageHigh").val(),
+						storageCapacity:jQuery("#storageCapacity").val(),
+						storageUsed:jQuery("#storageUsed").val(),
+						storageMaxTemp:jQuery("#storageMaxTemp").val(),
+						storageMinTemp:jQuery("#storageMinTemp").val()
+					},             
+                    success:function(data){
+						
+						if(data == "success"){
+							location.href="$!request.getContextPath()/TempMonitor/storageManager";
+						}else if(data == "notexsit"){
+							alert("需更新的仓库不存在");
+						}
+						else if(data == "needlogin"){
+							alert("您未登陆或者无权限")						
+						}else{
+							alert("未知原因出错")
+						}
+                    },
+                    async:true            
+         	});
+		});
+		
+	});
+</script>
+
+<body>
+	<div class="container-fluid">
+		<div class="span 12">
+		<!-- BEGIN CONDENSED TABLE PORTLET-->
+		<div class="portlet box myColor">
+			<div class="portlet-title">
+				<h4><i class="icon-picture"></i>快速设置仓库温度临界值</h4>
+			</div>
+	 <div class="portlet-body">
+        	 <table class="table table-hover myColor">
+        				<tr class="info">
+                    	<td>
+                            <span class="label label-important">最高温度临界值:</span>
+                             <input id="quickMaxTemp" type="text">
+                        </div>
+                
+                		</td>
+                        <td>
+                            <span class="label label-important">最低温度临界值:</span>
+                            <input id="quickMinTemp" type="text">
+                
+                        </div>
+        				</td>
+        				<td>
+                		<span class="label label-important">选择仓库:</span>
+                		<select name="quickStorageId" id="quickStorageId">
+                        	#foreach($storage in ${storageList}) 
+                			<option value="${storage.id}" >$storage.name</option>
+        					#end
+                		</select>
+               
+                		<button type="button" class="btn green" id="updateMaxAndMin">设置 &nbsp; <i class="m-icon-swapright m-icon-white"></i></button>
+        				</td>
+        				</tr>
+        	</table>
+			</div>
+		<!-- END CONDENSED TABLE PORTLET-->
+		</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="span 12">
+		<!-- BEGIN CONDENSED TABLE PORTLET-->
+		<div class="portlet box myColor">
+			<div class="portlet-title">
+				<h4><i class="icon-picture"></i>仓库列表</h4>
+				<!--
+				<div class="tools">
+					<a href="javascript:;" class="collapse"></a>
+					<a href="#portlet-config" data-toggle="modal" class="config"></a>
+					<a href="javascript:;" class="reload"></a>
+					<a href="javascript:;" class="remove"></a>
+				</div>
+				-->
+			</div>
+			<div class="portlet-body">
+				<table class="table table-striped table-bordered table-hover dataTable" id="sample_1" aria-describedby="sample_1_info">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>仓库别名</th>
+							<th>长度(单位:米)</th>
+							<th>宽度(单位:米)</th>
+							<th>高度(单位:米)</th>
+							<th>最高温度限制(单位:℃)</th>
+							<th>最低温度限制(单位:℃)</th>
+							<th>容量</th>
+							<th>已使用</th>
+							<th>百分比</th>
+							<th style="text-align:center">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						#set($i=0)
+						#foreach($storage in ${storageList})												                             
+							#set($i = $i + 1)
+							#set($percent = ($!{storage.used}*1.0 / $!{storage.capacity})*100 + "%")
+							<tr id="storageRow$i">
+								<td> $i</td>
+								<td id="dname$i"> $!storage.name</td>
+								<td id="dlength$i">$!storage.length</td>
+								<td id="dwidth$i">$!storage.width</td>
+								<td id="dhigh$i">$!storage.high</td>								
+								<td id="dmaxTemp$i" >$!storage.maxTemp</td>
+								<td id="dminTemp$i" >$!storage.minTemp</td>
+								<td id="dcapacity$i" value="$!{storage.capacity}">$!{storage.capacity}箱</td>
+								<td id="dused$i" value="$!{storage.used}">$!{storage.used}箱</td>
+								<td>
+									<div class="progress">
+										<div style="width: ${percent};" class="bar">$percent</div>
+									</div>
+								</td>
+								<!--<td id="dcreator$i" >$!sensor.creator</td>
+								<td id="dcreateTime$i">$!sensor.createTime</td>
+								<td id="dmender$i">$!sensor.mender</td>
+								<td id="dmendTime$i">$!sensor.mendTime</td>-->
+								<td>
+									
+								<button type="button" class="btn blue start" id="updateStorage$i" updateId="$i" storageId="$!{storage.id}">
+									<i class="icon-upload icon-white"></i>
+									<span>编辑</span>
+								</button>															
+								</td>
+							</tr>
+                        #end  
+						<script type="text/javascript"> storageNumber = $i </script>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- END CONDENSED TABLE PORTLET-->
+		</div>
+	</div>
+	
+	
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12" id="updateForm">
+    		<div class="portlet box myColor">
+             <div class="portlet-title">
+                  <h4><i class="icon-reorder"></i>修改仓库属性</h4>
+    		 </div>
+            </div>    
+    		
+           
+    		<div  class="form-horizontal" id="sensorForm" > <!--Form start-->
+    			<h3 class="form-section">仓库属性</h3>
+    			
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">仓库别名</label>
+                             <div class="controls">
+								<input type="hidden" class="m-wrap span12" id="storageId">
+                                <input type="text" class="m-wrap span12" id="storageName">
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label" >仓库长度(单位:米)</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="storageLength">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+                 </div>
+    			<!--ROW END-->
+    			
+    			
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">仓库宽度(单位:米)</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="storageWidth">                         
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+					   
+					   <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">仓库高度(单位:米)</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="storageHigh">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->					   
+					               
+                 </div>
+    			<!--ROW END-->
+    			 
+    			
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                      
+					<div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">仓库容量(单位:箱)</label>
+                             <div class="controls">
+                                  <input type="text" class="m-wrap span12" placeholder="" id="storageCapacity">                         
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+					
+                       <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">已使用(单位:箱)</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="storageUsed" disabled="disabled">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+    			     		
+    			   
+                 </div>
+    			<!--ROW END-->		
+				
+				<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">最高温度限制</label>
+                             <div class="controls">
+								<input type="text" class="m-wrap span12" placeholder="" id="storageMaxTemp">    
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+					   
+					   <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">最低温度限制</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="storageMinTemp">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->					   
+					               
+                 </div>
+    			<!--ROW END-->
+				
+				<!--ROW START-->
+    			<div class="form-actions">                      			   			  																
+
+                                <button type="button" class="btn blue start" id="updateAStorage">
+        							<i class="icon-upload icon-white"></i>
+        							<span>编辑</span>
+        						</button>    							    						   			   
+                 </div>
+    			<!--ROW END-->		
+    			
+    		 </div><!--Form END-->
+			
+			</div>	 
+		</div> <!--THE ADD AND UPDATE ROW END-->
+     </div>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+   <link rel="stylesheet" type="text/css" href="$!request.getContextPath()/public/ConstantJs/fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />
+    <script type="text/javascript" src="$!request.getContextPath()/public/ConstantJs/fancybox/jquery.fancybox.js?v=2.1.5"></script>
+</head>
+
+<body style="width:100%;">
+   <div class="row-fluid">
+      <div  class="span12" style="text-align:center; !important">
+         <div id="vpQrCode" ></div>
+         <div id="vpInfo"></div>
+      </div>
+   </div>
+   <div id="content">
+            <!-- -引用的位置如：/WEB-INF/view/hello.vm-->
+            #parse("/WEB-INF/view/processRecordWindow.vm")
+   </div>
+   <div id="content1">
+            <!-- -引用的位置如：/WEB-INF/view/hello.vm-->
+            #parse("/WEB-INF/view/rfidRecordWindow.vm")
+   </div>
+   <div id="content2">
+            <!-- -引用的位置如：/WEB-INF/view/hello.vm-->
+            #parse("/WEB-INF/view/transRecordWindow.vm")
+   </div>
+   <div id="content3">
+            <!-- -引用的位置如：/WEB-INF/view/hello.vm-->
+            #parse("/WEB-INF/view/saleRecordWindow.vm")
+   </div>
+</body>
+<script type="text/javascript">
+String.prototype.format = function()
+{
+    var args = arguments;
+    return this.replace(/\{(\d+)\}/g,                
+        function(m,i){
+            return args[i];
+        });
+};
+var img = "<a class='fancybox' href = '{0}' title='{1}<br>(扫描二维码获取更多数据)'>" +
+                "<img src='{2}' alt='点击查看大图' width = '200px' height = '200px'/></a>";
+   jQuery(function(jQuery) {
+      var vp = eval($!{vpInfo});
+      var pngHref = "$!request.getContextPath()/public/qrcode/"+vp.enterpriseId+"/"+vp.qrCode+".png";
+      jQuery("#vpQrCode").append(img.format(pngHref,vp.productionName,pngHref));
+      jQuery('.fancybox').fancybox();
+      jQuery("#vpInfo").text("("+vp.productionName+")的溯源信息");
+   });
+</script>
+</html>

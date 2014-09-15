@@ -1,0 +1,380 @@
+<head>
+	<style>
+        .ver-inline-menu li.active a, .ver-inline-menu li.active i {
+        	background: #28b779;
+        	border-left: solid 1px #28b779;
+        }  
+        .ver-inline-menu li.active:after {
+        	border-left: 6px solid #28b779;
+        }
+
+        .ver-inline-menu li.active i {
+        	background: #28b779 !important;
+        }
+    </style>
+</head>
+<body>
+<div class="row-fluid">
+  <div class="span12">
+	<div class="span3">
+		<ul class="ver-inline-menu tabbable margin-bottom-10">
+			<li class="active service_setting"><a data-toggle="tab" href="#tab_storage"><i class="icon-truck"></i>仓储配置</a></li>
+			<li class="service_setting"><a data-toggle="tab" href="#tab_temp"><i class="icon-bar-chart"></i>温控配置</a></li>
+			<li class="service_setting"><a data-toggle="tab" href="#tab_trace"><i class="icon-table"></i>溯源配置</a></li>
+		</ul>
+	</div>
+	<div class="span9">
+		<div class="tab-content ">
+			<div id="tab_storage" class="tab-pane active">
+				<div style="height: auto;" id="accordion2-2" class="accordion collapse in">
+					<form>
+					    <div  class="profile-settings row-fluid" style="border-bottom: 1px solid #eee;">
+						<div class="input-append ">                
+	                       <button class="btn blue bt_add_new_setting" type="button" id="add_service_storage">新增配置</button>
+		                </div>
+		                <div class="btn-group row-fluid bt_service_setting" style="margin-b id="add_service_temp"ottom: 10px;">
+	        				<a class="btn span3 red" id="bt_service_inoutService">出入库 &nbsp;</a>
+	        				<a class="btn span3 red" id="bt_service_inventoryService">库存管理</a>
+	        				<a class="btn span3 red" id="bt_service_repPreviwService">仓库预览</a>
+	        				<a class="btn span3 red" id="bt_service_rfidService">RFID管理</a>
+	        			</div>
+	        			</div>
+	        			<div class="space10"></div>
+	        			<div class="profile-settings row-fluid">
+		        			<h4> 其他可用配置 </h4>
+		        			<table class="table table-bordered table-hover" id="service_table_storage">
+								<thead>
+									<tr>
+										<th>配置ID</th>
+										<th>出入库</th>
+										<th>库存管理</th>
+										<th>仓库预览</th>
+										<th>RFID管理</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+								 </tbody>
+							</table>
+						</div>
+						<div class="space10"></div>
+						<div id = "chart_storage">
+
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="tab_temp" class="tab-pane">
+				<div style="height: auto;" id="accordion2-2" class="accordion collapse in">
+					<form>
+					    <div class="profile-settings row-fluid" style="border-bottom: 1px solid #eee;">
+						<div class="input-append ">                
+	                       <button class="btn blue bt_add_new_setting" type="button" id="add_service_temp">新增配置</button>
+		                </div>
+		                <div class="btn-group row-fluid bt_service_setting" style="margin-bottom: 10px;">
+	        				<a class="btn span2 red" id="bt_service_realTimeData">实时温度</a>
+	        				<a class="btn span2 red" id="bt_service_historyData">历史温度</a>
+	        				<a class="btn span2 red" id="bt_service_exceptionData">异常历史</a>
+	        				<a class="btn span2 red" id="bt_service_sensorManager">传感器管理</a>
+	        				<a class="btn span2 red" id="bt_service_storageManager">仓库管理</a>
+	        				<a class="btn span2 red" id="bt_service_tmDownload">移动监控</a>
+	        			</div>
+	        			</div>
+	        			<div class="space10"></div>
+	        			<div class="profile-settings row-fluid">
+	        			<h4> 其他可用配置 </h4>
+	        			<table class="table table-bordered table-hover" id="service_table_temp">
+							<thead>
+								<tr>
+								    <th>配置ID</th>
+									<th>实时温度</th>
+									<th>历史温度</th>
+									<th>异常历史</th>
+									<th>传感器管理</th>
+									<th>仓库管理</th>
+									<th>移动监控</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+							 </tbody>
+							</table>
+							</div>
+					</form>
+				</div>
+			</div>
+			<div id="tab_trace" class="tab-pane">
+				<div style="height: auto;" id="accordion2-2" class="accordion collapse in">
+					<form>
+					    <div  class="profile-settings row-fluid" style="border-bottom: 1px solid #eee;">
+						<div class="input-append ">                
+	                       <button class="btn blue bt_add_new_setting" type="button" id="add_service_trace">新增配置</button>
+		                </div>
+		                <div class="btn-group row-fluid bt_service_setting" style="margin-bottom: 10px;">
+	        				<a class="btn span2 red" id="bt_service_rawmaterialManager">原料管理</a>
+	        				<a class="btn span2 red" id="bt_service_productionManager">产品管理</a>
+	        				<a class="btn span2 red" id="bt_service_dataManager">数据管理</a>
+	        				<a class="btn span2 red" id="bt_service_productionStatistics">产品统计</a>
+	        				<a class="btn span2 red" id="bt_service_datarecord">数据录入</a>
+	        				<a class="btn span2 red" id="bt_service_dataquery">数据查询</a>
+	        				<a class="btn red" id="bt_service_mobileApp">移动APP</a>
+	        			</div>
+	        			</div>
+	        			<div class="space10"></div>
+	        			<div class="profile-settings row-fluid">
+	        			<h4> 其他可用配置 </h4>
+	        			<table class="table table-bordered table-hover" id="service_table_trace">
+							<thead>
+								<tr>
+									<th>配置ID</th>
+									<th>原料管理</th>
+									<th>产品管理</th>
+									<th>数据管理</th>
+									<th>产品统计</th>
+									<th>数据录入</th>
+									<th>数据查询</th>
+									<th>移动APP</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+							 </tbody>
+							</table>
+							</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--end span9-->                                   
+  </div>
+</div>
+</body>
+<script src="$!request.getContextPath()/public/js/highcharts.js"></script>
+<script type="text/javascript">
+	jQuery(function(jQuery) {
+
+		$('.service_setting').click(function(){
+			var chosen = $(this);
+			var tab_name = $(chosen.children('a').get(0)).attr('href');
+			setServiceTab(tab_name);
+		});
+
+		$('.bt_service_setting a').click(function(){
+			var chosen = $(this);
+			if(chosen.hasClass('green'))
+			{
+				chosen.removeClass('green');
+				chosen.addClass('red');
+			}
+			else if(chosen.hasClass('red'))
+			{
+				chosen.removeClass('red');
+				chosen.addClass('green');
+			}
+		});
+
+		setServiceTab('#tab_storage');
+		drawUserCount('chart_storage');
+
+		$('.bt_add_new_setting').click(function(){
+			addNewSetting($(this).attr('id'));
+		});
+
+		$('tbody').on('click','.delete_service',function(){
+			var chosen = $(this);
+			var tr = $(chosen.parent().parent());
+			var id = tr.children().first().text();
+			var service = tr.parent().parent().attr('id').replace('service_table_','');
+			deletSetting(id,service);
+		});
+
+	});
+
+	function drawUserCount(chart_id)
+	{
+		var service_name = chart_id.replace('chart_','');
+		jQuery.ajax({
+			type:"POST",
+			data:{
+				service:service_name
+			},
+			url:'$pageAbsUrl'+'/enterpriseManager/enterpriseMaintain?action=user_count',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+				if(res){
+			    	var datas = JSON.parse(res);
+			    	console.log(datas);
+			    	draw(chart_id, 'chart', datas);
+			    }
+			    else{
+			    	alert('fail');
+			    }
+			   
+			}
+		});
+	}
+
+	function deletSetting(id, service)
+	{
+		jQuery.ajax({
+			type:"POST",
+			data:{
+				id:id,
+				service:service
+			},
+			url:'$pageAbsUrl'+'/enterpriseManager/enterpriseMaintain?action=delete',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+			   alert("success");
+			}
+		});
+	}
+
+	function addNewSetting(id) 
+	{
+
+		var bts = $('#'+id).parent().next().children('a');
+		var add_data = {};
+		for (var i = bts.length-1; i >= 0; i--)
+		{
+			var temp = $(bts[i]);
+			add_data[temp.attr('id').replace('bt_service_','')] = temp.hasClass('green')?'1':'0';
+		}
+		add_data.service_name = id.replace('add_service_','');
+
+		jQuery.ajax({
+			type:"POST",
+			data:add_data,
+			url:'$pageAbsUrl'+'/enterpriseManager/enterpriseMaintain?action=add',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+			   alert("success");
+			}
+		});
+	}
+
+	var addServiceTable= function(service)
+	{
+		var trString = "<tr><td>"+service.id+"</td>";
+
+		for(var s in service)
+		{
+			if(s == 'id') continue;
+			if(service[s])
+			{
+				trString += "<td><span class='label label-success'>启用</span></td>";
+			}
+			else
+			{
+				trString +=　"<td><span class='label'>停用</span></td>";
+			}
+		}
+		trString += "<td><a class='btn mini red delete_service'><i class='icon-trash'>删除</i> </a></td></tr>";
+		return trString;
+	}
+
+	var setServiceTable = function(name, datas)
+	{
+		$('#service_table_'+name+' tbody tr').remove();
+
+		for( var len = datas.length-1; len >= 0; len--)
+		{
+			$('#service_table_'+name+' tbody').append(addServiceTable(datas[len]));
+		}
+	}
+
+	function setServiceTab(tab_name)
+	{
+		var service_name = tab_name.replace('#tab_',''); 
+		
+		jQuery.ajax({
+			type:"POST",
+			url:'$pageAbsUrl'+'/enterpriseManager/enterpriseMaintain?action='+service_name+'_service',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+			    if(res){
+			    	var datas = JSON.parse(res);
+			    	console.log(datas);
+			    	setServiceTable(service_name, datas);
+			    }
+			    else{
+			    	alert('fail');
+			    }
+			    
+			}
+		});
+
+	}
+
+	function draw(chart_id, chart_name, datas)
+	{
+		var my_series = [];
+		var pie_datas = {
+
+				type: 'pie',
+	           	name: '数量比例',
+	            tooltip: {
+	        	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	            },
+	            center: [100, 80],
+	            size: 100,
+	            showInLegend: false,
+	            dataLabels: {
+	                enabled: false
+	            },
+	            data:[]
+	        };
+	    for (var i = datas.length - 1; i >= 0; i--) 
+	    {
+	    	var cur_data = datas[i];
+	    	var tmp = {
+				type: 'column',
+	            name: '服务'+cur_data.id,
+	            data: []
+			};
+			tmp.data.push(cur_data.user_count);
+			my_series.push(tmp);
+
+			var pie_tmp = {
+				name: '服务'+cur_data.id,
+	            y: cur_data.user_count,
+	            color: Highcharts.getOptions().colors[i%2]
+			};
+			pie_datas.data.push(pie_tmp);
+	    }
+	    my_series.push(pie_datas);
+
+	    $('#'+chart_id).highcharts({
+	        title: {
+	            text: '用量统计图'
+	        },
+	        xAxis: {
+	            categories: [chart_name]
+	        },
+	        labels: {
+	            items: [{
+	                html: '用量比例',
+	                style: {
+	                    left: '85px',
+	                    top: '18px',
+	                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+	                }
+	            }]
+	        },
+	        series: my_series
+	    });
+
+	}
+
+	
+
+</script>

@@ -1,0 +1,197 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<style >
+		.location-active {
+			background-color: green !important;
+		}
+    </style>
+	<link href="$!request.getContextPath()/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/metro.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style_responsive.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style_light.css" rel="stylesheet" id="style_color" />
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link href="$!request.getContextPath()/public/font-awesome/css/font-awesome.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="portlet box green">
+      <div class="portlet-title">
+         <h4><i class="icon-reorder"></i>加工和原料信息</h4>
+      </div>
+      <div class="portlet-body form">
+         <!-- BEGIN FORM-->
+         <form action="#" class="form-horizontal">
+            <h3 class="form-section">加工详情</h3>
+            <div class="row-fluid">
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">加工时间</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="processTime" disabled="disabled" value="">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">操作人员</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="processUser" disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+            </div>
+            <!--/row-->
+            <div class="row-fluid">
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">加工地点</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="processLoc" disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">加工环境</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="processEnv" disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+            </div>
+
+            <h3 class="form-section">产品成分</h3>
+            <div class="row-fluid">
+               <div class="span12">
+                     <!--BEGIN TABS-->
+                     <div class="tabbable tabbable-custom tabs-left">
+                        <!-- Only required for left/right tabs -->
+                        <ul class="nav nav-tabs tabs-left" id="raw_tab_ul">
+                        </ul>
+                        <div class="tab-content" id="raw_tab_content_id">
+                        </div>
+                     </div>
+                     <!--END TABS-->
+                  </div>
+            </div>          
+            <!--/row-->
+         </form>
+         <!-- END FORM-->                
+      </div>
+   </div>
+
+   <!--hidden div for use-->
+   <!--
+      {0}  - - -active or not?
+      {1} ----tab id
+      {2} --- Manufacturer
+      {3} ---ProductionPlace
+      {4} ---ProductionDate
+      {5} ---QualityEvaluation
+      {6} ---useCount
+   -->
+   <div style="display: none;" id = "raw_tab_model">
+      <div class='tab-pane {0}' id='{1}'>
+            <table class='table table-bordered table-striped'>
+               <tbody>
+                  <tr>
+                     <td>
+                        厂商
+                     </td>
+                     <td>  
+                        {2}
+                     </td>
+                  </tr> 
+                  <tr>
+                     <td>
+                        产地
+                     </td>
+                     <td>  
+                        {3}
+                     </td>
+                  </tr> 
+                  <tr>
+                     <td>
+                        生产日期
+                     </td>
+                     <td>  
+                       {4}
+                     </td>
+                  </tr> 
+                  <tr>
+                     <td>
+                        质量级别
+                     </td>
+                     <td>  
+                        {5}
+                     </td>
+                  </tr>  
+                  <tr>
+                     <td>
+                        使用数量
+                     </td>
+                     <td>  
+                        {6}
+                     </td>
+                  </tr>                    
+               </tbody>
+            </table>
+         </div>
+   </div>
+</body>
+<script type="text/javascript">
+String.prototype.format = function()
+{
+    var args = arguments;
+    return this.replace(/\{(\d+)\}/g,                
+        function(m,i){
+            return args[i];
+        });
+};
+function handleProcessRecord(pr){
+   jQuery("#processEnv").val(pr.processEnv);
+   jQuery("#processLoc").val(pr.processLoc);
+   jQuery("#processUser").val(pr.processUser);
+   jQuery("#processTime").val(pr.processTime);
+}
+function handleRawList(pr,rawList){
+   var rawTabLi = "<li class='{0}'> <a href='#{1}' data-toggle='tab'>{2}</a></li>";
+   var rawTabUlJ = jQuery("#raw_tab_ul");
+   var rawTabContentModel = jQuery("#raw_tab_model").html();
+   var rawTabContentJ = jQuery("#raw_tab_content_id");
+   var rawIdList = pr.rawIdList.trim().split(";");
+   var rawUseCountList = pr.rawCountList.trim().split(";");
+   for(var index = 0; index < rawIdList.length; index++){
+      var raw = getRawById(rawList,rawIdList[index]);
+      var isActive = index == 0 ? " active" : " ";
+      rawTabUlJ.append(rawTabLi.format(isActive,"raw_tab_content_"+rawIdList[index],raw.name));
+      rawTabContentJ.append(rawTabContentModel.format(isActive,"raw_tab_content_"+rawIdList[index],
+                                    raw.manufacturer,raw.productionPlace,raw.productionDate
+                                    ,raw.quality,rawUseCountList[index]));
+   }
+
+}
+
+function getRawById(rawList,rawId){
+   for(var index = 0; index < rawList.length; index++){
+      var temp = rawList[index];
+      if(temp.rawId == rawId){
+         return temp;
+      }
+   }
+}
+jQuery(function(jQuery) {
+   var pr = eval($!{processRecord});
+   var rawList = eval($!{rawList});
+   handleProcessRecord(pr);
+   handleRawList(pr,rawList);
+});
+</script>
+</html>

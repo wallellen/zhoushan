@@ -1,0 +1,669 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="$!request.getContextPath()/public/js/bootstrap.min.js"></script>
+	<script src="$!request.getContextPath()/public/js/bootstrap-datetimepicker.min.js"></script>	
+	<link href="$!request.getContextPath()/public/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+</head>
+<style>
+	
+		@-webkit-keyframes twinkle {
+			0%   { box-shadow: 0 0 40px #28b779; }
+			100% { box-shadow: 0 0 40px green; }
+		}
+		@-moz-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #28b779; }
+			100% { box-shadow: 0 0 40px green; }
+		}
+		@-ms-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #28b779; }
+			100% { box-shadow: 0 0 40px green; }
+		}
+
+		.twinkle{
+            -webkit-animation: twinkle 1s alternate infinite;
+            -moz-animation: twinkle 1s alternate infinite;
+            -ms-animation: twinkle 1s alternate infinite;
+		}
+
+		#proInfoDiv .form .form-actions{
+			padding-left: 70px ;
+		}
+
+
+
+</style>
+<body>
+	
+	<div class="container-fluid">
+		<div class="span 12">
+		<!-- BEGIN CONDENSED TABLE PORTLET-->
+		<div class="portlet box green">
+			<div class="portlet-title">
+				<h4><i class="icon-picture"></i>商品列表</h4>
+				<div class="actions">
+					<a class="btn blue"><i class="icon-print"></i>刷新</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<table class="table table-condensed table-hover">
+					<thead>
+						<tr>
+							<th>商品名字</th>
+							<th>商品描述</th>
+							<th>商品库存</th>
+							<th>所属仓库</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<script type="text/javascript">
+							var pieDatas = [];
+							var blankPercent = 100;
+						</script>
+						  #set($count = 1)
+						  #foreach($pro in ${proList})
+							  
+							<tr id="proRow$pro.name">
+								<td class="proName">$pro.name</td>
+								#if (!$pro.msg || $pro.msg == '' )
+									#set($pro.msg = '')
+									<td class="proMsg"> 无备注 </td>
+								#else
+									<td class="proMsg"> $pro.msg </td>
+								#end
+								
+								<td class="proCount">$pro.count</td>
+								<td class="storageId">$!storage.name</td>
+								<td>
+									
+								<button type="button" class="btn blue start rowEdit">
+									<i class="icon-upload icon-white"></i>
+									<span>编辑</span>
+								</button>
+									
+								<button type="button" class="btn red delete rowDel">
+									<i class="icon-trash icon-white"></i>
+									<span>删除</span>
+								</button>
+								</td>
+								<script type="text/javascript">
+								    function addPie(){
+									   var pie = {};				
+									   pie.msg = '$pro.msg';
+									   pie.name = '$pro.name';
+									   pie.y = (($pro.count / $storage.capacity)) * 100;	
+									   blankPercent = blankPercent - pie.y;
+									   pie.storageId = '$pro.storageId';
+									   pie.storageName = '$!storage.name';
+									   pieDatas.push(pie);
+									}
+									addPie();
+								</script>
+							</tr>
+						  #end
+					</tbody>
+					 <script type="text/javascript">
+						  	var pie = {};
+						   	pie.name = '未使用';
+							pie.y = blankPercent;
+							pieDatas.push(pie);
+						  </script>
+				</table>
+			</div>
+		</div>
+		<!-- END CONDENSED TABLE PORTLET-->
+		</div>
+	</div>
+	<div class="container-fluid">
+	 <div class="row-fluid">
+	  <div class="span3">
+    	<div class="portlet box green " id="proInfoDiv">
+             <div class="portlet-title">
+                  <h4><i class="icon-reorder"></i>商品信息</h4>
+    		 </div>   
+	  
+			 <div class="portlet-body form">
+    			<!--ROW START-->
+			  <form class="horizontal-form" id="pro_form">
+    			<div class="row-fluid " >
+                          <div class="control-group">
+                             <label class="control-label">仓库名</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="storageId" readOnly="true" value='$!storage.name'>
+                             </div>
+                          </div>
+                       </div>
+
+    			<!--ROW END-->
+
+    			<!--ROW START-->
+    			<div class="row-fluid">
+					
+                          <div class="control-group">
+                             <label class="control-label">商品名称</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12"  id="proName">
+                             </div>
+                          </div>
+                       </div>
+
+    			<!--ROW END-->
+				<div class="row-fluid">
+					 <!--/span-->
+                          <div class="control-group">
+                             <label class="control-label">商品描述</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12"  id="proMsg">
+                             </div>
+                          </div>
+                   <!--/span-->
+				</div>
+						
+				<div class="form-actions">
+					<button type="button" class="btn blue" id="btnAddPro"><i class="icon-ok"></i> 添加</button>
+                    <button type="button" class="btn yellow hidden" id="btnEditPro"><i class="icon-ok"></i>编辑</button>
+                </div>
+			  </form>
+		    </div>
+		</div>
+      </div>
+
+      <div class="span3">
+      	<div class="portlet green box">
+		             <div class="portlet-title">
+		                  <h4><i class="icon-reorder"></i>RFID货物信息</h4> 
+		    		 </div> 
+				     <div class="portlet-body" >
+				         <div class="input-append ">                
+		                       <button class="btn blue" type="button" >RFID卡号</button>
+							   <input  id="rfidProCard" class="m-wrap" type="text" style="border:1px solid #e5e5e5 !important ; width: inherit">
+		                 </div>
+				         <table id ="rfidProTable" class="table table-striped table-bordered table-advance table-hover">
+					     	<thead>
+								<tr>
+									<th> 商品名</th>
+									<th> 商品数目</th>
+								</tr>
+							</thead>
+						 </table>
+				     </div>
+
+		    </div>
+      </div>
+      
+	  <div class="span6">
+    	<div class="portlet box green ">
+             <div class="portlet-title">
+                  <h4><i class="icon-reorder"></i>库存分析</h4> 
+				  <div class="actions">
+					<a  class="btn blue"><i class="icon-print"></i>刷新</a>
+				</div>
+    		 </div> 
+		     <div class="portlet-body" >
+				<div class="input-append ">                
+                       <button class="btn blue" type="button">仓库使用情况</button>
+						<input class="m-wrap" type="text" id="used" value='$storage.used / $storage.capacity' style="border:1px solid #e5e5e5 !important ">
+                </div>
+				<div id="chart"></div>
+		     </div>
+
+	    </div>
+	  </div>
+	</div>
+    </div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+	   <div class="span12">
+		<div class="portlet box green">
+             <div class="portlet-title">
+                <h4><i class="icon-reorder"></i>出入库统计</h4>
+             </div>
+             <div class="portlet-body ">
+					<div >
+						  <div>	
+							<div  class="form-horizontal" id="searchForm" > <!--Form start-->
+								<h3 class="form-section">检索条件</h3>
+    			
+								<!--ROW START-->
+								<div class="row-fluid">
+									<table class="table table-hover myColor">
+										<tr class="info">
+											
+											<td>
+												<span class="label label-important">商品:</span>
+												<select id="proSearchId"  >
+													<option value="0">所有</option>
+													#foreach($pro in ${proList}) 
+														<option value="${pro.name}">$pro.name</option>
+													#end
+												</select>
+											</td>
+											<td>
+												<span class="label label-important">负责人:</span>
+												 <select id="personSearchId" >
+													<option value="0">所有</option>
+													#foreach($user in ${allUsers}) 
+														<option value="${user.id}">$user.name</option>
+													#end
+												 </select>		
+											</td>
+											<td>
+												<span class="label label-important">出入库操作选择:</span>
+												 <select id="searchAction" >
+													<option value="2">所有</option>
+													<option value="1">入库</option>
+													<option value="0">出库</option>
+												 </select>		
+											</td>
+										</tr>
+										<tr class="info">
+											<td>
+												<span class="label label-important">开始时间:</span>
+												<div id="datetimepicker1" class="input-append date">
+													<input data-format="yyyy-MM-dd hh:mm:ss" type="text" name="startTime" id ="startTime"></input>
+													<span class="add-on">
+														<i data-time-icon="icon-time" data-date-icon="icon-calendar">
+														</i>
+													</span>
+												</div>
+        
+											</td>
+											<td>
+												<span class="label label-important">结束时间:</span>
+												<div id="datetimepicker2" class="input-append date">
+													<input data-format="yyyy-MM-dd hh:mm:ss" type="text" name="endTime" id ="endTime"></input>
+													<span class="add-on">
+														<i data-time-icon="icon-time" data-date-icon="icon-calendar" >
+														</i>
+													</span>
+        
+												</div>
+											</td>
+											<td>
+												<button type="button" class="btn red" id="searchHistory" style="margin-left:10px" >查询 &nbsp; </button>	
+												<!--<button type="button" class="btn red" id="searchAll" style="margin-left:10px" >查询所有&nbsp; </button>-->
+												<button type="button" class="btn red hidden" id="getChart" style="margin-left:10px" >分析趋势图&nbsp; </button>	
+											</td>
+										</tr>
+										
+									</table>
+									<!--ROW END-->							    			
+								</div><!--Form END-->
+								
+							</div>
+							 <!-- 查询表 -->
+							<table id ="inouttable" class="table table-striped table-bordered table-advance table-hover">
+							     <thead>
+										<tr>
+											<th> RFID号</th>
+											<th> 负责人</th>
+											<th> RFID绑定数额</th>
+											<th>操作时间</th>
+											<th> 出库|入库 </th>
+											<th> 二维码 </th>
+										</tr>
+									</thead>
+					         </table>
+							<!--  查询表 -->
+							<div id="progressBar">
+							</div>
+						 </div>
+						 
+						 <br>					
+						 <h3 class="form-section">出入库趋势图 &nbsp;&nbsp;
+							<!--<a class="btn icon-only"><i class="icon-refresh"></i></a>-->
+						 </h3>
+						<div id="lineChart">
+							
+						</div>
+						<div id="chartProgress">
+							
+						</div>
+						
+					</div>
+					
+            </div>
+        </div>
+	</div>
+</div>
+	</div>
+<script src="$!request.getContextPath()/public/js/highcharts.js"></script>
+<script src="$!request.getContextPath()/public/js/modules/exporting.js"></script>
+<script src="$!request.getContextPath()/public/js/themes/grid.js"></script>
+
+<script type="text/javascript">
+    
+   jQuery(function(jQuery) {
+   	 draw();
+
+   	 $('table').on('click','.cardNum',function(){
+	      getRfidPros($(this).text());
+	  });
+	 
+	 jQuery('#datetimepicker1').datetimepicker({
+      language: 'pt-BR'
+    });
+    jQuery('#datetimepicker2').datetimepicker({
+      language: 'pt-BR'
+    });
+	
+	jQuery('#proInfoDiv').click(function(){
+	  jQuery('#proInfoDiv').removeClass('twinkle');
+	});
+	
+	jQuery('.rowEdit').click(function(){
+		
+	    var $chosen = $(this);
+		var $parentTr = $chosen.parent('td');
+		var rowInfo = {
+		    'name' : $parentTr.prevAll('.proName').text(),
+			'msg' : $parentTr.prevAll('.proMsg').text(),
+			'count' : $parentTr.prevAll('.proCount').text(),
+			'storageName' : '$!storage.name'
+		};
+		
+		editPro(rowInfo);
+	});
+
+	jQuery('.rowDel').click(function(){
+		var $chosen = $(this);
+		var $parentTr = $chosen.parent('td');
+		var rowInfo = {
+		    'name' : $parentTr.prevAll('.proName').text(),
+			'msg' : $parentTr.prevAll('.proMsg').text(),
+			'count' : $parentTr.prevAll('.proCount').text(),
+			'storageName' : '$!storage.name'
+		};
+
+        deletePro(rowInfo);
+	});
+
+	jQuery('#btnEditPro').click(function(){
+	  jQuery.ajax({
+			type:'POST',
+			url:'$pageAbsUrl/warahouse/product?action=edit',
+			data:{
+				name:jQuery("#proName").val(),
+				msg:jQuery("#proMsg").val()
+			},
+			success:function(data){
+			    alert("编辑成功");
+				location.href="$!request.getContextPath()/warahouse/product";	
+            },
+            async:true
+		}); 
+	});
+	
+	jQuery('#btnAddPro').click(function(){
+	  jQuery.ajax({
+	  	 type:'POST',
+		 url:"$pageAbsUrl/warahouse/product?action=add",
+		 data:{
+				name:jQuery("#proName").val(),
+				unit:jQuery("#proUnit").val(),
+				msg:jQuery("#proMsg").val()
+			   },
+		 success:function(data){ 
+				alert('添加成功');
+          },
+         async:true  
+	  });
+	});
+	
+	jQuery("#searchHistory").click(function(){
+		var progressBar = "<div class='progress progress-striped active' id='progressbar'>";
+    		progressBar += "<div class='bar' style='width: 100%;'></div></div>";
+   		jQuery('#progressBar').append(progressBar);
+		if($("#searchAction ").val() != '2') jQuery('#getChart').removeClass('hidden');
+		else jQuery('#getChart').addClass('hidden');
+		
+		jQuery.ajax({
+            type:"POST",
+            url:"$pageAbsUrl/warahouse/statictisInOut?action=search_all",
+            data:{startTime:$("#startTime").val(),endTime:$("#endTime").val(),proSearchId:$("#proSearchId ").val(),personSearchId:$("#personSearchId ").val(),searchAction:$("#searchAction ").val()},             
+            success:function(data){ 
+				jQuery("#progressbar").detach();
+				//填充表格
+			    var inoutDatas = JSON.parse(data);
+				setInTable(inoutDatas);
+	
+            },
+            async:true            
+         });
+		return false;
+	});
+	
+	jQuery("#getChart").click(function(){
+		var progressBar = "<div class='progress progress-striped active' id='progressbar'>";
+    		progressBar += "<div class='bar' style='width: 100%;'></div></div>";
+		jQuery('#chartProgress').append(progressBar);
+		
+		jQuery.ajax({
+            type:"POST",
+            url:"$pageAbsUrl/warahouse/statictisInOut?action=search_allforchart",
+            data:{startTime:$("#startTime").val(),endTime:$("#endTime").val(),proSearchId:$("#proSearchId ").val(),personSearchId:$("#personSearchId ").val(),searchAction:$("#searchAction ").val()},             
+            success:function(data){ 
+				jQuery("#chartProgress").remove();
+				//填充表格
+			    var datas = JSON.parse(data);
+				drawLines(datas);
+	
+            },
+            async:true            
+         });
+		return false;
+		
+	});
+	
+   });
+
+   function getRfidPros(cardNum)
+   {
+     if( !cardNum ) return;
+     jQuery.ajax(
+     {
+         type:"POST",
+         data:{
+             cardNum:cardNum
+         },
+         url:'$pageAbsUrl'+'/warahouse/inventoryInOut?action=get_rfid_pros',
+         error:function(request){
+				alert("fail");
+		},
+		success:function(data){
+		    console.log(data);
+			setInRFIDTable(JSON.parse(data),cardNum);
+		}
+     });
+    }
+
+    function setInRFIDTable(datas,cardNum)
+    {
+      jQuery('#rfidProTable tbody').remove();
+      jQuery('#rfidProCard').val(cardNum);
+      for(var i = 0;i < datas.length;i++){
+			jQuery('#rfidProTable').append("<tbody><tr><td class='highlight'><div class='success'></div><a>"+datas[i].productionName+"</a></td>"+
+			"<td>"+datas[i].productionCount+"</td>"+
+			"</tr></tbody>");
+		}
+   }
+   
+   
+   function editPro(info)
+   {
+   	 //编辑窗口高亮
+     jQuery('#proInfoDiv').addClass('twinkle');
+	 jQuery('#btnEditPro').removeClass('hidden');
+
+	 fillProBox(info);
+	 //清除编辑窗口高亮
+	 //setTimeout(function clearbgColor(){jQuery('#proInfoDiv').removeClass('twinkle');}, 1000);
+	 
+   }
+   
+   //填充商品信息
+   function fillProBox(pro)
+   {
+   	 $('#storageId').val(pro.storageName);
+	 $('#proName').val(pro.name);
+	 $('#proCount').val(pro.count);
+	 $('#proMsg').val(pro.msg);
+   }
+
+   //删除商品
+   function deletePro(rowInfo)
+   {
+     //当前库存不为0,不能删除
+	 if(rowInfo.count == '0'){
+	 	 jQuery.ajax({
+            type:"POST",
+            url:"$pageAbsUrl/warahouse/inventory?action=delete",
+            data:{name:rowInfo.name,count:rowInfo.count},             
+            success:function(data){ 
+				alert('删除成功');
+				jQuery('#proRow'+rowInfo.name).remove();
+            },
+            async:true            
+         });
+	 }
+	 else {
+	    alert("库存不为0,不能删除");
+	 }
+	
+		return false;
+   }
+   
+   //绘制出入库分析曲线图
+   function drawLines(map)
+   {
+       if($("#searchAction ").val() == '1')
+	     var titleText = '入库信息';
+	   else if($("#searchAction ").val() == '0')
+	     titleText = '出库信息';
+		 
+       //highcharts 配置
+  		var options = {
+	            chart: {
+	                type: 'spline',
+	                animation: Highcharts.svg,
+	                marginRight: 130,
+	                marginBottom: 25,
+	                zoomType: 'x'
+	            },
+	            title: {
+	                text:titleText,
+	                x: -20 //center
+	            },
+	            subtitle: {
+	                text: 'Source: From today',
+	                x: -20
+	            },
+	            xAxis: {
+					type: 'datetime',
+	                tickPixelInterval:150
+	            },
+	            yAxis: {
+	                title: {
+	                    text: '数量/吨'
+	                }
+	            },
+	            tooltip: {
+	                valueSuffix: ''
+	            },
+	            legend: {
+	                layout: 'vertical',
+	                align: 'right',
+	                verticalAlign: 'top',
+	                x: -10,
+	                y: 100,
+	                borderWidth: 0
+	            },
+	            series: []
+		}	
+		jQuery.each(map,function(key,values){
+			
+			if(key == 'time') ;
+			else{			  
+				options.series.push({
+	            	name:key,
+	            	data:values
+		          	});
+			}
+		});
+	
+		options.xAxis.categories = map.time;
+		//var tempChart = new Highcharts.Chart(options);
+   		jQuery('#lineChart').highcharts(options);
+   }
+   
+   function setInTable(list)
+	{
+		jQuery('#inouttable tbody').remove();
+		var actionString = '';
+		for(var i = 0;i < list.length;i++){
+		    if(list[i].action == 1)  actionString = '入库';
+			else if(list[i].action == 0) actionString = '出库';
+			jQuery('#inouttable').append("<tbody><tr><td class='highlight'><div class='success'></div><a class='cardNum'>"+list[i].cardNum+"</a></td>"+
+						"<td>"+list[i].personId+"</td>"+
+						"<td>"+list[i].bindCount+"</td>"+
+						"<td>"+list[i].time+"</td>"+
+						"<td>"+actionString+"</td>"+
+					 	"<td>"+list[i].barCode+"</td></tr></tbody>");
+		}
+	}
+   
+   
+
+	function draw()
+	{
+		
+		//pie图配置
+	 var options = {
+		chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+			renderTo: 'chart'
+        },
+        title: {
+            text: ' 商品分布图, 仓库$workStorage'
+        },
+        tooltip: {
+    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            },
+			series: {
+				point: {
+					events: {
+						click : function(){
+						    //填充编辑表格
+						   fillProBox(this);
+						}
+					}
+				}
+			}
+        },
+        series: []
+    };
+	options.series.push({
+		type:'pie',
+		name:'库存占用量',
+		data:pieDatas
+	});
+	new Highcharts.Chart(options);
+
+	}
+</script>
+</body>
+</html>

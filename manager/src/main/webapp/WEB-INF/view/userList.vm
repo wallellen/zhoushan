@@ -1,0 +1,179 @@
+<head>
+    <link href="$!request.getContextPath()/public/data-tables/DT_bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="portlet box green">
+		
+		<div class="portlet-title">
+			<h4><i class="icon-reorder"></i>工具栏</h4>
+			<div class="tools">
+				<a href="javascript:;" class="collapse"></a>
+			</div>
+		</div>
+		
+		<div class="portlet-body">
+        	<div class="row-fluid">
+            	<div  class="span9">
+        		<h4> 用户权限 </h4>
+            	<a class="icon-btn span3">
+                	<i class="icon-map-marker"></i>
+                	<div>仓储</div>
+            	</a>
+            	
+            	<a class="icon-btn span3 location-active">
+                	<i class="icon-home"></i>
+                	<div>温控</div>
+            	</a>
+
+                <a class="icon-btn span3 location-active">
+                    <i class="icon-home"></i>
+                    <div>溯源</div>
+                </a>
+            	</div> <!--span3 over-->
+        		
+        		<div class="span3" >
+        		<h4  >检索</h4>	
+        			<div class="row-fluid" style="margin-top:38px;">
+            		<div class="input-cont span7">   
+            			<input type="text" placeholder="Search..." class="m-wrap">
+            		</div>
+            		<button type="button" class="btn green span5">搜索<i class="m-icon-swapright m-icon-white"></i></button>			
+        			</div>
+        		</div>		
+        	</div> 
+		</div> <!--portlet-body end -->
+	</div> <!--Portlet end -->
+	<!--data table start-->
+<div class="portlet box green tabbable">
+		<div class="portlet-title">
+			<h4><i class="icon-globe"></i>用户数据</h4>
+		</div>
+		<div class="portlet-body">
+			<div class="tabbable portlet-tabs">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#portlet_tab1" data-toggle="tab">列表</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="portlet_tab1">
+						<table class="table table-striped table-bordered table-hover dataTable" id="sample_1" aria-describedby="sample_1_info">
+        				<thead>
+        					<tr role="row">
+        						<th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 10%;" aria-sort="descending" >用户ID号</th>
+        						<th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 10%;" aria-sort="descending" >用户姓名</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 10%;" aria-sort="descending" >用户性别</th>
+        						<th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 15%;" aria-sort="descending" >仓库列表</th>
+        						<th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 10%;" aria-sort="descending" >缺省仓库</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 20%;" aria-sort="descending" >用户权限</th>		
+        						<th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 15%;" aria-sort="descending" >操作</th>
+        					</tr>
+        				</thead>
+        				
+        				<tbody role="alert" aria-live="polite" aria-relevant="all">		
+        				</tbody>
+        				</table>
+        				<div class="row-fluid" id="enterprise_table_id">
+							<!--<div class="span6"><div class="dataTables_info" id="table_page_info">Showing 1 to 5 of 25 entries</div></div>
+							<div class="span6">
+								<div class="dataTables_paginate paging_bootstrap pagination">
+									<ul><li class="prev disabled"><a href="#">← Prev</a></li><li class="active"><a href="#">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li><li><a href="#">4</a></li><li><a href="#">5</a></li><li class="next"><a href="#">Next → </a></li></ul>
+								</div>
+							</div>-->
+						</div> <!--分页div row fluid结束-->
+						</div>
+					</div> <!--first tab over-->
+					
+				</div>
+			</div>
+			
+		</div> <!--portlet-body end-->
+	</div> <!--portlet end-->
+	<!--data table end-->
+	<script src="$!request.getContextPath()/public/ConstantJs/page.js"></script>
+    <script src="$!request.getContextPath()/public/ConstantJs/submitForm.js"></script>
+	
+</body>
+<script>
+var trOdd = "<tr class='gradeX odd'></tr>";
+var trEven = "<tr class='gradeX even'></tr>";
+var tdContent = "<td class='hidden-480 '>{0}</td>";
+var tdOperator = "<td class='hidden-480 '>"
+                +"<button type='button' class='btn green editBt' >编辑</button>"
+                +"<button type='button' class='btn black withdrawBt' >注销</button>"
+                +"</td>";
+var tdService =  "<td class='hidden-480 '>"
+                + "<button type='button'  class='btn storageSBt'"
+                +">仓储</button>"
+                + "<button type='button'  class='btn tempSBt'"
+                +">温控</button>"
+                + "<button type='button'  class='btn traceSBt'"
+                +">溯源</button>"
+                +"</td>";
+
+String.prototype.format = function()
+{
+    var args = arguments;
+    return this.replace(/\{(\d+)\}/g,                
+        function(m,i){
+            return args[i];
+        });
+}
+
+function addDefaultDataToTable(data, table){
+
+    console.log(data);
+
+    var tbody = jQuery('#'+table+' tbody');
+    //first clear the table's tbody
+    tbody.empty();
+    
+    for(var i = 0; i < data.length; i++){
+        if(i % 2 == 0) {
+            tbody.append(trOdd);
+        }else{
+            tbody.append(trEven);
+        }
+        var item = data[i];
+        var lastTr = jQuery('#'+table+'>tbody>tr:last');
+
+        //because json is disordered  
+        var order = new Array("id","name","sex","storageList"
+                    ,"defaultStorageId");
+        for(var index in order){
+            if(order[index] == "sex"){
+                 lastTr.append(tdContent.format(item['sex'] ? '男': '女')); 
+            }
+            else{
+                 lastTr.append(tdContent.format(item[order[index]] ? item[order[index]]: '无')); 
+            }
+        }
+        //add privilege setting
+       
+        if(item.privilege)
+        {
+            var tdPrivlege = $(tdService);
+            tdPrivlege.children('.storageSBt').addClass(item.privilege & 4 ? 'green' : 'red');
+            tdPrivlege.children('.tempSBt').addClass(item.privilege & 2 ? 'green' : 'red');
+            tdPrivlege.children('.traceSBt').addClass(item.privilege & 1 ? 'green' : 'red');
+            lastTr.append(tdPrivlege);
+
+        }
+        else
+        {
+            lastTr.append(tdContent.format('管理员账户'));
+        }
+        //add operation
+        lastTr.append(tdOperator.format(item.id,item.name));
+        //add click listener to select button
+    } // for is over
+}//function addDefaultDataToTable is over
+
+jQuery(function(jQuery) {
+
+    var pageInfo = eval($!{pageInfo});
+
+    //sample_1 是原料表的id
+    addDefaultDataToTable(pageInfo.dataList,"sample_1");
+    createPageInfo("enterprise_table_id",pageInfo,"enterprise_records_pers_page","$!request.getContextPath()/enterpriseManager/enterpriseList");
+
+});
+</script>

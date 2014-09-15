@@ -1,0 +1,320 @@
+<head>
+    <style>
+        .ver-inline-menu li.active a, .ver-inline-menu li.active i {
+        	background: #28b779;
+        	border-left: solid 1px #28b779;
+        }  
+        .ver-inline-menu li.active:after {
+        	border-left: 6px solid #28b779;
+        }
+
+        .ver-inline-menu li.active i {
+        	background: #28b779 !important;
+        }
+    </style>
+    <link href="$!request.getContextPath()/public/data-tables/DT_bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+<div class="row-fluid search-forms search-default">
+	<form class="form-search" action="#">
+		<div class="chat-form">
+			<div class="input-cont">   
+				<input type="text" placeholder="查找企业ID或者企业名" class="m-wrap" id="input_enterprise">
+			</div>
+			<button type="button" class="btn green" id="search_bt">查找 &nbsp; <i class="m-icon-swapright m-icon-white"></i></button>
+		</div>
+	</form>
+</div>
+<div class="row-fluid">
+  <div class="span12">
+	<div class="span3">
+		<ul class="ver-inline-menu tabbable margin-bottom-10">
+			<li class="active">
+				<a data-toggle="tab" href="#tab_basic">
+				<i class="icon-user"></i> 
+				基本信息
+				</a> 
+				<span class="after"></span>                           			
+			</li>
+			<li class="service_setting"><a data-toggle="tab" href="#tab_storage"><i class="icon-truck"></i>仓储配置</a></li>
+			<li class="service_setting"><a data-toggle="tab" href="#tab_temp"><i class="icon-bar-chart"></i>温控配置</a></li>
+			<li class="service_setting"><a data-toggle="tab" href="#tab_trace"><i class="icon-table"></i>溯源配置</a></li>
+		</ul>
+	</div>
+	<div class="span9">
+		<div class="tab-content">
+			<div id="tab_basic" class="tab-pane active">
+				<div style="height: auto;" id="accordion1-1" class="accordion in collapse">
+					<form action="#">
+						<label class="control-label">企业ID号</label>
+						<input type="text" placeholder="1000" class="m-wrap span8" id="input_id">
+						<label class="control-label">企业名称</label>
+						<input type="text" placeholder="杭州太极" class="m-wrap span8" id="input_name">
+						<label class="control-label">联系电话</label>
+						<input type="text" placeholder="+1 646 580 DEMO (6284)" class="m-wrap span8" id="input_phone">
+						<label class="control-label">联系邮箱</label>
+						<input type="text" placeholder="test@admin.com" class="m-wrap span8" id="input_email">
+						<label class="control-label">简介</label>
+						<textarea class="span8 m-wrap" rows="3" id="input_about"></textarea>
+						<label class="control-label">网站链接</label>
+						<input type="text" placeholder="http://www.mywebsite.com" class="m-wrap span8" id="input_website">
+					</form>
+				</div>
+			</div>
+			<div id="tab_storage" class="tab-pane">
+				<div style="height: auto;" id="accordion2-2" class="accordion collapse in">
+					<form>
+					    <div  class="profile-settings row-fluid" style="border-bottom: 1px solid #eee;">
+						<div class="input-append ">                
+	                       <button class="btn blue" type="button">当前级别</button>
+						   <input id="level_storage" class="m-wrap" type="text" style="border:1px solid #e5e5e5 !important ; width : 130px">
+		                </div>
+		                <div class="btn-group row-fluid" style="margin-bottom: 10px;">
+	        				<a class="btn span3" id="bt_current_service_inoutService">出入库 &nbsp;</a>
+	        				<a class="btn span3" id="bt_current_service_inventoryService">库存管理</a>
+	        				<a class="btn span3" id="bt_current_service_repPreviwService">仓库预览</a>
+	        				<a class="btn span3" id="bt_current_service_rfidService">RFID管理</a>
+	        			</div>
+	        			</div>
+	        			<div class="space10"></div>
+	        			<div class="profile-settings row-fluid">
+	        			<h4> 其他可用配置 </h4>
+	        			<table class="table table-bordered table-hover" id="service_table_storage">
+							<thead>
+								<tr>
+									<th>配置ID</th>
+									<th>出入库</th>
+									<th>库存管理</th>
+									<th>仓库预览</th>
+									<th>RFID管理</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+							 </tbody>
+							</table>
+							</div>
+					</form>
+				</div>
+			</div>
+			<div id="tab_temp" class="tab-pane">
+				<div style="height: auto;" id="accordion2-2" class="accordion collapse in">
+					<form>
+					    <div class="profile-settings row-fluid" style="border-bottom: 1px solid #eee;">
+						<div class="input-append ">                
+	                       <button class="btn blue" type="button">当前级别</button>
+						   <input id="level_temp" class="m-wrap" type="text" style="border:1px solid #e5e5e5 !important ; width : 130px">
+		                </div>
+		                <div class="btn-group row-fluid" style="margin-bottom: 10px;">
+	        				<a class="btn span2" id="bt_current_service_realTimeData">实时温度</a>
+	        				<a class="btn span2" id="bt_current_service_historyData">历史温度</a>
+	        				<a class="btn span2" id="bt_current_service_exceptionData">异常历史</a>
+	        				<a class="btn span2" id="bt_current_service_sensorManager">传感器管理</a>
+	        				<a class="btn span2" id="bt_current_service_storageManager">仓库管理</a>
+	        				<a class="btn span2" id="bt_current_service_tmDownload">移动监控</a>
+	        			</div>
+	        			</div>
+	        			<div class="space10"></div>
+	        			<div class="profile-settings row-fluid">
+	        			<h4> 其他可用配置 </h4>
+	        			<table class="table table-bordered table-hover" id="service_table_temp">
+							<thead>
+								<tr>
+								    <th>配置ID</th>
+									<th>实时温度</th>
+									<th>历史温度</th>
+									<th>异常历史</th>
+									<th>传感器管理</th>
+									<th>仓库管理</th>
+									<th>移动监控</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+							 </tbody>
+							</table>
+							</div>
+					</form>
+				</div>
+			</div>
+			<div id="tab_trace" class="tab-pane">
+				<div style="height: auto;" id="accordion2-2" class="accordion collapse in">
+					<form>
+					    <div  class="profile-settings row-fluid" style="border-bottom: 1px solid #eee;">
+						<div class="input-append ">                
+	                       <button class="btn blue" type="button">当前级别</button>
+						   <input id="level_trace" class="m-wrap" type="text" style="border:1px solid #e5e5e5 !important ; width : 130px">
+		                </div>
+		                <div class="btn-group row-fluid" style="margin-bottom: 10px;">
+	        				<a class="btn span2" id="bt_current_service_rawmaterialManager">原料管理</a>
+	        				<a class="btn span2" id="bt_current_service_productionManager">产品管理</a>
+	        				<a class="btn span2" id="bt_current_service_dataManager">数据管理</a>
+	        				<a class="btn span2" id="bt_current_service_productionStatistics">产品统计</a>
+	        				<a class="btn span2" id="bt_current_service_datarecord">数据录入</a>
+	        				<a class="btn span2" id="bt_current_service_dataquery">数据查询</a>
+	        				<a class="btn" id="bt_current_service_mobileApp">移动APP</a>
+	        			</div>
+	        			</div>
+	        			<div class="space10"></div>
+	        			<div class="profile-settings row-fluid">
+	        			<h4> 其他可用配置 </h4>
+	        			<table class="table table-bordered table-hover" id="service_table_trace">
+							<thead>
+								<tr>
+									<th>配置ID</th>
+									<th>原料管理</th>
+									<th>产品管理</th>
+									<th>数据管理</th>
+									<th>产品统计</th>
+									<th>数据录入</th>
+									<th>数据查询</th>
+									<th>移动APP</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+							 </tbody>
+							</table>
+							</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--end span9-->                                   
+  </div>
+</div>
+</body>
+<script type="text/javascript">
+	jQuery(function(jQuery) {
+		$('#search_bt').click(searchEnter);
+
+		$('.service_setting').click(function(){
+			var chosen = $(this);
+			var tab_name = $(chosen.children('a').get(0)).attr('href');
+			setServiceTab(tab_name);
+		})
+	});
+
+	var setCurrentService = function(service)
+	{
+		for(var s in service)
+		{
+			var bt = $('#bt_current_service_'+s);
+			if(service[s] && !bt.hasClass('green')) 
+			{
+				bt.addClass('green');
+			}
+			else if(!service[s] && !bt.hasClass('red'))
+			{
+				bt.addClass('red');
+			}
+		}
+	}
+
+	var addServiceTable= function(service)
+	{
+		var trString = "<tr><td>"+service.id+"</td>";
+		for(var s in service)
+		{
+			if(s == 'id') continue;
+			if(service[s])
+			{
+				trString += "<td><span class='label label-success'>启用</span></td>";
+			}
+			else
+			{
+				trString +=　"<td><span class='label'>停用</span></td>";
+			}
+		}
+		trString += "<td><a href='#' class='btn mini blue'><i class='icon-edit'></i> Edit</a></td></tr>";
+		return trString;
+	}
+
+	var setServiceTable = function(name, datas, current_id)
+	{
+		$('#service_table_'+name+' tbody tr').remove();
+
+		for( var len = datas.length-1; len >= 0; len--)
+		{
+			var service = datas[len];
+			if (service.id == current_id)
+			{
+				setCurrentService(service);
+			}
+			else
+			{
+				$('#service_table_'+name+' tbody').append(addServiceTable(service));
+			}
+		}
+	}
+
+	function searchEnter()
+	{
+		var id_or_name = $('#input_enterprise').val();
+		jQuery.ajax({
+			type:"POST",
+			data:{
+                 search:id_or_name
+            },
+			url:'$pageAbsUrl'+'/enterpriseManager/enterpriseMaintain?action=search',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+			    if(res && res!= "null"){
+			    	var datas = JSON.parse(res);
+			    	setBasic(datas);
+			    }
+			    else{
+			    	alert('无法找到该企业');
+			    }
+			    
+			}
+		});
+	}
+
+	var setBasic = function(data)
+	{
+		$('#input_id').val(data.id);
+		$('#input_name').val(data.name);
+		$('#input_phone').val(data.phone);
+		$('#input_email').val(data.email);
+		$('#input_about').val(data.description);
+		$('#input_website').val("无");
+
+		$('#level_storage').val(data.storageService);
+		$('#level_temp').val(data.tempService);
+		$('#level_trace').val(data.traceService);
+	}
+
+	var setServiceTab = function(tab_name)
+	{
+		var service_name = tab_name.replace('#tab_',''); 
+		var current_level = $('#level_'+service_name).val();
+		if (!current_level)
+		{
+			return;
+		}
+		jQuery.ajax({
+			type:"POST",
+			url:'$pageAbsUrl'+'/enterpriseManager/enterpriseMaintain?action='+service_name+'_service',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+			    if(res){
+			    	var datas = JSON.parse(res);
+			    	setServiceTable(service_name, datas, current_level);
+			    }
+			    else{
+			    	alert('fail');
+			    }
+			    
+			}
+		});
+	}
+
+
+
+</script>

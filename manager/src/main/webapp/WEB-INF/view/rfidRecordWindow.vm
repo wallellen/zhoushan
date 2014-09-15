@@ -1,0 +1,300 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<style >
+		.location-active {
+			background-color: green !important;
+		}
+    </style>
+	<link href="$!request.getContextPath()/public/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/metro.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style_responsive.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/css/style_light.css" rel="stylesheet" id="style_color" />
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link href="$!request.getContextPath()/public/font-awesome/css/font-awesome.css" rel="stylesheet">
+</head>
+
+<body style="width:50%;">
+	<div class="portlet box green">
+      <div class="portlet-title">
+         <h4><i class="icon-reorder"></i>仓储信息</h4>
+      </div>
+      <div class="portlet-body form">
+         <!-- BEGIN FORM-->
+         <form action="#" class="form-horizontal">
+            <h3 class="form-section">出入库详情</h3>
+            <div class="row-fluid">
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">入库时间</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="iTime" disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">操作人员</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="iUser" disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+            </div><!--/row-->
+
+            <div class="row-fluid">
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">出库时间</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="oTime" disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">操作人员</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="oUser" disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+            </div><!--/row-->
+         </form>
+         <!-- END FORM-->
+
+         <!-- BEGIN FORM-->
+         <form action="#" class="form-horizontal">
+            <h3 class="form-section" id = "storageName">仓库详情</h3>
+            <div class="row-fluid">
+               <!--/span-->
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">最高温度</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="maxTemp" disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+               <div class="span6 ">
+                  <div class="control-group">
+                     <label class="control-label">最低温度</label>
+                     <div class="controls">
+                        <input type="text" class="m-wrap span12" id="minTemp" disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <!--/span-->
+            </div><!--/row-->
+         </form>
+         <!-- END FORM--> 
+
+          <!-- BEGIN FORM-->
+         <form action="#" class="form-horizontal">
+            <h3 class="form-section">温度分析</h3>
+            <div class="row-fluid">
+               <div class="span12">
+                     <!--BEGIN TABS-->
+                     <div class="tabbable tabbable-custom tabs-left">
+                        <!-- Only required for left/right tabs -->
+                        <ul class="nav nav-tabs tabs-left" >
+                           <li class="active"> <a href="#test1" data-toggle='tab'>异常情况</a></li>
+                           <li class=""> <a href="#test2" data-toggle='tab'>趋势图</a></li>
+                        </ul>
+                        <div class="tab-content" id="raw_tab_content_id">
+                           <div class="tab-pane active" id="test1"><div id="container"></div></div>
+                           <div class="tab-pane " id="test2"><div id="container1">1232</div></div>
+                        </div>
+                     </div>
+                     <!--END TABS-->
+                  </div>
+            </div>          
+            <!--/row-->
+         </form>
+         <!-- END FORM-->  
+
+      </div>
+   </div>
+</body>
+
+<script type="text/javascript">
+
+function loadJS(file) {
+    // DOM: Create the script element
+    var jsElm = document.createElement("script");
+    // set the type attribute
+    //jsElm.type = "application/javascript";
+    // make the script element load file
+    jsElm.src = file;
+    // finally insert the element to the body element in order to load the script
+    jQuery("body").append(jsElm);
+}
+
+
+function handleInOutRecord(inOut){
+   if(inOut.length == 1){
+      jQuery("#iTime").val(inOut[0].time);
+      jQuery("#iUser").val(inOut[0].personId);
+      jQuery("#oTime").val("暂未出库");
+      jQuery("#oUser").val("暂未出库");
+   }else{
+      jQuery("#iTime").val(inOut[0].action == 1 ? inOut[0].time: inOut[1].time);
+      jQuery("#iUser").val(inOut[0].action == 1 ? inOut[0].personId: inOut[1].personId);
+      jQuery("#oTime").val(inOut[0].action == 1 ? inOut[1].time: inOut[0].time);
+      jQuery("#oUser").val(inOut[0].action == 1 ? inOut[1].personId: inOut[0].personId);
+   }
+}
+
+function handleStorageInfo(storageInfo){
+   jQuery("#storageName").text("仓库详情（" + storageInfo.name + "）");
+   jQuery("#maxTemp").val(storageInfo.maxTemp);
+   jQuery("#minTemp").val(storageInfo.minTemp);
+}
+
+function handleExceptionRate(exceptionRate,extToName){
+   var categories = [];
+   var seriesChildLow = [];
+   var seriesChildNormal = [];
+   var seriesChildexceed = [];
+   var lowAll = 0;
+   var normalAll = 0;
+   var exceedAll = 0;
+   for(var key in exceptionRate){
+      var dataString = exceptionRate[key].split(";"); //0,12,12
+      categories.push(extToName[key]);
+      seriesChildLow.push(parseFloat(dataString[0]));
+      seriesChildNormal.push(parseFloat(dataString[1]));
+      seriesChildexceed.push(parseFloat(dataString[2]));
+      lowAll += parseInt(dataString[0]);
+      normalAll += parseInt(dataString[1]);
+      exceedAll += parseInt(dataString[2]);
+   }
+
+   jQuery('#container').highcharts({
+        title: {
+            text: '异常情况统计图'
+        },
+        xAxis: {
+            categories: categories
+        },
+        labels: {
+            items: [{
+                html: '异常比例图',
+                style: {
+                    left: '50px',
+                    top: '18px',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+            }]
+        },
+        series: [{
+            type: 'column',
+            name: '温度偏低',
+            data: seriesChildLow
+        }, {
+            type: 'column',
+            name: '温度正常',
+            data: seriesChildNormal
+        }, {
+            type: 'column',
+            name: '温度偏高',
+            data: seriesChildexceed
+        }, {
+            type: 'pie',
+            name: '比例',
+            tooltip: {
+             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            data: [{
+                name: '温度偏低',
+                y: lowAll,
+                color: Highcharts.getOptions().colors[0] // Jane's color
+            }, {
+                name: '温度正常',
+                y: normalAll,
+                color: Highcharts.getOptions().colors[1] // John's color
+            }, {
+                name: '温度偏高',
+                y: exceedAll,
+                color: Highcharts.getOptions().colors[2] // Joe's color
+            }],
+            center: [100, 80],
+            size: 100,
+            showInLegend: false,
+            dataLabels: {
+                enabled: false
+            }
+        }]
+    });
+}
+
+function handleTempData(tempData,extToName,timeLine){
+   extToName.average = "平均值";
+   var series = [];
+   for(var key in tempData){
+      var seriesChild = {};
+      seriesChild.name = extToName[key];
+      seriesChild.data = tempData[key];
+      series.push(seriesChild);
+   }
+   $('#container1').highcharts({
+            title: {
+                text: '温度趋势图',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Source: 温度控制系统',
+                x: -20
+            },
+            xAxis: {
+                categories:timeLine
+            },
+            yAxis: {
+                title: {
+                    text: 'Temperature (°C)'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: '°C'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: series
+        });
+}
+
+jQuery(function(jQuery) {
+   if(jQuery("body").highcharts === undefined){
+      loadJS("$!request.getContextPath()/public/js/highcharts4/highcharts.js");
+      loadJS("$!request.getContextPath()/public/js/highcharts4/exporting.js");
+      loadJS("$!request.getContextPath()/public/js/highcharts4/grid.js");
+   }
+   var inOutList = eval($!{inOutList});
+   var storageInfo = eval($!{storageInfo});
+   var exceptionRate = eval($!{exceptionRate});
+   var extToName = eval($!{extToName});
+   var tempData = eval($!{tempData});
+   var timeLine = eval($!{timeLine});
+   handleInOutRecord(inOutList);
+   handleStorageInfo(storageInfo);
+   handleExceptionRate(exceptionRate,extToName);
+   handleTempData(tempData,extToName,timeLine);
+});
+</script>
+</html>

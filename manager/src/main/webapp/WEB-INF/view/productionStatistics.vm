@@ -1,0 +1,266 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<link href="$!request.getContextPath()/public/uniform/css/uniform.default.css" rel="stylesheet" />	
+	
+</head>
+<style>
+		@-webkit-keyframes twinkle {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		@-moz-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		@-ms-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		.twinkle{
+            -webkit-animation: twinkle 1s alternate infinite;
+            -moz-animation: twinkle 1s alternate infinite;
+            -ms-animation: twinkle 1s alternate infinite;
+		}
+
+</style>
+<body>
+	
+	<div class="portlet box green">
+		
+		<div class="portlet-title">
+			<h4><i class="icon-reorder"></i>工具栏</h4>
+			<div class="tools">
+				<a href="javascript:;" class="collapse"></a>
+			</div>
+		</div>
+		
+		<div class="portlet-body">
+        	<div class="row-fluid">
+            	<div  class="span12">
+        		<h4  >产品位置选择</h4>
+            	<a href="#" class="icon-btn span3" style="width:20%">
+                	<i class="icon-map-marker"></i>
+                	<div>未入库</div>
+            	</a>
+            	
+            	<a href="#" class="icon-btn span3 twinkle" style="width:20%">
+                	<i class="icon-home"></i>
+                	<div>仓库中</div>
+            	</a>
+            	
+            	<a href="#" class="icon-btn span3" style="width:20%">
+                	<i class=" icon-truck"></i>
+                	<div>运输中</div>
+            	</a>
+            	
+            	<a href="#" class="icon-btn span3" style="width:20%">
+                	<i class=" icon-shopping-cart"></i>
+                	<div>销售中</div>
+            	</a>
+            	</div>       			
+        	</div> <!--the tools bar's Row fluid end -->
+		</div> <!--portlet-body end -->
+	</div> <!--Portlet end -->
+	
+	<div class="row-fluid">
+		<div  class="span6">
+			<!-- BEGIN Portlet PORTLET-->
+			<div class=" portlet box green">
+							<div class="portlet-title">
+								<h4><i class="icon-reorder"></i>仓库中产品分布图</h4>
+								<div class="actions">
+									
+									<div class="btn-group">
+										<a class="btn mini green" href="#" data-toggle="dropdown">
+										<i class="icon-user"></i> 仓库选择
+										<i class="icon-angle-down"></i>
+										</a>
+										<ul class="dropdown-menu pull-right">
+											<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+											<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+											<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+											<li class="divider"></li>
+											<li><a href="#"><i class="i"></i> Make admin</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="portlet-body" id = "container-first-left">
+								
+							</div>
+						</div>
+			<!-- END Portlet PORTLET-->
+			
+			
+		</div>
+		
+		<div  class="span6">
+			
+			<!-- BEGIN Portlet PORTLET-->
+			<div class=" portlet box green">
+							<div class="portlet-title">
+								<h4><i class="icon-reorder"></i>产品在仓库中的分布图</h4>
+								<div class="actions">
+									
+									<div class="btn-group">
+										<a class="btn mini green" href="#" data-toggle="dropdown">
+										<i class="icon-user"></i> 产品选择
+										<i class="icon-angle-down"></i>
+										</a>
+										<ul class="dropdown-menu pull-right">
+											<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+											<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+											<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+											<li class="divider"></li>
+											<li><a href="#"><i class="i"></i> Make admin</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="portlet-body" id = "container-first-right">
+								
+							</div>
+						</div>
+			<!-- END Portlet PORTLET-->
+		</div>
+		
+	</div> <!--the highcharts's first row fluid over-->	
+<script src="$!request.getContextPath()/public/js/highcharts4/highcharts.js"></script>
+<script src="$!request.getContextPath()/public/js/highcharts4/exporting.js"></script>
+<script src="$!request.getContextPath()/public/js/highcharts4/grid.js"></script>	
+		
+</body>
+<script type="text/javascript">
+ 
+
+  jQuery(function(jQuery) {
+  
+  
+  
+  jQuery('#container-first-left').highcharts({
+        title: {
+            text: '仓库A统计图'
+        },
+        xAxis: {
+            categories: ['仓库A']
+        },
+        labels: {
+            items: [{
+                html: '产品比例',
+                style: {
+                    left: '85px',
+                    top: '18px',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+            }]
+        },
+        series: [{
+            type: 'column',
+            name: '产品A',
+            data: [30]
+        }, {
+            type: 'column',
+            name: '产品B',
+            data: [20]
+        }, {
+            type: 'column',
+            name: '产品C',
+            data: [40]
+        }, {
+            type: 'column',
+            name: '产品D',
+            data: [80]
+        },{
+            type: 'pie',
+            name: '数量比例',
+             tooltip: {
+        	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            data: [{
+                name: '产品A',
+                y: 30,
+                color: Highcharts.getOptions().colors[0] // Jane's color
+            }, {
+                name: '产品B',
+                y: 20,
+                color: Highcharts.getOptions().colors[1] // John's color
+            }, {
+                name: '产品C',
+                y: 40,
+                color: Highcharts.getOptions().colors[2], // Joe's color
+            }, {
+                name: '产品D',
+                y: 80,
+                color: Highcharts.getOptions().colors[2], // Joe's color
+            }],
+            center: [100, 80],
+            size: 100,
+            showInLegend: false,
+            dataLabels: {
+                enabled: false
+            }
+        }]
+    }); //first-left over
+	
+	jQuery('#container-first-right').highcharts({
+        title: {
+            text: '产品A统计图'
+        },
+        xAxis: {
+            categories: ['产品A']
+        },
+        labels: {
+            items: [{
+                html: '产品分布',
+                style: {
+                    left: '85px',
+                    top: '18px',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                }
+            }]
+        },
+        series: [{
+            type: 'column',
+            name: '仓库A',
+            data: [30]
+        }, {
+            type: 'column',
+            name: '仓库B',
+            data: [20]
+        }, {
+            type: 'column',
+            name: '仓库C',
+            data: [40]
+        },  {
+            type: 'pie',
+            name: '数量比例',
+             tooltip: {
+        	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            data: [{
+                name: '仓库A',
+                y: 30,
+                color: Highcharts.getOptions().colors[0] // Jane's color
+            }, {
+                name: '仓库B',
+                y: 20,
+                color: Highcharts.getOptions().colors[1] // John's color
+            }, {
+                name: '仓库C',
+                y: 40,
+                color: Highcharts.getOptions().colors[2], // Joe's color
+            }],
+            center: [100, 80],
+            size: 100,
+            showInLegend: false,
+            dataLabels: {
+                enabled: false
+            }
+        }]
+    }); //first-right over
+	
+  	//alert(1);
+  }); //ready over
+</script>
+</html>

@@ -1,0 +1,207 @@
+<head>
+	<script src="$!request.getContextPath()/public/js/socket.io.js"></script>
+</head>
+<body>
+	<div id="tab_storage" class="span10">
+			<div style="height: auto;">
+				<form>
+				    <div  class="profile-settings row-fluid" style="border-bottom: 1px solid #eee;">
+					<div class="input-append ">                
+	                   <button class="btn blue" type="button">当前级别</button>
+					   <input id="level_storage" class="m-wrap" type="text" style="border:1px solid #e5e5e5 !important ; width : 130px">
+	                </div>
+	                <div class="btn-group row-fluid" style="margin-bottom: 10px;">
+	    				<a class="btn span3" id="bt_current_service_inoutService">出入库 &nbsp;</a>
+	    				<a class="btn span3" id="bt_current_service_inventoryService">库存管理</a>
+	    				<a class="btn span3" id="bt_current_service_repPreviwService">仓库预览</a>
+	    				<a class="btn span3" id="bt_current_service_rfidService">RFID管理</a>
+	    			</div>
+	    			</div>
+	    			<div class="space10"></div>
+	    			<div class="profile-settings row-fluid">
+		    			<h4> 其他可用配置 </h4>
+		    			<table class="table table-bordered table-hover" id="service_table_storage">
+							<thead>
+								<tr>
+									<th>配置ID</th>
+									<th>出入库</th>
+									<th>库存管理</th>
+									<th>仓库预览</th>
+									<th>RFID管理</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+							 </tbody>
+							</table>
+					</div>
+
+					<div class="profile-settings"> 
+						<h4>权限说明</h4>
+						<div class="accordion collapse" id="accordion1" style="height: auto;">
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse_1">
+									出入库功能介绍
+									</a>
+								</div>
+								<div id="collapse_1" class="accordion-body collapse" style="height: 0px;">
+									<div class="accordion-inner">
+										完成自动化的出入库，商品信息与RFID号绑定，自动进行商品库存的更新。
+										对今日的出入库信息进行统计，查询等。
+									</div>
+								</div>
+							</div>
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse_2">
+									库存功能介绍
+									</a>
+								</div>
+								<div id="collapse_2" class="accordion-body collapse" style="height: 0px;">
+									<div class="accordion-inner">
+										查看当前库存情况，仓库中存储的商品信息，各种产品的占用库存百分百。
+										查询所有出入库记录，分析出入库趋势。
+									</div>
+								</div>
+							</div>	
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse_3">
+									仓库预览功能介绍
+									</a>
+								</div>
+								<div id="collapse_3" class="accordion-body collapse" style="height: 0px;">
+									<div class="accordion-inner">
+									对仓库进行3D预览，查看大致的商品配额以及商品的信息。
+									集合化平台，集合完成其他功能，如温控、阅读器等控制。
+									</div>
+								</div>
+							</div>	
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse_4">
+								    RFID功能介绍
+									</a>
+								</div>
+								<div id="collapse_4" class="accordion-body collapse" style="height: 0px;">
+									<div class="accordion-inner">
+									RFID阅读器管理界面，完成阅读器的管理和维护。
+									</div>
+								</div>
+							</div>			
+						</div>
+					</div>
+					</form>
+				</div>
+			</div>
+</body>
+<script>
+	jQuery(function(jQuery) {
+		setServiceTab();
+
+		//add action to apply bt
+		$('table').on('click','.apply',function(){
+			var chosen = $(this);
+			var target_id = chosen.parent().parent().find('td:first').text();
+	     	handleApply(target_id);
+	  	});
+	});
+
+	function handleApply(target_id)
+	{
+		
+		jQuery.ajax({
+			type:"POST",
+			url:'$pageAbsUrl'+'/maintainManager/enterpriseBasic?action=apply',
+			data:
+			{
+				service : 'storage',
+				target_id : target_id
+			},
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+			  	    
+			}
+		});
+
+	}
+
+	var addServiceTable= function(service)
+	{
+		var trString = "<tr><td>"+service.id+"</td>";
+		for(var s in service)
+		{
+			if(s == 'id') continue;
+			if(service[s])
+			{
+				trString += "<td><span class='label label-success'>启用</span></td>";
+			}
+			else
+			{
+				trString +=　"<td><span class='label'>停用</span></td>";
+			}
+		}
+		trString += "<td><a class='btn mini blue apply'><i class='icon-edit'></i>申请</a></td></tr>";
+		return trString;
+	}
+
+	var setCurrentService = function(service)
+	{
+		for(var s in service)
+		{
+			var bt = $('#bt_current_service_'+s);
+			if(service[s] && !bt.hasClass('green')) 
+			{
+				bt.addClass('green');
+			}
+			else if(!service[s] && !bt.hasClass('red'))
+			{
+				bt.addClass('red');
+			}
+		}
+	}
+
+	var setServiceTable = function(datas, current_id)
+	{
+		$('#service_table_storage tbody tr').remove();
+
+		$('#level_storage').val(current_id);
+		for( var len = datas.length-1; len >= 0; len--)
+		{
+			var service = datas[len];
+			if (service.id == current_id)
+			{
+				setCurrentService(service);
+			}
+			else
+			{
+				$('#service_table_storage tbody').append(addServiceTable(service));
+			}
+		}
+	}
+
+	function setServiceTab()
+	{
+		jQuery.ajax({
+			type:"POST",
+			url:'$pageAbsUrl'+'/maintainManager/enterpriseBasic?action=get_storage',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+			    if(res){
+			    	var datas = JSON.parse(res);
+			    	setServiceTable(datas.all, datas.current);
+			    }
+			    else{
+			    	alert('fail');
+			    }
+			    
+			}
+		});
+	}
+
+</script>

@@ -1,0 +1,1099 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<link href="$!request.getContextPath()/public/data-tables/DT_bootstrap.css" rel="stylesheet" />
+	<link href="$!request.getContextPath()/public/uniform/css/uniform.default.css" rel="stylesheet" />	
+    <link rel="stylesheet" type="text/css" href="$!request.getContextPath()/public/ConstantJs/fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />
+    <script src="$!request.getContextPath()/public/ConstantJs/submitForm.js"></script>        
+    <script src="$!request.getContextPath()/public/ConstantJs/page.js"></script>
+    <script type="text/javascript" src="$!request.getContextPath()/public/ConstantJs/fancybox/jquery.fancybox.js?v=2.1.5"></script>
+    <script src="$!request.getContextPath()/public/js/bootstrap-datetimepicker.min.js"></script>    
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=cFd5LkakiVL0fxGypWqsLZFg"></script>				
+	<link href="$!request.getContextPath()/public/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+</head>
+<style>
+		@-webkit-keyframes twinkle {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		@-moz-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		@-ms-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		.twinkle{
+            -webkit-animation: twinkle 1s alternate infinite;
+            -moz-animation: twinkle 1s alternate infinite;
+            -ms-animation: twinkle 1s alternate infinite;
+		}
+        .hidden-480{
+            vertical-align: middle !important;
+        }
+        .sort_desc {
+            background:url('$!request.getContextPath()/public/data-tables/images/sort_desc.png') no-repeat center right;
+        }
+        .sort_asc {
+            background:url('$!request.getContextPath()/public/data-tables/images/sort_asc.png') no-repeat center right;
+        }
+</style>
+<body>
+	
+	<div class="portlet box green">
+		
+		<div class="portlet-title">
+			<h4><i class="icon-reorder"></i>工具栏</h4>
+			<div class="tools">
+				<a href="javascript:;" class="collapse"></a>
+			</div>
+		</div>
+		
+		<div class="portlet-body">
+        	<div class="row-fluid">
+            	<div  class="span3">
+        		<h4  >产品位置选择</h4>
+            	<a href="#" class="icon-btn span3 location" id = "location0" style="width:20%" locStatus = "0">
+                	<i class="icon-map-marker"></i>
+                	<div>未入库</div>
+            	</a>
+            	
+            	<a href="#" class="icon-btn span3 location" id = "location1" style="width:20%" locStatus = "1">
+                	<i class="icon-home"></i>
+                	<div>仓库中</div>
+            	</a>
+            	
+            	<a href="#" class="icon-btn span3 location" id = "location2" style="width:20%" locStatus = "2">
+                	<i class=" icon-truck"></i>
+                	<div>运输中</div>
+            	</a>
+            	
+            	<a href="#" class="icon-btn span3 location" id = "location3" style="width:20%" locStatus = "3">
+                	<i class=" icon-shopping-cart"></i>
+                	<div>销售中</div>
+            	</a>
+            	</div>
+        		
+        		<div class="span3">
+            		<h4  >分类</h4>
+            		<div class="row-fluid" style="margin-top:20px;">
+            			<div class="btn-group span6">
+            				<a class="btn green" href="#" data-toggle="dropdown">
+            				<i class="icon-question-sign"></i> 产品种类
+            				<i class="icon-angle-down"></i>
+            				</a>
+            				<ul class="dropdown-menu">
+            					<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+            					<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+            					<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+            					<li class="divider"></li>
+            					<li><a href="#"><i class="i"></i> Make admin</a></li>
+            				</ul>
+            			</div>
+            			
+            			<div class="btn-group span6">
+            				<a class="btn green" href="#" data-toggle="dropdown">
+            				<i class="icon-key"></i>企业仓库
+            				<i class="icon-angle-down"></i>
+            				</a>
+            				<ul class="dropdown-menu">
+            					<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+            					<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+            					<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+            					<li class="divider"></li>
+            					<li><a href="#"><i class="i"></i> Make admin</a></li>
+            				</ul>
+            			</div>
+            		</div>
+        			<div class="row-fluid" style="margin-top:10px;">
+            			<div class="btn-group span6">
+            				<a class="btn green" href="#" data-toggle="dropdown">
+            				<i class=" icon-plane"></i> 运输批次
+            				<i class="icon-angle-down"></i>
+            				</a>
+            				<ul class="dropdown-menu">
+            					<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+            					<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+            					<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+            					<li class="divider"></li>
+            					<li><a href="#"><i class="i"></i> Make admin</a></li>
+            				</ul>
+            			</div>
+            			
+            			<div class="btn-group span6">
+            				<a class="btn green" href="#" data-toggle="dropdown">
+            				<i class="icon-map-marker"></i>  销售地区
+            				<i class="icon-angle-down"></i>
+            				</a>
+            				<ul class="dropdown-menu">
+            					<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+            					<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+            					<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+            					<li class="divider"></li>
+            					<li><a href="#"><i class="i"></i> Make admin</a></li>
+            				</ul>
+            			</div>
+            		</div>
+            	</div>
+        	
+                <div class="span3" >
+                <h4  >排序</h4>
+
+                    <div class="btn-group row-fluid" style="margin-top:10px !important;">
+                        <a id = "make_time_sort" href="javascript:;" class="btn span6 blue" style="background-color:#0E192A !important;">加工时间</a>
+                        <a id = "in_storage_sort" href="javascript:;" class="btn red span6">入库时间</a>
+                    </div>
+                    <div class="btn-group row-fluid" style="margin-top:10px !important;">
+                        <a id = "in_car_time" href="javascript:;" class="btn red span6" style="background-color:#0E192A !important;">上车时间</a>
+                        <a id = "in_sale_time" href="javascript:;" class="btn red span6">销售时间</a>
+                    </div>
+                </div>
+        		
+        		<div class="span3" >
+                <h4  >检索</h4>   
+                    <div class="row-fluid" style="margin-top:38px;">
+                    <div class="input-cont span7">   
+                        <input type="text" placeholder="Search..." class="m-wrap" id="search_content">
+                    </div>
+                    <button type="button" class="btn green span5" id="search_bt">搜索<i class="m-icon-swapright m-icon-white"></i></button>          
+                    </div>
+                </div>  	
+        	</div> <!--the tools bar's Row fluid end -->
+		</div> <!--portlet-body end -->
+	</div> <!--Portlet end -->
+	
+	<!--data table start-->
+	<div class="portlet box green tabbable">
+        <div class="portlet-title">
+            <h4><i class="icon-globe"></i>产品数据</h4>
+        </div>
+        <div class="portlet-body">
+            <div class="tabbable portlet-tabs">
+                <ul class="nav nav-tabs">
+                    <li><a href="#portlet_tab2" data-toggle="tab">
+                            已选择
+                            <span id="selectedPros" class="badge  badge-info">0</span>
+                    </a></li>
+                    <li class="active"><a href="#portlet_tab1" data-toggle="tab">列表</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="portlet_tab1">
+                        <div id="sample_1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                            <div class="row-fluid">
+                                <div class="span6"><div id="sample_1_length" class="dataTables_length">
+                                <label>
+                                <select size="1" name="sample_1_length" id="pro_records_pers_page" aria-controls="sample_1" class="m-wrap xsmall">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="-1">All</option>
+                                </select> 每页记录数
+                                </label>
+                               </div>
+                               </div>
+                            <div class="span6">
+                                <div class="dataTables_filter" id="sample_1_filter">
+                                    <label>Search: <input type="text" aria-controls="sample_1" class="m-wrap medium"></label></div>
+                            </div>
+                          </div> <!--Row fluid is over-->
+                        <table class="table table-striped table-bordered table-hover dataTable" id="sample_1" aria-describedby="sample_1_info">
+                        <thead>
+                            <tr role="row">
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 7%;" aria-sort="descending" >产品二维码</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 10%;" aria-sort="descending" >产品名称</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 15%;" aria-sort="descending" >加工记录号</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 15%;" aria-sort="descending" >RFID号</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 15%;" aria-sort="descending" >运输号</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 15%;" aria-sort="descending" >销售号</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 7%;" aria-sort="descending" >产品数量</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 16%;" aria-sort="descending" >操作</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody role="alert" aria-live="polite" aria-relevant="all">     
+                        </tbody>
+                        </table>
+                        <div class="row-fluid" id="production_table_id">
+                        </div> <!--分页div row fluid结束-->
+                        </div>
+                    </div> <!--first tab over-->
+                    <div class="tab-pane" id="portlet_tab2">
+                        <h3 class="form-section">已选择产品</h3>
+                        <table class="table table-striped table-bordered table-hover dataTable" id="selected_pro_table" aria-describedby="selected_pro_table_info">
+                        <thead>
+                            <tr role="row">
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="selected_pro_table" rowspan="1" colspan="1" style="width: 228px;" aria-sort="descending" >产品二维码</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="selected_pro_table" rowspan="1" colspan="1" style="width: 228px;" aria-sort="descending" >产品名称</th>
+                                <th class="sorting_disabled" role="columnheader" tabindex="0" aria-controls="selected_pro_table" rowspan="1" colspan="1" style="width: 228px;" aria-sort="descending" >操作</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody role="alert" aria-live="polite" aria-relevant="all">     
+                        </tbody>
+                        </table> 
+                        <div style="display:none;" id = "bind_rfid_form">
+                            <h3 class="form-section">绑定已存的入库记录</h3>
+                            <div class="row-fluid">
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                     <label class="control-label" for="rfid_time">入库时间</label>
+                                     <div class="controls">
+                                        <div id="rfid_datetimepicker1" class="input-append date" >
+                                        <input data-format="yyyy-MM-dd hh:mm:ss" type="text"  id ="rfid_time"></input>
+                                        <span class="add-on">
+                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                        </i>
+                                        </span>
+                                        </div>
+                                   </div>
+                                </div>
+                               </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                     <label class="control-label" for="rfid_time_offset">时间允许误差</label>
+                                     <div class="controls">
+                                        <select class="medium m-wrap" tabindex="1" id="rfid_time_offset">
+                                             <option value="0.5">半小时</option>
+                                             <option value="1">1小时</option>
+                                             <option value="2">2小时</option>
+                                             <option value="4">4小时</option>
+                                        </select>
+                                     </div>
+                                    </div>  
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                     <label class="control-label" for="rfid_operator">操作人员</label>
+                                     <div class="controls">
+                                        <input type="text" id="rfid_operator" class="m-wrap " placeholder="">
+                                     </div>
+                                    </div> 
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                     <label class="control-label" for="rfid_search">搜索RFID记录</label>
+                                     <div class="controls">
+                                        <button type="button" class="btn green reload" id="rfid_search">搜索 &nbsp; <i class="m-icon-swapright m-icon-white"></i></button>
+                                     </div>
+                                    </div> 
+                                </div>
+                            </div>
+                            <h3 class="form-section">检索结果</h3>
+                            <div class="portlet-body">
+                                     <table class="table table-striped table-bordered table-hover dataTable" id="rfid_search_result">
+                                        <thead>
+                                            <tr role="row">
+                                                <th role="columnheader" >RFID号</th>
+                                                <th role="columnheader" >入库时间</th>
+                                                <th role="columnheader" >操作人员</th>
+                                                <th role="columnheader" >操作</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all">     
+                                        </tbody>
+                                     </table>
+                            </div>
+                        </div> <!--bind_rfid_form is over-->
+
+                        <div style="display:none;" id = "transport_form">
+                            <h3 class="form-section">运输记录信息</h3>
+                            <div class="row-fluid">
+                               <div class="span12">
+                                    <div class="accordion" id="trans_accordion1">
+                                        <div class="accordion-group">
+                                            <div class="accordion-heading">
+                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#trans_accordion1" href="#trans_collapse_1">
+                                                <i class="icon-angle-left"></i>
+                                                即时录入运输数据
+                                                </a>
+                                            </div>
+                                            <div id="trans_collapse_1" class="accordion-body collapse">
+                                                <div class="accordion-inner">
+                                                <div class="row-fluid">
+                                                   <div class="span6 ">
+                                                      <div class="control-group">
+                                                         <label class="control-label" for="trans_driver">驾驶员</label>
+                                                         <div class="controls">
+                                                            <input type="text" id="trans_driver" class="m-wrap span12" placeholder="">
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                   <!--/span-->
+                                                   <div class="span6 ">
+                                                      <div class="control-group">
+                                                         <label class="control-label" for="trans_license">车辆或船只牌照</label>
+                                                         <div class="controls">
+                                                            <input type="text" id="trans_license" class="m-wrap span12" placeholder="">
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                 </div>
+                                                <div class="row-fluid">
+                                                    <div class="span6 ">
+                                                      <div class="control-group">
+                                                         <label class="control-label" for="trans_start_place">出发地点</label>
+                                                         <div class="controls">
+                                                            <input type="text" id="trans_start_place" class="m-wrap span12" placeholder="">
+                                                         </div>
+                                                      </div>
+                                                    </div>
+                                                   <!--/span-->
+                                                   <div class="span6 ">
+                                                      <div class="control-group">
+                                                         <label class="control-label" for="trans_end_place">目的地点</label>
+                                                         <div class="controls">
+                                                            <input type="text" id="trans_end_place" class="m-wrap span12" placeholder="">
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                   <!--/span-->
+                                                </div>  <!--row fluid is over-->
+
+                                                <div class="row-fluid">
+                                                    <div class="span6 ">
+                                                      <div class="control-group">
+                                                         <label class="control-label" for="trans_start_time">出发时间</label>
+                                                         <div class="controls">
+                                                            <div id="trans_datetimepicker1" class="input-append date" >
+                                                            <input data-format="yyyy-MM-dd hh:mm:ss" class="m-wrap span12" type="text"  id ="trans_start_time"></input>
+                                                            <span class="add-on">
+                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                            </i>
+                                                            </span>
+                                                            </div>
+                                                       </div>
+                                                     </div>
+                                                    </div>
+                                                   <!--/span-->
+                                                   <div class="span6 ">
+                                                      <div class="control-group">
+                                                         <label class="control-label" for="trans_end_time">到达时间</label>
+                                                         <div class="controls">
+                                                            <div id="trans_datetimepicker2" class="input-append date">
+                                                            <input data-format="yyyy-MM-dd hh:mm:ss" class="m-wrap span12" type="text"  id ="trans_end_time"></input>
+                                                            <span class="add-on">
+                                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                            </i>
+                                                            </span>
+                                                         </div>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                   <!--/span-->
+                                                </div> 
+
+                                                <div  style="position:relative;float:right;">
+                                                    <a class="btn purple big" id="goToCar">进入运输环节<i class="m-icon-big-swapright m-icon-white"></i></a>
+                                                </div>
+                                                </div> <!--first inner is over-->
+                                            </div>
+                                        </div> <!--trans accordion group 1 is over-->
+                                        <div class="accordion-group"> 
+                                            <div class="accordion-heading">
+                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#trans_accordion1" href="#trans_collapse_2">
+                                                <i class="icon-angle-left"></i>
+                                                绑定已有运输数据
+                                                </a>
+                                            </div>
+                                            <div id="trans_collapse_2" class="accordion-body collapse">
+                                                <div class="accordion-inner">
+                                                    <div class="row-fluid" style="display:inline;">
+                                                        <div class="input-cont sapn12">   
+                                                            <input type="text" placeholder="输入随意数量的关键字" class="m-wrap" id="trans_search_input">
+                                                            <button type="button" class="btn green" id="trans_search_bt">模糊搜索<i class="m-icon-swapright m-icon-white"></i></button> 
+                                                        </div> 
+                                                    </div>
+                                                    <h3 class="form-section">检索结果</h3>
+                                                    <div class="portlet-body">
+                                                             <table class="table table-striped table-bordered table-hover dataTable" id="trans_search_result">
+                                                                <thead>
+                                                                    <tr role="row">
+                                                                        <th role="columnheader" >出发地</th>
+                                                                        <th role="columnheader" >目的地</th>
+                                                                        <th role="columnheader" >出发时间</th>
+                                                                        <th role="columnheader" >到达时间</th>
+                                                                        <th role="columnheader" >牌照</th>
+                                                                        <th role="columnheader" >驾驶员</th>
+                                                                        <th role="columnheader" >操作</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                
+                                                                <tbody role="alert" aria-live="polite" aria-relevant="all">     
+                                                                </tbody>
+                                                             </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!--trans accordion group 2 is over-->
+                                    </div>
+                                     
+                                  </div>
+                            </div> <!--row is over-->
+                        </div> <!--transport_form is over-->
+
+                        <div style="display:none;" id = "sale_form">
+                            <h3 class="form-section">销售记录信息</h3>
+                            <div class="row-fluid">
+                                <div class="accordion" id="sale_accordion1">
+                                    <div class="accordion-group"> 
+                                            <div class="accordion-heading">
+                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#sale_accordion1" href="#sale_collapse_1">
+                                                <i class="icon-angle-left"></i>
+                                                即时录入销售数据
+                                                </a>
+                                            </div>
+                                            <div id="sale_collapse_1" class="accordion-body collapse">
+                                                <div class="accordion-inner">      
+                                                    <div class="row-fluid">
+                                                       <div class="span6 ">
+                                                          <div class="control-group">
+                                                             <label class="control-label" for="sale_place">销售地区</label>
+                                                             <div class="controls">
+                                                                <input type="text" id="sale_place" class="m-wrap span12" placeholder="">
+                                                             </div>
+                                                          </div>
+                                                       </div>
+                                                       <!--/span-->
+                                                       <div class="span6 ">
+                                                          <div class="control-group">
+                                                             <label class="control-label" for="sale_market">销售超市</label>
+                                                             <div class="controls">
+                                                                <input type="text" id="sale_market" class="m-wrap span12" placeholder="">
+                                                             </div>
+                                                          </div>
+                                                       </div>
+                                                     </div>
+                                                    <div class="row-fluid">
+                                                         <div class="span6 ">
+                                                          <div class="control-group">
+                                                             <label class="control-label" for="sale_freezer_number">冰柜编号</label>
+                                                             <div class="controls">
+                                                                <input type="text" id="sale_freezer_number" class="m-wrap span12" placeholder="">
+                                                             </div>
+                                                         </div>
+                                                         </div>
+                                                       <!--/span-->
+                                                       <div class="span6 ">
+                                                          <div class="control-group">
+                                                             <label class="control-label" for="sale_time">上架时间</label>
+                                                             <div class="controls">
+                                                                <div id="sale_datetimepicker" class="input-append date">
+                                                                <input data-format="yyyy-MM-dd hh:mm:ss" class="m-wrap span12" type="text"  id ="sale_time"></input>
+                                                                <span class="add-on">
+                                                                <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                                </i>
+                                                                </span>
+                                                             </div>
+                                                             </div>
+                                                          </div>
+                                                       </div>
+                                                       <!--/span-->
+                                                    </div> 
+
+                                                    <div  style="position:relative;float:right;">
+                                                        <a class="btn purple big" id="goToMarket">进入销售环节<i class="m-icon-big-swapright m-icon-white"></i></a>
+                                                    </div>                                 
+                                                </div> <!---trans accordion inner 1 is over-->
+                                            </div>
+                                        </div><!--trans accordion group 1 is over-->
+                                    <div class="accordion-group"> 
+                                            <div class="accordion-heading">
+                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#sale_accordion1" href="#sale_collapse_2">
+                                                <i class="icon-angle-left"></i>
+                                                绑定已有销售数据
+                                                </a>
+                                            </div>
+                                            <div id="sale_collapse_2" class="accordion-body collapse">
+                                                <div class="accordion-inner">
+                                                    <div class="row-fluid" style="display:inline;">
+                                                        <div class="input-cont sapn12">   
+                                                            <input type="text" placeholder="输入随意数量的关键字" class="m-wrap" id="sale_search_input">
+                                                            <button type="button" class="btn green" id="sale_search_bt">模糊搜索<i class="m-icon-swapright m-icon-white"></i></button> 
+                                                        </div> 
+                                                    </div>
+                                                    <h3 class="form-section">检索结果</h3>
+                                                    <div class="portlet-body">
+                                                             <table class="table table-striped table-bordered table-hover dataTable" id="sale_search_result">
+                                                                <thead>
+                                                                    <tr role="row">
+                                                                        <th role="columnheader" >上架时间</th>
+                                                                        <th role="columnheader" >销售地点</th>
+                                                                        <th role="columnheader" >销售超市</th>
+                                                                        <th role="columnheader" >冰柜编号</th>
+                                                                        <th role="columnheader" >操作</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                
+                                                                <tbody role="alert" aria-live="polite" aria-relevant="all">     
+                                                                </tbody>
+                                                             </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!--trans accordion group 2 is over-->
+                                </div>
+                            </div>
+                        </div> <!--sale_form is over-->
+
+                    </div> <!--second tab over-->
+                </div>
+            </div> <!--tab-content end-->
+        </div> <!--portlet-body end-->
+    </div> <!--portlet end-->
+    <!--data table end-->
+	<!--data table end-->
+
+
+    <!--hidden div for use-->
+   <!--
+      {0}  - - -active or not?
+      {1} ----tab id
+      {2} --- Manufacturer
+      {3} ---ProductionPlace
+      {4} ---ProductionDate
+      {5} ---QualityEvaluation
+      {6} ---useCount
+   -->
+   <div style="display: none;" id = "selected_production_tab_model">
+   </div>
+</body>
+
+<script type="text/javascript">
+
+var trOdd = "<tr class='gradeX odd'></tr>";
+var trEven = "<tr class='gradeX even'></tr>";
+var tdContent = "<td class='hidden-480 '>{0}</td>";
+var tdOperator = {};
+var conditionData = {};
+tdOperator.location = "<td class='hidden-480 '>"
+                +""
+                + "<button type='button'  class='btn green {0}' customvalue='{1}'"+
+                " style='outline: 0px; box-shadow: rgba(57, 155, 195, 0) 0px 0px 13px; outline-offset: 20px;'"
+                +">{2}</button>"
+                +"</td>";
+tdOperator.content = "<button type='button'  class='btn red {0}' customvalue='{1}'"+
+                " style='outline: 0px; box-shadow: rgba(57, 155, 195, 0) 0px 0px 13px; outline-offset: 20px;'"
+                +">{2}</button>";
+var img = "<td class='hidden-480 '>"+
+                "<a class='fancybox' href = '{0}' title='{1}<br>(扫描二维码获取更多数据)'>" +
+                "<img src='{2}' alt='点击查看大图' width = '80px' height = '80px'/></a>" + "</td>";
+var tdDeleteSelected = "<td class='hidden-480 '>"
+                + "<button type='button'  class='btn red delProBt' qrCode='{0}'"
+                +">删除</button>"
+                +"</td>";
+function setLocation(){
+    jQuery("#location" + $!{status}).addClass("twinkle");
+    conditionData.status = $!{status};
+    if(!('$!{keyWords}' == '')){
+        conditionData.keyWords = '$!{keyWords}';
+    }
+}
+
+function addDefaultDataToTable(data,table){
+    var tbody = jQuery('#'+table+' tbody');
+    //first clear the table's tbody
+    tbody.empty();
+    //$!request.getContextPath()/Traceability/productionManager?action=processinfo
+    var prA = "<a class='fancybox fancybox.ajax' href='{0}' >{1}</a>"
+    
+    for(var i = 0; i < data.length; i++){
+        if(i % 2 == 0) {
+            tbody.append(trOdd);
+        }else{
+            tbody.append(trEven);
+        }
+        var item = data[i];
+        var lastTr = jQuery('#'+table+'>tbody>tr:last');
+        var pngHref = "$!request.getContextPath()/public/qrcode/"+item.enterpriseId+"/"+item.qrCode+".png";
+        lastTr.append(img.format(pngHref,item.productionName,pngHref));
+        //because json is disordered  
+        var order = new Array("productionName","processNumber","rfid"
+                    ,"transNumber","saleNumber","productionCount");
+        item.productionNameNew = item.productionName;
+        item.productionCountNew = item.productionCount;
+        item.processNumberNew = prA.format("$!request.getContextPath()/Traceability/productionManager?action=processinfo&processNumber="
+            +item.processNumber,item.processNumber);
+        item.rfidNew = prA.format("$!request.getContextPath()/Traceability/productionManager?action=storageinfo&rfid="
+            +item.rfid,item.rfid);
+        item.transNumberNew = prA.format("$!request.getContextPath()/Traceability/productionManager?action=transinfo&transNumber="
+            +item.transNumber,item.transNumber);
+        item.saleNumberNew = prA.format("$!request.getContextPath()/Traceability/productionManager?action=saleinfo&saleNumber="
+            +item.saleNumber,item.saleNumber);
+        for(var index in order){
+            lastTr.append(tdContent.format(item[order[index]] === undefined || item[order[index]] == "" ? "暂无数据" : item[order[index]+"New"]));    
+        }
+        var operatorContent = {
+            location0 : ["selectBt0",item.qrCode+";"+item.enterpriseId+";"+item.productionName,"选择"],
+            location1 : ["selectBt1",item.qrCode+";"+item.enterpriseId+";"+item.productionName,"选择"],
+            location2 : ["selectBt2",item.qrCode+";"+item.enterpriseId+";"+item.productionName,"选择"],
+            location3 : ["viewAllDataBt",item.qrCode,"查看所有数据"],
+            location00 : ["printBt",pngHref,"打印二维码"]
+        }
+        lastTr.append(tdOperator["location"].format(operatorContent["location" + $!{status}][0],operatorContent["location" + $!{status}][1],operatorContent["location" + $!{status}][2]));
+        if($!{status} == 0){
+            var lastTd = jQuery('#'+table+'>tbody>tr:last>td:last');
+            lastTd.append(tdOperator["content"].format(operatorContent["location00"][0],operatorContent["location00"][1],operatorContent["location00"][2]));
+        }
+        //add click listener to select button
+    } // for is over
+
+    //为未入库产品添加打印二维码功能
+    jQuery(".printBt").on("click",function(e) {
+        var w = window.open(jQuery(this).attr("customvalue"));
+        w.window.print();
+    });
+    //为库中、和运输中的产品添加选择功能
+    addSelectHandler($!{status});
+
+    jQuery(".viewAllDataBt").on("click",function(e) {
+
+        var qrCode = jQuery(this).attr("customvalue");
+        var postData = {};
+        postData.action = "allinfo";
+        postData.qrCode = qrCode;
+        jQuery.form("$!request.getContextPath()/Traceability/productionManager",postData,"POST").submit();
+    })
+}
+
+function addToolBarEvent(){
+    jQuery(".location").on("click",function(e){
+        var status = jQuery(this).attr("locStatus");
+        jQuery.form("$!request.getContextPath()/Traceability/productionManager",{status:status},"POST").submit();
+    });
+}
+
+function addSelectHandler(status){
+    jQuery(".selectBt" + status).on("click",function(e) {
+        var customvalue = jQuery(this).attr("customvalue").split(";");
+        //02c868eb-f952-43ba-bd30-d3534a8a6306;1000;盱眙
+        jQuery(this).pulsate({
+                    color: "#399bc3",
+                    repeat: false
+            });
+        if (typeof(Storage) != "undefined"){
+            var selected = JSON.parse(localStorage.getItem("selectedPros" + status)) || {};
+            selected[customvalue[0]] = [customvalue[1],customvalue[2]];
+            localStorage.setItem("selectedPros" + status,JSON.stringify(selected));
+            freshSelectedNum();
+            refreshSelectedPro("selected_pro_table");
+        }else{
+            alert("关于此浏览器，请实现其他存储方法");
+        }
+    });
+}
+ 
+function appendDomToTab2(currentLocation){
+    var tab2J = jQuery("#portlet_tab2");
+    if(currentLocation == 3){
+        tab2J.remove();
+    }else if(currentLocation == 0){
+        jQuery("#bind_rfid_form").css("display","block");
+        jQuery('#rfid_datetimepicker1').datetimepicker({
+            language: 'pt-BR'
+        });
+        jQuery("#rfid_search").on("click",function(e){
+            var requestData = {};
+            requestData.rfidTime = jQuery("#rfid_time").val();
+            requestData.rfidTimeOffset = jQuery("#rfid_time_offset").val();
+            requestData.operator = jQuery("#rfid_operator").val();
+            requestData.action = "searchrfid"
+            jQuery.ajax({
+                type:"POST",
+                url:"$!request.getContextPath()/Traceability/productionManager",
+                data:requestData, 
+                success:function(rfidList){
+                    var tbodyJ = jQuery("#rfid_search_result >tbody");
+                    tbodyJ.empty();
+                    rfidList = JSON.parse(rfidList);
+                    for(var i = 0; i < rfidList.length; i++){
+                        var trTemp = null;
+                        if( i % 2 == 0){
+                            trTemp = jQuery(trOdd);
+                        }else{
+                            trTemp = jQuery(trEven);
+                        }
+                        trTemp.append(tdContent.format(rfidList[i].cardNum));
+                        trTemp.append(tdContent.format(rfidList[i].time));
+                        trTemp.append(tdContent.format(rfidList[i].personId));
+                        trTemp.append(tdOperator.location.format("bind_rfid_bt",rfidList[i].cardNum
+                            ,"绑定"));
+                        tbodyJ.append(trTemp);
+                    }
+                    jQuery(".bind_rfid_bt").on("click",function(e){
+                        if(checkProIsSelected() == 0) return;
+                        var rfidNum = jQuery(this).attr("customvalue");
+                        var postData = {};
+
+                        postData.selectedPros = getSelectedPros();
+                        postData.rfidNum = rfidNum;
+                        postData.action = "bindrfid";
+                        jQuery.ajax({
+                            type:"POST",
+                            url:"$!request.getContextPath()/Traceability/productionManager",
+                            data:postData, 
+                            success:function(data){
+                                if(data == "success"){
+                                    alert("绑定完成");
+                                    //清空已选择的
+                                    localStorage.removeItem("selectedPros" + $!{status});
+                                }else if(data == "fail"){
+                                    alert("发生为止错误，请联系管理员");
+                                }
+                            },
+                            async:true            
+                        });
+                    });
+                },
+                async:true            
+            });
+        });
+    }else if(currentLocation == 1){
+        jQuery("#transport_form").css("display","block");
+        jQuery('#trans_datetimepicker1').datetimepicker({
+            language: 'pt-BR'
+        });
+        jQuery('#trans_datetimepicker2').datetimepicker({
+            language: 'pt-BR'
+        });
+        jQuery("#trans_search_bt").on("click",function(e){
+            var keyWords = jQuery("#trans_search_input").val();
+            var postData = {};
+            postData.action = "searchtrans";
+            postData.keyWords = keyWords;
+            jQuery.ajax({
+                type:"POST",
+                url:"$!request.getContextPath()/Traceability/productionManager",
+                data:postData, 
+                success:function(transList){
+                    transList = JSON.parse(transList);
+                    var tbodyJ = jQuery("#trans_search_result > tbody");
+                    tbodyJ.empty();
+                    for(var i = 0; i < transList.length; i++){
+                        var trTemp = null;
+                        if( i % 2 == 0){
+                            trTemp = jQuery(trOdd);
+                        }else{
+                            trTemp = jQuery(trEven);
+                        }
+                        trTemp.append(tdContent.format(transList[i].startPlace));
+                        trTemp.append(tdContent.format(transList[i].endPlace));
+                        trTemp.append(tdContent.format(transList[i].startTime));
+                        trTemp.append(tdContent.format(transList[i].endTime));
+                        trTemp.append(tdContent.format(transList[i].license));
+                        trTemp.append(tdContent.format(transList[i].driver));
+                        trTemp.append(tdOperator.location.format("bind_trans_bt",transList[i].transportNumber
+                            ,"绑定"));
+                        tbodyJ.append(trTemp);
+                    }
+
+                    jQuery(".bind_trans_bt").on("click",function(e){
+                        if(checkProIsSelected() == 0) return;
+                        var postData = {};
+                        postData.action = "bindtrans";
+                        postData.selectedPros = getSelectedPros();
+                        postData.transportNumber = jQuery(this).attr("customvalue");
+                         jQuery.ajax({
+                            type:"POST",
+                            url:"$!request.getContextPath()/Traceability/productionManager",
+                            data:postData, 
+                            success:function(data){
+                                if(data == "success"){
+                                    alert("运输记录绑定完成");
+                                    //清空已选择的
+                                    localStorage.removeItem("selectedPros" + $!{status});
+                                }else if(data == "fail"){
+                                    alert("发生为止错误，请联系管理员");
+                                }
+                            },
+                            async:true            
+                        });
+                    });
+                },
+                async:true            
+            });
+        });
+        jQuery("#goToCar").on("click",function(e){
+            if(checkProIsSelected() == 0) return;
+            var postData = {};
+            postData.trans_driver = jQuery("#trans_driver").val();
+            postData.trans_license = jQuery("#trans_license").val();
+            postData.trans_start_time = jQuery("#trans_start_time").val();
+            postData.trans_end_time = jQuery("#trans_end_time").val();
+            postData.trans_end_place = jQuery("#trans_end_place").val();
+            postData.trans_start_place = jQuery("#trans_start_place").val();
+            postData.action = "gotocar";
+            postData.selectedPros = getSelectedPros();
+            jQuery.ajax({
+                type:"POST",
+                url:"$!request.getContextPath()/Traceability/productionManager",
+                data:postData, 
+                success:function(data){
+                    if(data == "success"){
+                        alert("运输完成");
+                        //清空已选择的
+                        localStorage.removeItem("selectedPros" + $!{status});
+                    }else if(data == "fail"){
+                        alert("发生为止错误，请联系管理员");
+                    }
+                },
+                async:true            
+            });
+        });
+    }else if(currentLocation == 2){
+        jQuery("#sale_form").css("display","block");
+        jQuery('#sale_datetimepicker').datetimepicker({
+            language: 'pt-BR'
+        });
+        jQuery("#sale_search_bt").on("click",function(e){
+            var keyWords = jQuery("#sale_search_input").val();
+            var postData = {};
+            postData.action = "searchsale";
+            postData.keyWords = keyWords;
+            jQuery.ajax({
+                type:"POST",
+                url:"$!request.getContextPath()/Traceability/productionManager",
+                data:postData, 
+                success:function(saleList){
+                    saleList = JSON.parse(saleList);
+                    var tbodyJ = jQuery("#sale_search_result > tbody");
+                    tbodyJ.empty();
+                    for(var i = 0; i < saleList.length; i++){
+                        var trTemp = null;
+                        if( i % 2 == 0){
+                            trTemp = jQuery(trOdd);
+                        }else{
+                            trTemp = jQuery(trEven);
+                        }
+                        trTemp.append(tdContent.format(saleList[i].saleTime));
+                        trTemp.append(tdContent.format(saleList[i].salePlace));
+                        trTemp.append(tdContent.format(saleList[i].saleMarket));
+                        trTemp.append(tdContent.format(saleList[i].freezerNumber));
+                        trTemp.append(tdOperator.location.format("bind_sale_bt",saleList[i].saleNumber
+                            ,"绑定"));
+                        tbodyJ.append(trTemp);
+                    }
+
+                    jQuery(".bind_sale_bt").on("click",function(e){
+                        if(checkProIsSelected() == 0) return;
+                        var postData = {};
+                        postData.action = "bindsale";
+                        postData.selectedPros = getSelectedPros();
+                        postData.saleNumber = jQuery(this).attr("customvalue");
+                         jQuery.ajax({
+                            type:"POST",
+                            url:"$!request.getContextPath()/Traceability/productionManager",
+                            data:postData, 
+                            success:function(data){
+                                if(data == "success"){
+                                    alert("销售记录绑定完成");
+                                    //清空已选择的
+                                    localStorage.removeItem("selectedPros" + $!{status});
+                                }else if(data == "fail"){
+                                    alert("发生为止错误，请联系管理员");
+                                }
+                            },
+                            async:true            
+                        });
+                    });
+                },
+                async:true            
+            });
+        });
+        jQuery("#goToMarket").on("click",function(e){
+            if(checkProIsSelected() == 0) return;
+            var postData = {
+            };
+            postData.sale_time = jQuery("#sale_time").val();
+            postData.sale_place = jQuery("#sale_place").val();
+            postData.sale_market = jQuery("#sale_market").val();
+            postData.sale_freezer_number = jQuery("#sale_freezer_number").val();
+            postData.action = "gotomarket";
+            postData.selectedPros = getSelectedPros();
+            jQuery.ajax({
+                type:"POST",
+                url:"$!request.getContextPath()/Traceability/productionManager",
+                data:postData, 
+                success:function(data){
+                    if(data == "success"){
+                        alert("上架完成");
+                        //清空已选择的
+                        localStorage.removeItem("selectedPros" + $!{status});
+                    }else if(data == "fail"){
+                        alert("发生为止错误，请联系管理员");
+                    }
+                },
+                async:true            
+            });
+        });
+    }
+}
+
+function getSelectedPros(){
+    var selPros = "";
+    var selected = JSON.parse(localStorage.getItem("selectedPros" + $!{status})) || {};
+    for(var key in selected){
+        selPros  = selPros + key + ";";
+    }
+    return selPros;
+}
+function checkProIsSelected(){
+    if (typeof(Storage) != "undefined"){
+        if(getJsonLength(JSON.parse(localStorage.getItem("selectedPros"+$!{status})) || {}) == 0){
+            alert("您还未选择任何产品");
+            return 0;
+        }
+    }else{
+        alert("不支持此浏览器");
+        return 0;
+    }
+    return 1;
+}
+function refreshSelectedPro(tableName){
+    //selected_pro_table
+    var tbodyJ = jQuery('#'+tableName+' tbody');
+    tbodyJ.empty();
+    var selected = JSON.parse(localStorage.getItem("selectedPros" + $!{status})) || {};
+    var count = 0;
+    for(var key in selected){
+        if(count % 2 == 0) {
+            tbodyJ.append(trOdd);
+        }else{
+            tbodyJ.append(trEven);
+        }
+        count++;
+        var lastTr = jQuery('#'+tableName+'>tbody>tr:last');
+        var proObj = selected[key];
+        var pngHref = "$!request.getContextPath()/public/qrcode/"+proObj[0]+"/"+key+".png";
+        lastTr.append(img.format(pngHref,proObj[1],pngHref));
+        lastTr.append(tdContent.format(proObj[1]));
+        lastTr.append(tdDeleteSelected.format(key));
+    }
+
+    //add click listener to delete raws button
+    jQuery(".delProBt").click(function(){
+        jQuery(this).pulsate({
+                    color: "#399bc3",
+                    repeat: false
+        });
+        if (typeof(Storage) != "undefined"){
+            var selected = JSON.parse(localStorage.getItem("selectedPros" + $!{status})) || {};
+            delete selected[jQuery(this).attr("qrCode")];
+            //localStorage.removeItem(jQuery(this).attr("rawId"));
+            localStorage.setItem("selectedPros"+ $!{status},JSON.stringify(selected));
+            refreshSelectedPro(tableName);
+            freshSelectedNum();
+        }
+    });
+}
+
+function getJsonLength(jsonData) {
+    var length = 0;
+    if(jsonData === null || jsonData === undefined) return 0;
+    for(var key in jsonData){
+        length++;
+    }
+    return length;
+}
+
+function freshSelectedNum(){
+    if (typeof(Storage) != "undefined"){
+        jQuery("#selectedPros").text(getJsonLength(JSON.parse(localStorage.getItem("selectedPros"+ $!{status})) || {}));
+    }
+} // freshSelectedNum is over;
+
+function addSearchListener() {
+    //$.form('/new', { title: 'Hello World', body: 'Foo Bar' })
+    jQuery("#search_bt").on("click",function(e){
+        var postData = {};
+        postData.keyWords = jQuery("#search_content").val();
+        postData.status = conditionData.status;
+        jQuery.form('$!request.getContextPath()/Traceability/productionManager',postData).submit();
+    });
+}
+
+function addSortListener() {
+    //
+    if(!('$!{sortWords}' == '')){
+        var sortDict = {
+        };
+        sortDict["process_record.processTime"] = "make_time_sort";
+        sortDict["in_out.time"] = "in_storage_sort";
+        sortDict["transportation_record.startTime"] = "in_car_time";
+        sortDict["sale_record.saleTime"] = "in_sale_time";
+
+        var sortWords = '$!{sortWords}';
+        var sortWordsArray = sortWords.split(" ");
+        if(sortWordsArray.length == 2) {
+            sortWordsArray.push("asc");
+        }
+        jQuery("#" + sortDict[sortWordsArray[1]]).addClass("sort_" + sortWordsArray[2]);
+    }
+    var postData = {};
+    postData.status = conditionData.status;
+    jQuery("#make_time_sort").on("click", function(){
+        if(jQuery(this).hasClass("sort_asc")) {
+            postData.sortWords = "processNumber process_record.processTime desc";
+        }else{
+            postData.sortWords = "processNumber process_record.processTime";
+        }
+        jQuery.form("$!request.getContextPath()/Traceability/productionManager",postData).submit();
+    });
+
+    jQuery("#in_car_time").on("click", function(){
+        if(jQuery(this).hasClass("sort_asc")) {
+            postData.sortWords = "transNumber transportation_record.startTime desc";
+        }else{
+            postData.sortWords = "transNumber transportation_record.startTime";
+        }
+        jQuery.form("$!request.getContextPath()/Traceability/productionManager",postData).submit();
+    });
+
+    jQuery("#in_sale_time").on("click", function(){
+        if(jQuery(this).hasClass("sort_asc")) {
+            postData.sortWords = "saleNumber sale_record.saleTime desc";
+        }else{
+            postData.sortWords = "saleNumber sale_record.saleTime";
+        }
+        jQuery.form("$!request.getContextPath()/Traceability/productionManager",postData).submit();
+    });
+
+    jQuery("#in_storage_sort").on("click", function(){
+        if(jQuery(this).hasClass("sort_asc")) {
+            postData.sortWords = "rfid in_out.time desc";
+        }else{
+            postData.sortWords = "rfid in_out.time";
+        }
+        jQuery.form("$!request.getContextPath()/Traceability/productionManager",postData).submit();
+    });
+}
+
+jQuery(function(jQuery) {
+    //设置当前显示的产品所在位置
+    setLocation();
+	var pageInfo = eval($!{pageInfo});
+
+    //sample_1 是产品表的id
+    addDefaultDataToTable(pageInfo.dataList,"sample_1");
+    jQuery('.fancybox').fancybox();
+
+
+    createPageInfo("production_table_id",pageInfo,"pro_records_pers_page","$!request.getContextPath()/Traceability/productionManager",conditionData);
+
+    //为不同location附加不同tab2的dom
+    appendDomToTab2($!{status});
+
+    //注册工具栏事件
+    addToolBarEvent();
+
+    //更新已经选择的产品
+    freshSelectedNum();
+    refreshSelectedPro("selected_pro_table");
+
+    addSearchListener();
+
+    addSortListener();
+});
+</script>
+</html>

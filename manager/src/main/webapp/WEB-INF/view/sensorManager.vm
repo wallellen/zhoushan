@@ -1,0 +1,540 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<style>
+		@-webkit-keyframes twinkle {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		@-moz-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		@-ms-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px #28b779; }
+		}
+		th,td,label {
+			text-align:center !important;
+		}
+		.myColor {
+			background-color:#28b779 !important;
+		}	
+
+		.twinkle{
+            -webkit-animation: twinkle 1s alternate infinite;
+            -moz-animation: twinkle 1s alternate infinite;
+            -ms-animation: twinkle 1s alternate infinite;
+		}
+
+    </style>
+	<link href="$!request.getContextPath()/public/css/validate.css" rel="stylesheet" />
+	<script src="$!request.getContextPath()/public/js/validate.js"></script>
+	<script src="$!request.getContextPath()/public/ConstantJs/submitForm.js"></script>
+	<script src="$!request.getContextPath()/public/ConstantJs/page.js"></script>
+	<link href="$!request.getContextPath()/public/data-tables/DT_bootstrap.css" rel="stylesheet" />
+</head>
+
+<script type="text/javascript">
+	
+	jQuery(function(){
+		var sensorPageInfo = eval($!{sensorPageInfo});
+
+		createPageInfo("sensor_page_select_id",sensorPageInfo,"sensor_records_pers_page","$!request.getContextPath()/TempMonitor/sensorManager",null);
+
+		var i = 1;
+		for(;i<=sensorNumber;i++){ //sensorNumber变量在传感器列表循环完毕时赋值
+			
+			jQuery("#resetWorkTime"+i).click(function(){
+			
+			
+				if(confirm("建议更换电池后再重置，方便我们给出精确的建议，确定要重置？")){
+    				var resetId = jQuery(this).attr("resetId");
+					
+					jQuery.ajax({
+                        type:"POST",
+                        url:"$!request.getContextPath()/TempMonitor/resetSensor",
+                        data:{extAddr:jQuery("#textAddr"+resetId).text()},             
+                        success:function(data){
+    						if(data == "success"){
+    							jQuery("#tworkTime"+resetId).text("0时");
+								jQuery("#tsuggest"+resetId).html("<span class='label label-success'>电量充足</span>");
+    						}else if(data == "fail"){
+    							alert("重置失败，请联系管理员");
+    						}
+                        },
+                        async:true            
+             		});
+				}
+			});		
+		
+			jQuery("#deleteSensor"+i).click(function(){
+				if(confirm("确定要删除吗？")){
+				
+    				var deleteId = jQuery(this).attr("deleteId");
+    				
+    				jQuery.ajax({
+                        type:"POST",
+                        url:"$!request.getContextPath()/TempMonitor/deleteSensor",
+                        data:{extAddr:jQuery("#dextAddr"+deleteId).text()},             
+                        success:function(data){
+    						if(data == "success"){
+    							jQuery("#sensorRow"+deleteId).remove();
+    						}else if(data == "fail"){
+    							alert("删除失败，请联系管理员");
+    						}
+                        },
+                        async:true            
+             		});
+				}
+			});
+			
+			jQuery("#updateSensor"+i).click(function(){
+				var updateId = jQuery(this).attr("updateId");
+				
+				
+				jQuery("#extAddr").val(jQuery("#dextAddr"+updateId).text());
+				jQuery("#shortAddr").val(jQuery("#dshortAddr"+updateId).text());
+				jQuery("#fatherNode").val(jQuery("#dfatherNode"+updateId).text());
+				jQuery("#nodeTypes").val(jQuery("#dnodeTypes"+updateId).attr("value"));
+				jQuery("#workStatus").val(jQuery("#dworkStatus"+updateId).attr("value"));
+				jQuery("#position").val(jQuery("#dposition"+updateId).text());
+				jQuery("#name").val(jQuery("#dname"+updateId).text());
+				var storageName = jQuery('#dstorageId'+updateId).text();
+				jQuery('#storageId option').each(function(i){
+                    if(jQuery(this).text() == storageName) {
+                        jQuery(this).attr("selected", "selected");
+                    }
+    			});
+				//jQuery("#storageId").val(jQuery("#dstorageId"+updateId).text());
+				jQuery("#updateForm").addClass("twinkle");
+								
+			});
+		}//for 循环结束
+		
+		jQuery("#addASensor").click(function(){
+			
+			jQuery.ajax({
+                    type:"POST",
+                    url:"$!request.getContextPath()/TempMonitor/addSensor",
+                    data:{
+						extAddr:jQuery("#extAddr").val(),
+						shortAddr:jQuery("#shortAddr").val(),
+						fatherNode:jQuery("#fatherNode").val(),
+						nodeTypes:jQuery("#nodeTypes").val(),
+						workStatus:jQuery("#workStatus").val(),
+						position:jQuery("#position").val(),
+						name:jQuery("#name").val(),
+						storageId:jQuery("#storageId").val()
+					},             
+                    success:function(data){
+
+						if(data == "success"){
+							
+							location.href="$!request.getContextPath()/TempMonitor/sensorManager";
+						}else if(data == "exist"){
+							alert("传感器MAC地址重复");
+						}
+						else if(data == "needlogin"){
+							alert("您未登陆或者无权限")						
+						}else{
+							alert("未知原因出错")
+						}
+                    },
+                    async:true            
+         	});
+			
+			
+		});
+		
+		jQuery("#updateASensor").click(function(){
+			
+			jQuery.ajax({
+                    type:"POST",
+                    url:"$!request.getContextPath()/TempMonitor/updateSensor",
+                    data:{
+						extAddr:jQuery("#extAddr").val(),
+						shortAddr:jQuery("#shortAddr").val(),
+						fatherNode:jQuery("#fatherNode").val(),
+						nodeTypes:jQuery("#nodeTypes").val(),
+						workStatus:jQuery("#workStatus").val(),
+						position:jQuery("#position").val(),
+						name:jQuery("#name").val(),
+						storageId:jQuery("#storageId").val()
+					},             
+                    success:function(data){
+						
+						if(data == "success"){
+							location.href="$!request.getContextPath()/TempMonitor/sensorManager";
+						}else if(data == "notexsit"){
+							alert("需更新的传感器不存在");
+						}
+						else if(data == "needlogin"){
+							alert("您未登陆或者无权限")						
+						}else{
+							alert("未知原因出错")
+						}
+                    },
+                    async:true            
+         	});
+			
+			if(jQuery("#updateForm").hasClass("twinkle")){
+				jQuery("#updateForm").removeClass("twinkle");
+			}
+			
+		});
+		//验证表单
+		
+	});
+</script>
+
+<body>
+
+	<div class="container-fluid">
+		<div class="span 12">
+		<!-- BEGIN CONDENSED TABLE PORTLET-->
+		<div class="portlet box myColor">
+			<div class="portlet-title">
+				<h4><i class="icon-picture"></i>传感器列表</h4>
+				<!--
+				<div class="tools">
+					<a href="javascript:;" class="collapse"></a>
+					<a href="#portlet-config" data-toggle="modal" class="config"></a>
+					<a href="javascript:;" class="reload"></a>
+					<a href="javascript:;" class="remove"></a>
+				</div>
+				-->
+			</div>
+			<div class="portlet-body">
+				<div id="sample_1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                            <div class="row-fluid">
+                                <div class="span12"><div id="sample_1_length" class="dataTables_length">
+                                <label>
+                                <select size="1" name="sample_1_length" id="sensor_records_pers_page" aria-controls="sample_1" class="m-wrap xsmall">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="-1">All</option>
+                                </select> 每页记录数
+                                </label>
+                               </div>
+                               </div>
+                </div> <!--Row fluid is over-->
+				<table  class="table table-striped table-bordered table-hover dataTable" id="sample_1" aria-describedby="sample_1_info">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>传感器名字</th>
+							<th>传感器Mac地址</th>
+							<th>传感器IP地址</th>
+							<th>父节点IP地址</th>
+							<th>节点类型</th>
+							<th>工作状态</th>
+							<th>所属仓库</th>
+							<th>节点位置</th>
+							<!--<th>创建者</th>
+							<th>创建时间</th>
+							<th>修改者</th>
+							<th>修改时间</th>-->
+							<th style="text-align:center">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<script>
+							var storageMap = {};
+						</script>
+						#foreach($storage in ${storageList})
+							<script>
+							 storageMap["${storage.id}"] = "${storage.name}";
+							</script>							
+						#end
+						#set($i=0)
+						#foreach($sensor in ${allSensors})  
+                              
+							#set($i = $i + 1)
+							<tr id="sensorRow$i">
+								<td> $i</td>
+								<td id="dname$i"> $!sensor.name</td>
+								<td id="dextAddr$i">$!sensor.extAddr</td>
+								<td id="dshortAddr$i">$!sensor.shortAddr</td>
+								<td id="dfatherNode$i">$!sensor.fatherNode</td>
+								#if($!sensor.nodeTypes == 0)
+									<td id="dnodeTypes$i" value="0">协调器</td>
+								#elseif($!sensor.nodeTypes == 1)
+									<td  id="dnodeTypes$i" value="1">路由器</td>
+								#elseif($!sensor.nodeTypes == 2)
+									<td  id="dnodeTypes$i" value="2">终端节点</td>
+								#else
+									<td>Unknown</td>
+								#end
+								#if($!sensor.workStatus == 0)
+									<td  id="dworkStatus$i" value="0"><span class="label label-warning">停止工作</span></td>
+								#elseif($!sensor.workStatus == 1)
+									<td id="dworkStatus$i" value="1"><span class="label label-success">正常工作</span></td>
+								#elseif($!sensor.workStatus == 2)
+									<td id="dworkStatus$i" value="2"><span class="label label-error">异常工作</span></td>
+								#else
+									<td>Unknown</td>
+								#end
+								<td id="dstorageId$i" >1</td>
+								<script>						
+									document.getElementById("dstorageId$i").innerHTML = storageMap['${sensor.storageId}'];
+								</script>
+								<td id="dposition$i" >$!sensor.position</td>
+								<!--<td id="dcreator$i" >$!sensor.creator</td>
+								<td id="dcreateTime$i">$!sensor.createTime</td>
+								<td id="dmender$i">$!sensor.mender</td>
+								<td id="dmendTime$i">$!sensor.mendTime</td>-->
+								<td>
+									
+								<button type="button" class="btn blue start" id="updateSensor$i" updateId="$i">
+									<i class="icon-upload icon-white"></i>
+									<span>编辑</span>
+								</button>
+									
+								<button type="button" class="btn red delete" id="deleteSensor$i" deleteId="$i">
+									<i class="icon-trash icon-white"></i>
+									<span>删除</span>
+								</button>
+								
+								</td>
+							</tr>
+                        #end  
+						<script type="text/javascript"> sensorNumber = $i </script>
+					</tbody>
+				</table>
+				<div class="row-fluid" id="sensor_page_select_id">
+                </div> <!--分页div row fluid结束-->
+			</div>
+		</div>
+		<!-- END CONDENSED TABLE PORTLET-->
+		</div>
+	</div>
+	
+	
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span7" id="updateForm">
+    		<div class="portlet box myColor">
+             <div class="portlet-title">
+                  <h4><i class="icon-reorder"></i>添加或者修改传感器</h4>
+    		 </div>
+            </div>    
+    		
+           
+    		<div  class="form-horizontal" id="sensorForm" > <!--Form start-->
+    			<h3 class="form-section">节点信息</h3>
+    			
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">传感器Mac地址</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="extAddr">
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label" >传感器IP地址</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="shortAddr">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+                 </div>
+    			<!--ROW END-->
+    			
+    			
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">传感器类型</label>
+                             <div class="controls">
+                                <select class="m-wrap span12" id="nodeTypes">
+    							   <option value="0">协调器</option>
+                                   <option value="1">路由器</option>
+                                   <option value="2">终端节点</option>
+                                </select>
+                            
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+					   
+					   <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">父节点地址</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="fatherNode">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->					   
+					               
+                 </div>
+    			<!--ROW END-->
+    			 
+    			
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                      
+					<div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">工作状态</label>
+                             <div class="controls">
+                                <select class="m-wrap span12" id="workStatus">
+    							   <option value="0">停止</option>
+                                   <option value="1">正常工作</option>
+                                   <option value="2">异常工作</option>
+                                </select>
+                            
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+					
+                       <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">节点位置</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="position">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+    			     		
+    			   
+                 </div>
+    			<!--ROW END-->		
+				
+				<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">所属仓库</label>
+                             <div class="controls">
+                                <select class="m-wrap span12" id="storageId">
+									#foreach($storage in ${storageList})
+										<option value="${storage.id}">${storage.name}</option>								
+									#end
+                                </select>
+                            
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+					   
+					   <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">传感器别名</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="name">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->					   
+					               
+                 </div>
+    			<!--ROW END-->
+				
+				<!--ROW START-->
+    			<div class="form-actions">                      			   			  																
+								<button class="btn green fileinput-button" id="addASensor">
+									<i class="icon-plus icon-white"></i>
+									<span>添加</span>									 
+								</button>
+                                <button type="button" class="btn blue start" id="updateASensor">
+        							<i class="icon-upload icon-white"></i>
+        							<span>编辑</span>
+        						</button>    							    						   			   
+                 </div>
+    			<!--ROW END-->		
+    			
+    		 </div><!--Form END-->
+			
+			</div>
+			 <div class="span5 ">
+						<!-- BEGIN Portlet PORTLET-->
+						<div class="portlet box myColor">
+							<div class="portlet-title">
+								<h4><i class="icon-reorder"></i>传感器生命周期</h4>
+							</div>
+							<div class="portlet-body">
+                				<table class="table table-striped table-bordered table-hover dataTable" id="sample_1" aria-describedby="sample_1_info">
+                					<thead>
+                						<tr>
+                							<th>#</th>
+                							<th>Mac地址</th>
+                							<th>IP地址</th> 
+											<th>工作时长</th> 
+											<th>建议</th> 
+                							<th style="text-align:center">操作</th>
+                						</tr>
+                					</thead>
+                					<tbody>
+                						#set($i=0)
+                						#foreach($sensor in ${allSensors})  
+                                              
+                							#set($i = $i + 1)
+											#set($year = ${sensor.workTime}/(24*365) )
+											#set($day = (${sensor.workTime} - ${year} * 365*24)/24)
+											#set($hour = ${sensor.workTime} - ${year} * 365*24 - ${day}*24)
+											
+											#set($formatTime = "")
+											
+											#if($year != 0)
+												#set($formatTime = "${formatTime}${year}年")
+											#end
+											#if($day != 0)
+												#set($formatTime = "${formatTime}${day}天")
+											#end
+											#if($hour != 0)
+												#set($formatTime = "${formatTime}${hour}时")
+											#end
+											
+											#if($formatTime == "")
+												#set($formatTime = "0时")
+											#end
+						
+                							<tr>
+                								<td> $i</td>
+                								<td id="textAddr$i">$sensor.extAddr</td>
+                								<td>$sensor.shortAddr</td>
+                								<td id="tworkTime$i">$formatTime</td>
+												#if(${sensor.workTime} >= 365*24)
+													<td id="tsuggest$i"> <span class="label label-error">更换电池</span></td>
+												#elseif(${sensor.workTime} >= 365*12)
+													<td id="tsuggest$i"><span class="label label-warning"> 电量告急</span></td>
+												#else 
+													<td id="tsuggest$i"> <span class="label label-success">电量充足</span></td>  
+												#end                								
+                								<td>
+                									
+                								<button type="button" class="btn blue start" id="resetWorkTime$i" resetId="$i">
+                									<i class="icon-upload icon-white"></i>
+                									<span>重置</span>
+                								</button>            								
+                								
+                								</td>
+                							</tr>
+                                        #end  			
+                					</tbody>
+                				</table>
+							</div>
+						</div>
+						<!-- END Portlet PORTLET-->
+					</div>		 
+		</div> <!--THE ADD AND UPDATE ROW END-->
+     </div>
+	 
+</body>
+</html>

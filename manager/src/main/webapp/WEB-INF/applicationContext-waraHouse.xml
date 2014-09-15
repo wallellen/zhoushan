@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+   <!-- 仓库管理bean -->
+   <!-- 仓库出入库 -->
+   
+
+    <bean id="warahouseInout" class="com.jtang.controller.warahouse.WarahouseInOutController">
+    	<property name="vpService" ref="virtualProductionService"></property>
+    	<property name="userService" ref="UserService"></property>   
+    </bean>
+    <bean id="warahouseAddInOutC" class="com.jtang.controller.warahouse.WarahouseAddInOutC">
+    	<property name="inoutService" ref="inoutService"></property>
+    	<property name="proService" ref="proService"></property>
+    	<property name="storageService" ref="storageService"></property>
+    	<property name="vpService" ref="virtualProductionService"></property>
+    </bean>
+    <bean id="warahouseStatictisInOutC" class="com.jtang.controller.warahouse.WarahouseStatictisInOutC">
+    	<property name="inoutService" ref="inoutService"></property>
+    </bean>
+    <bean id="warahouseReaderC" class="com.jtang.controller.warahouse.WarahouseReaderController">
+    </bean>
+    <bean id="warahouseProduct" class="com.jtang.controller.warahouse.WarahouseProductC">
+    	<property name="proService" ref="proService"></property>
+    	<property name="storageService" ref="storageService"></property>
+    	<property name="userService" ref="UserService"></property>
+    </bean>
+    <bean id="warahouse3D" class="com.jtang.controller.warahouse.Warahouse3DC">
+    	<property name="proService" ref="proService"></property>
+    	<property name="storageService" ref="storageService"></property>
+    </bean>
+    
+    <bean id="startReaderCenter" class="jt.readerdata.main.StartReaderCenter">
+    </bean>
+    
+ </beans>

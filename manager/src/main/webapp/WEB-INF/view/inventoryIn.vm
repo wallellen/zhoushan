@@ -1,0 +1,542 @@
+<div >
+	 <div class="row-fluid">
+	  <div class="span6">
+    	<div class="portlet " id="proInfoDiv">
+             <div class="portlet-title">
+                  <h4><i class="icon-reorder"></i>出入库操作</h4>
+    		 </div>   
+	  
+			 <div class="portlet-body form  bt_selections" id="inoutAction">
+				<!--  参数 -->
+    			<h4> 参数配置 </h4>
+				<div class="btn-group">
+					<a class="btn green" data-toggle="dropdown">
+					  <i class=" icon-wrench"></i> <span>操作选择</span>
+					  <i class="icon-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu" id="actionId">
+						<li value="0"><a>出库</a></li>
+						<li value="1"><a>入库</a></li>
+					</ul>
+				</div>
+				
+				<div class="btn-group">
+					<a class="btn green" data-toggle="dropdown">
+					  <i class=" icon-user"></i> <span>操作员</span>
+					  <i class="icon-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu" id="personId">
+						#foreach($user in ${allUsers}) 
+						  <li userId="${user.id}"><a>$user.name</a></li>
+						#end
+					</ul>
+				</div>
+
+				<div class="btn-group">
+				    <a class="btn blue" onclick="scanReader()">
+					  <i class="icon-arrow-right"></i> <span>扫描</span>
+					</a>
+				</div>
+
+				<!--  参数 -->
+				<div class="space10"></div>
+				<h4>扫描信息</h4>
+				<table id="cardsTable" class="table table-advance ">
+					<thead>
+						<tr>
+							<th><i class="icon-briefcase"></i> RFID号</th>
+							<th><i class="icon-shopping-cart"></i> 出入库时间</th>
+						</tr>
+					</thead>
+					<tbody><tr><td class="highlight"><div class="success"></div><a class="cardNum">E2002019520400671580724B</a></td><td>2014-06-16 15:32:24</td></tr></tbody>
+					<tbody><tr><td class="highlight"><div class="success"></div><a class="cardNum">E2002019520400661580724F</a></td><td>2014-06-16 15:32:24</td></tr></tbody>
+				</table>
+				<div class="form-actions" style="padding-top: 10px ; padding-bottom:10px ; margin-top:40px !important">
+                        <button type="button" class="btn blue" id="bt-postInOut"><i class="icon-ok"></i> 提交 </button>
+                        <button type="button" class="btn" >取消</button>
+                </div>
+		     </div>
+			
+		</div>
+      </div>
+
+      <div class="span6">
+         <div class="portlet ">
+            <div class="portlet-title">
+              <h4><i class="icon-reorder"></i>出入库查询</h4>
+		    </div>
+		    <div class="portlet-body form bt_selections" >
+		        <h4> 查询参数 </h4>
+		        <div class="btn-group">
+					<a class="btn green" data-toggle="dropdown">
+					  <i class=" icon-wrench"></i> <span>操作选择</span>
+					  <i class="icon-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu" id="actionSearchId">
+						<li value="0"><a>出库</a></li>
+						<li value="1"><a>入库</a></li>
+					</ul>
+				</div>
+					
+				<div class="btn-group">
+					<a class="btn green" data-toggle="dropdown">
+					  <i class=" icon-user"></i> <span>操作员</span>
+					  <i class="icon-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu" id="personSearchId">
+					    <li userId="0"><a>全部</a></li>
+						#foreach($user in ${allUsers}) 
+						  <li userId="${user.id}"><a>$user.name</a></li>
+						#end
+					</ul>
+				</div>
+				<div class="btn-group">
+					<a class="btn green" data-toggle="dropdown">
+					  <i class="icon-shopping-cart"></i> <span>商品选择</span>
+					  <i class="icon-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu" id="proSearchId">
+					    <li><a>全部</a></li>
+						#foreach($pro in ${allPros}) 
+						  <li><a>$pro</a></li>
+						#end
+					</ul>
+				</div>
+				<div class="btn-group">
+				    <a class="btn blue" onclick="searchToday()">
+					  <i class="icon-arrow-right" ></i> <span>查询</span>
+					</a>
+				</div>
+
+				<div class="space10"></div>
+		        <h4> 查询结果 </h4>
+		        <!-- 查询表 -->
+			    <table id ="inouttable" class="table table-striped table-bordered table-advance table-hover">
+			     <thead>
+						<tr>
+							<th> RFID号</th>
+							<th> 负责人</th>
+							<th> RFID绑定数额</th>
+							<th> 商品</th>
+							<th>操作时间</th>
+						</tr>
+					</thead>
+				 </table>
+				    <!--  查询表 -->
+    		</div>
+
+	      </div>
+	  </div>
+	</div>
+	<div class="row-fluid">
+	    <div class="span6">
+	        <div class="portlet green box">
+		             <div class="portlet-title">
+		                  <h4><i class="icon-reorder"></i>RFID货物信息</h4> 
+		    		 </div> 
+				     <div class="portlet-body" >
+				         <div class="input-append ">                
+		                       <button class="btn blue" type="button" >RFID卡号</button>
+							   <input  id="rfidProCard" class="m-wrap" type="text" style="border:1px solid #e5e5e5 !important ; ">
+		                 </div>
+				         <table id ="rfidProTable" class="table table-striped table-bordered table-advance table-hover">
+					     	<thead>
+								<tr>
+									<th> QR号</th>
+									<th> 商品名</th>
+									<th> 商品数目</th>
+								</tr>
+							</thead>
+						 </table>
+				     </div>
+
+		    </div>
+	    </div>
+	    <div class="span6">
+	        <div class="portlet green box">
+		             <div class="portlet-title">
+		                  <h4><i class="icon-reorder"></i>今日出入库分析</h4> 
+						  <div class="actions">
+							<a  class="btn green" id="bt_getTodayStatistic"><i class=" icon-refresh"></i></a>
+						  </div>
+		    		 </div> 
+				     <div class="portlet-body" >
+						<div class="row-fluid">
+							<div class="input-append ">                
+		                       <button class="btn blue" type="button" >入库总量</button>
+							   <input  id="inSum" class="m-wrap" type="text" style="border:1px solid #e5e5e5 !important ; width : 130px">
+		                    </div>
+							<div class="input-append ">                
+		                       <button class="btn blue" type="button" >出库总量</button>
+							   <input id="outSum" class="m-wrap" type="text" style="border:1px solid #e5e5e5 !important ; width : 130px">
+		                    </div>
+		      
+							<div id="chart_today"></div>
+						</div>
+						
+				     </div>
+
+		    </div>
+	    </div>
+	       
+	</div>
+
+
+</div>
+
+<script src="$!request.getContextPath()/public/js/socket.io.js"></script>
+<script src="$!request.getContextPath()/public/js/highcharts.js"></script>
+<script src="$!request.getContextPath()/public/js/modules/exporting.js"></script>
+<script src="$!request.getContextPath()/public/js/themes/grid.js"></script>
+<script type="text/javascript">
+
+  //扫描的标签信息
+  var cardDatas = {};
+  //socket io
+  var socketCMD = null;
+  
+  jQuery(function(jQuery){
+     /*
+	 $('#datetimepicker1').datetimepicker({
+         language: 'pt-BR'
+      });
+	  */
+	  
+	  //drawEmpty();
+
+	  $('table').on('click','.cardNum',function(){
+	      getRfidPros($(this).text());
+	  });
+	  
+	  $('#bt-postInOut').click(postInOutDatas);
+	  
+	  $('.bt_selections li').click(function(){
+	      
+	      var chosen = $(this);		  
+		  if( !chosen.hasClass('selected') ) {
+		     var ul = chosen.parent('ul');
+			 ul.children('li.selected').removeClass('selected');
+			 
+		     chosen.addClass('selected');
+			 ul.prev('a').children('span').text(chosen.text());
+		  }
+		  
+	  });
+	  
+	  $('#bt_getTodayStatistic').click(getTodayStatistic);
+	  
+	 if( socketCMD == null ) {
+		   socketCMD = io.connect('ws://127.0.0.1:9900'); 
+		   socketCMD.emit('register', {'storageId': $!{workStorage} }); 
+	 }
+	 
+	 socketCMD.on('3',function (msg){
+			  if( msg.res > 0 && msg.res < 5 ){
+	            console.log( msg );
+				//清空表格
+				jQuery('#cardsTable tbody').remove();
+				cardDatas = msg ;
+			    // success
+				for(var i = 0;i < cardDatas.cardNum;i++){
+				  	jQuery('#cardsTable').append("<tbody><tr><td class='highlight'><div class='success'></div><a class='cardNum'>"+cardDatas.cards[i]+"</a></td>"+
+											"<td>"+cardDatas.cardsTime[i]+"</td></tr></tbody>");
+				}
+			  }
+			  else if ( msg.res == 48 ){
+			      //setAlert("提交警告","无数据提交,请重新扫描");
+			      alert('通讯失败');
+			  }
+			  else if ( msg.res == 0xFB){
+			      alert('未找到有效卡');
+			  }
+			     
+		   });
+	 
+  });
+
+  function getRfidPros(cardNum)
+  {
+     if( !cardNum ) return;
+     jQuery.ajax(
+     {
+         type:"POST",
+         data:{
+             cardNum:cardNum
+         },
+         url:'$pageAbsUrl'+'/warahouse/inventoryInOut?action=get_rfid_pros',
+         error:function(request){
+				alert("fail");
+		},
+		success:function(data){
+		    console.log(data);
+			setInRFIDTable(JSON.parse(data),cardNum);
+		}
+     });
+  }
+
+  function setInRFIDTable(datas,cardNum)
+  {
+      jQuery('#rfidProTable tbody').remove();
+      jQuery('#rfidProCard').val(cardNum);
+      for(var i = 0;i < datas.length;i++){
+			jQuery('#rfidProTable').append("<tbody><tr><td class='highlight'><div class='success'></div><a>"+datas[i].qrCode+"</a></td>"+"<td>"+datas[i].productionName+"</td>"+
+			"<td>"+datas[i].productionCount+"</td>"+
+			"</tr></tbody>");
+		}
+  }
+  
+  function searchToday()
+  {
+    var data = {
+          searchProName:$('#proSearchId li.selected').text(),
+		  searchPersonId:$('#personSearchId li.selected').attr('userId'),
+		  searchAction:$('#actionSearchId li.selected').val()
+    };
+
+    if((data.searchPersonId == undefined) || (data.searchAction == undefined))
+	{
+		alert("无数据提交,请重新扫描");
+	}
+	else
+	{
+	    data.searchProName = (!data.searchProName)?'0':data.searchProName;
+	    jQuery.ajax(
+		{
+			type:"POST",
+			data:data, 
+			url:'$pageAbsUrl'+'/warahouse/statictisInOut?action=search_today',
+			error:function(request){
+					alert("fail");
+			},
+			success:function(data){
+			    console.log(data);
+				setInTable(JSON.parse(data));
+			}
+		});
+	}
+
+  }
+  
+  //RFID阅读器扫描数据
+  function scanReader()
+  {
+  
+        if( socketCMD == null ) {
+		   socketCMD = io.connect('ws://127.0.0.1:9900'); 
+		   socketCMD.emit('register', {'storageId': $!{workStorage} }); 
+		}
+		
+		var storageId = $!{workStorage} ;
+		socketCMD.emit('readerCmd', {'cmdId':'3','storageId': storageId}); 
+	
+	}
+	
+	function setAlert(header,body)
+	{
+		$('.modal-header h3').remove();
+		$('.modal-body p').remove();
+		$('.modal-header').append("<h3>"+header+"</h3>");
+		$('.modal-body').append("<p>"+body+"</p>");
+		$('#alert').modal('show');
+	}
+	
+	function postInOutDatas()
+	{
+	    //FOR TEST DELETE
+	    cardDatas.cardNum = 2;
+	    cardDatas.cardsTime = ['2014-06-22 15:32:24','2014-06-22 15:32:24'];
+	    cardDatas.cards = ['E2002019520400671580724B','E2002019520400661580724F'];
+	    //FOR TEST DELETE
+
+	    cardDatas.personId=$('#personId  li.selected').attr('userId');
+		cardDatas.inOutAction = $('#actionId li.selected').val(); 
+		//判断是否数据要提交
+		if(!(cardDatas.cardNum) || (cardDatas.inOutAction == undefined) || (cardDatas.personId == undefined))
+		{
+			alert("无数据提交,请重新扫描");
+		}
+		else
+		{
+			var data={};
+			data.in_out=JSON.stringify(cardDatas);
+			jQuery.ajax(
+			{
+				type:"POST",
+				url:'$pageAbsUrl'+'/warahouse/addInout',
+				data:data,
+				error:function(request){
+					alert("fail");
+				},
+				success:function(data){
+					alert("ss");
+				}
+			});
+		}
+
+		
+	}
+	
+	function setInTable(list)
+	{
+		jQuery('#inouttable tbody').remove();
+		for(var i = 0;i < list.length;i++){
+			jQuery('#inouttable').append("<tbody><tr><td class='highlight'><div class='success'></div><a>"+list[i].cardNum+"</a></td>"+
+						"<td>"+list[i].personId+"</td>"+
+						"<td>"+list[i].bindCount+"</td>"+
+						"<td>"+list[i].proName+"</td>"+
+					 	"<td>"+list[i].time+"</td></tr></tbody>");
+		}
+	}
+	
+	function drawEmpty(){
+	
+	    var emptyData = {
+		   chartName : 'chart_today',
+		   times : []
+		};
+		
+		draw(emptyData);
+	}
+	
+	function draw(data){
+	
+		//highcharts 配置
+  		var options = {
+	            chart: {
+	                type: 'spline',
+	                animation: Highcharts.svg,
+	                marginRight: 130,
+	                marginBottom: 25,
+	                zoomType: 'x',
+	                renderTo: 'your chart id'
+	            },
+	            plotOptions:{
+	                series:{
+	                    cursor:'pointer',
+	                    point:{
+	                        events:{
+	                            click:function(){
+	                                getRfidPros(this.options.card);
+	                            }
+	                        }
+	                    }
+	                }
+	            },
+	            title: {
+	                text: '出入库信息',
+	                x: -20 //center
+	            },
+	            subtitle: {
+	                text: 'Source: From today',
+	                x: -20
+	            },
+	            xAxis: {
+	                categories: [],
+					type: 'datetime',
+	                tickPixelInterval:150
+	            },
+	            yAxis: {
+	                title: {
+	                    text: '数量/吨'
+	                }
+	            },
+	            tooltip: {
+	                pointFormat:'{series.name}: {point.y} ;' 
+	                             +'card: {point.card}',
+	            },
+	            legend: {
+	                layout: 'vertical',
+	                align: 'right',
+	                verticalAlign: 'top',
+	                x: -10,
+	                y: 100,
+	                borderWidth: 0
+	            },
+	            series: []
+		}
+		
+		jQuery.each(data,function(key,values){
+			
+			if(key == 'times' || key == 'chartName') ;
+			else{			  
+				options.series.push({
+	            	name:key,
+	            	data:values
+		          	});
+			}
+		});
+				
+		options.xAxis.categories = data.times;
+		options.chart.renderTo = data.chartName;
+		new Highcharts.Chart(options);		
+	}
+	
+	function getTodayStatistic()
+	{
+	   jQuery.ajax(
+	   {
+	       type:'GET',
+		   url:'$pageAbsUrl'+'/warahouse/statictisInOut?action=statictis_today',
+		   error:function(request){
+			   alert("fail");
+			},
+		   success:function(data){
+			   inoutDatas = JSON.parse(data);
+			   
+			   $('#inSum').val(inoutDatas.inSum);
+			   $('#outSum').val(inoutDatas.outSum);	
+              
+			   var originDatas = inoutDatas.chartDatas;
+			   var indatas = [];
+			   var outdatas = [];
+
+			   var times = originDatas.times;
+			   for( var i = times.length -1 ; i>=0 ; i-- ){
+			       indatas.push({
+			           'y': originDatas.inDatas[i],
+			           'card' : originDatas.inCards[i]
+			       });
+			       outdatas.push({
+			           'y':originDatas.outDatas[i],
+			           'card':originDatas.outCards[i]
+			       });
+			   }
+			   var datas ={
+			        'inDatas' : indatas,
+			        'outDatas' : outdatas,
+			        'times' : times
+			    };
+			    drawtTodayStatistic(datas);
+
+		   }
+	   });
+	}
+	
+	function drawtTodayStatistic(data)
+	{
+	   data.chartName = 'chart_today';
+	   draw(data);
+	}
+	
+	function searchTodayStatistic()
+	{
+	 	jQuery.ajax(
+		{
+			type:"GET",
+			url:'$pageAbsUrl'+'/warahouse/statictisInOut?action=statictis_in',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(data){
+				//填充表格
+			    inoutDatas = JSON.parse(data);
+				
+				$('#inSum').val(inoutDatas.all.inSum);			
+				setInTable(inoutDatas.all.list);
+				draw(inoutDatas.groupByTime);
+			}
+		});
+	}
+	
+	
+</script>

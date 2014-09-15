@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+   <!-- 平台级管理bean -->
+   
+    <!-- 企业管理 -->
+    <bean id="enterpriseListC" class="com.jtang.controller.enterprisemanager.EnterpriseListC">
+        <property name="enterpriseS" ref="enterpriseService"></property>
+    </bean>
+    <bean id="enterpriseMaintainC" class="com.jtang.controller.enterprisemanager.EnterpriseDetailC">
+        <property name="enterpriseS" ref="enterpriseService"></property>
+        <property name="storageSettingS" ref="storageSettingService"></property>
+        <property name="tempSettingS" ref="tempSettingService"></property>
+        <property name="traceSettingS" ref="traceSettingService"></property>
+    </bean>
+    <!-- 企业管理 -->
+
+    <!-- 权限管理 -->
+    <bean id="privilegeTreeC" class="com.jtang.controller.privilegemanager.privilegeTreeC">
+        <property name="privilegeService" ref="privilegeService"></property>
+    </bean>
+    <bean id="privilegeSetC" class="com.jtang.controller.privilegemanager.PrivilegeSetC">
+    </bean>
+    <!-- 权限管理 -->
+    
+ </beans>

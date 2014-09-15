@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	
+	<bean id="rawmaterialManagerC" class="com.jtang.controller.traceability.RawmaterialManagerC">
+  		<property name="rawService" ref="rawmaterialService"></property>
+  		<property name="processRecordService" ref="processRecordService"></property>
+  		<property name="virtualProductionService" ref="virtualProductionService"></property>
+  	</bean>
+	
+  	<bean id="productionManagerC" class="com.jtang.controller.traceability.ProductionManagerC">
+  		<property name="rawService" ref="rawmaterialService"></property>
+  		<property name="prs" ref="processRecordService"></property>
+  		<property name="vps" ref="virtualProductionService"></property>
+  		<property name="inOutS" ref="inoutService"></property>
+  		<property name="storageS" ref="storageService"></property>
+  		<property name="sensorS" ref="sensorService"></property>
+  		<property name="tempS" ref="tempService"></property>
+  		<property name="tranS" ref="transRecordService"></property>
+  		<property name="saleS" ref="saleRecordService"></property>
+  	</bean>
+  	<bean id="productionStatisticsC" class="com.jtang.controller.traceability.ProductionStatisticsC">
+  	</bean>
+  	<bean id="dataManagerC" class="com.jtang.controller.traceability.DataManagerC">
+  		<property name="tranS" ref="transRecordService"></property>
+  		<property name="saleS" ref="saleRecordService"></property>
+  	</bean>
+  	 <bean id="receiveData" class="com.jtang.controller.traceability.ReceiveDataC"> </bean>
+  	
+ 
+ </beans>

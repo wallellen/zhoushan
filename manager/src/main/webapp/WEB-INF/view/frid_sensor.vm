@@ -1,0 +1,382 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="$!request.getContextPath()/public/uniform/css/uniform.default.css">
+		<script src="$!request.getContextPath()/public/js/socket.io.js"></script>
+	</head>
+<body onload="getSocketIO()">
+ <div class="row-fluid">
+               <div class="span12">
+                  <!-- BEGIN EXTRAS PORTLET-->
+                  <div class="portlet box green">
+                     <div class="portlet-title">
+                        <h4><i class="icon-reorder"></i>基本设置</h4>
+							<div class="actions">
+								<a onclick="openReader()" class="btn yellow"><i class="icon-plus"></i> 开启</a>
+								<a onclick="closeReader()" class="btn blue"><i class="icon-print"></i> 关闭</a>
+						    </div>
+                     </div>
+                     <div class="portlet-body form" >
+						
+						 <form class="horizontal-form" id="reader_form">
+
+                                    <!--/row-->
+                                    <div class="row-fluid">
+                                       <div class="span6 ">
+                                          <div class="control-group">
+                                             <label class="control-label">端口</label>
+                                             <div class="controls">
+                                                <select name="portAdr" class="m-wrap span12">
+                                                   <option value="0">自动</option>
+                                                   <option value="1">COM1</option>
+												   <option value="2">COM2</option>
+												   <option value="3">COM3</option>
+                                                </select>
+                                                
+                                             </div>
+                                          </div>
+                                       </div>
+                                        <!--/span-->
+										
+                                       <div class="span6 ">
+                                          <div class="control-group">
+                                             <label class="control-label">蜂鸣</label>
+                                             <div class="controls">
+                                                <select name="soundSet" class="m-wrap span12">
+                                                   <option  value="0">开启</option>
+                                                   <option  value="1">关闭</option>
+                                                </select>
+                                                
+                                             </div>
+                                          </div>
+                                       </div>
+									  
+                                    </div>
+                                    <!--/row-->        
+                                    <div class="row-fluid">
+                                       <div class="span6 ">
+                                          <div class="control-group">
+                                             <label class="control-label">模式</label>
+                                             <div class="controls">
+                                                <select name="readMode" class="m-wrap span12">
+                                                   <option value="0">应答模式</option>
+                                                   <option value="1">主动模式</option>
+                                                </select>
+                                                
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <!--/span-->
+                                       <div class="span6 ">
+                                          <div class="control-group">
+                                             <label class="control-label">区域</label>
+                                             <div class="controls">
+                                                <select name="readArea" class="m-wrap span12">
+                                                   <option value="1">保留区</option>
+                                                   <option value="2">EPC</option>
+												   <option value="3">TID</option>
+                                                </select>
+                                                
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <!--/span-->
+                                    </div>
+                                    <!-- alert -->
+									<div id="alert" class="modal hide fade in">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+											<h3></h3>
+										</div>
+										<div class="modal-body">
+											<p></p>
+										</div>
+										<div class="modal-footer">
+											<button data-dismiss="modal" class="btn green">OK</button>
+										</div>
+								    </div>
+									<!-- alert -->
+                                  
+                                    <div class="form-actions">
+									   <button type="button" class="btn blue" onclick="setReader()"><i class="icon-ok"></i> 设置</button>
+                                       <button type="button" class="btn" onclick="cancelReader()">取消</button>
+                                    </div>
+                          </form>
+                        <!-- END FORM-->
+                     </div>
+                  </div>
+                  <!-- END EXTRAS PORTLET-->
+               </div>
+ </div>
+ <div class="row-fluid">
+	  <div class="span6">
+    	<div class="portlet box green ">
+             <div class="portlet-title">
+                  <h4><i class="icon-reorder"></i>阅读器信息</h4>
+				  <div class="actions">
+					<a onclick="getReaderState()" class="btn blue"><i class="icon-print"></i> 获取状态</a>
+				</div>
+    		 </div>   
+	  
+			 <div class="portlet-body">
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">工作状态</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="readerState" value="关闭">
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">型号</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="readerType">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+                 </div>
+    			<!--ROW END-->
+
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">最大频率</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="readerMaxFm">
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">最小频率</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="readerMinFm">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+                 </div>
+    			<!--ROW END-->
+				
+				<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">功率</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="readerPower">
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">最大查询时间</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="readerScan">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+                 </div>
+    			<!--ROW END-->
+		    </div>
+		</div>
+      </div>
+      
+	  <div class="span6">
+    	<div class="portlet box green ">
+             <div class="portlet-title">
+                  <h4><i class="icon-reorder"></i>端口信息</h4>
+    		 </div> 
+		     <div class="portlet-body">
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">端口状态</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="portState" value="关闭">
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">已打开端口</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" placeholder="" id="portNum">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+                 </div>
+    			<!--ROW END-->
+
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">端口句柄</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12" id="portHandle">
+                             </div>
+                          </div>
+                       </div>
+                       <!--/span-->
+                       <div class="span6 ">
+                          <div class="control-group">
+                             <label class="control-label">端口地址</label>
+                             <div class="controls">
+                                <input type="text" class="m-wrap span12"  id="portAdr">
+                             </div>
+                          </div>
+                       </div>
+                   <!--/span-->
+                 </div>
+    			<!--ROW END-->
+		     </div>
+
+	    </div>
+	  </div>
+ </div>
+<script type="text/javascript">
+
+    var socketCMD = null;
+    function getSocketIO(){ 
+	    socketCMD = io.connect('ws://192.168.2.105:9900');
+		socketCMD.emit('register', {'storageId': $!{workStorage} }); 
+		
+		//handler eventMsg
+		
+		//open Reader
+		socketCMD.on('1',function (msg ){
+			  setPortState( msg );
+			  if( msg.res == 0) {
+			    setAlert('关闭结果','关闭成功');
+				//setNotification('阅读器已打开');
+			  }
+			  else alert('失败');
+			  
+		});
+		
+		//close Reader
+		socketCMD.on('2',function (msg){
+		      if( msg.res == 0) 
+				{
+					cleanPortState();
+					setAlert('关闭结果','关闭成功');
+					//setNotification('阅读器已关闭');
+				}
+				else 
+				{
+					setAlert('关闭结果','关闭失败:'+msg.res);
+				}
+			
+		});
+		
+		//get ReaderState
+		socketCMD.on('4',function (msg){
+		         console.log(msg);
+				 setPortState(msg);
+			     if(msg.res == '0'){
+					setAlert('状态获取结果','获取成功');
+					$('#readerState').val('打开');
+					$('#readerType').val(msg.readerType);
+					$('#readerMaxFm').val(msg.dmaxFre);
+					$('#readerMinFm').val(msg.dminFre);
+					$('#readerPower').val(msg.powerBm);
+					$('#readerScan').val(msg.scanTime);
+				}
+				else{
+					setAlert('状态获取结果','获取失败,检查设备是否开始后重试');
+				}
+	    });
+		
+		//set Reader
+		socketCMD.on('5',function (msg){
+			  alert('ss');
+		});
+		
+		//check is reader open
+		socketCMD.on('6',function(msg){
+		    if( msg.isOpen != '-1' ) setPortState(msg);
+		});
+	}
+	
+	function setNotification ( msg ){
+	   var notifications = $('#header_notification_bar');
+	   var badge = notifications.find('.badge');
+	   if( !badge.is(':visible') ) {
+	      // add the badge
+		  badge.show();
+	   }
+	   else{
+	      //add one
+	      badge.text( badge.text() + 1 );
+		  //add info
+		  $('#notification_num').text(badge.text());
+		  var newInfo = $('#li_notification_sample').clone();
+		  newInfo.text(msg);
+		  newInfo.find('.time').text(new Date().toLocaleString());
+		  $('#li_notification_sample').after(newInfo);
+		  
+		  newInfo.show();
+	   }
+	}
+  
+  	function setAlert(header,body){
+		$('.modal-header h3').remove();
+		$('.modal-body p').remove();
+		$('.modal-header').append("<h3>"+header+"</h3>");
+		$('.modal-body').append("<p>"+body+"</p>");
+		$('#alert').modal('show');
+	}
+	
+	
+    function sendCmd ( cmdId ) {
+	  if ( socketCMD == null ) getSocketIO();
+	  socketCMD.emit('readerCmd', {'cmdId': cmdId ,'storageId': $!{workStorage} }); 
+	}
+	
+	function cleanPortState(){
+		
+		$('#portState').val('关闭');
+		$('#portNum').val('');
+		$('#portHandle').val('');
+		$('#portAdr').val('');
+	}
+	
+	function setPortState(datas)
+	{
+	    
+		$('#portNum').val('COM'+datas.port);
+		$('#portHandle').val(datas.handle);
+		$('#portAdr').val(datas.adr);
+		
+		if(datas.res == 0)   $('#portState').val('打开');
+		else
+		{
+			var tmp = $('#portState').val();
+			if( tmp == '') $('#portState').val('关闭');
+			
+		}
+		
+	}
+  
+    function setReader() { sendCmd('5'); }
+	function openReader(){ sendCmd('1'); }
+	function getReaderState(){ sendCmd('4'); }
+	function closeReader(){ sendCmd('2'); }
+	function checkOpen(){ sendCmd('6'); }
+
+</script>
+</body>
+
+</html>		

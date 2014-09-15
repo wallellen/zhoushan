@@ -1,0 +1,418 @@
+<html>
+  <head>
+ 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+    <title>实时数据</title>
+	<!--
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	-->
+	<style>
+	
+		@-webkit-keyframes twinkle {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px red; }
+		}
+		@-moz-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px red; }
+		}
+		@-ms-keyframes twinkle  {
+			0%   { box-shadow: 0 0 40px #6c9; }
+			100% { box-shadow: 0 0 40px red; }
+		}
+
+		.twinkle{
+            -webkit-animation: twinkle 1s alternate infinite;
+            -moz-animation: twinkle 1s alternate infinite;
+            -ms-animation: twinkle 1s alternate infinite;
+		}
+
+    </style>
+	
+	<script type="text/javascript" src="$!request.getContextPath()/public/js/cytoscapeweb_v1.0.4/js/json2.min.js"></script>
+	<script type="text/javascript" src="$!request.getContextPath()/public/js/cytoscapeweb_v1.0.4/js/AC_OETags.min.js"></script>
+	<script type="text/javascript" src="$!request.getContextPath()/public/js/cytoscapeweb_v1.0.4/js/cytoscapeweb.min.js"></script>
+	<script type="text/javascript">
+	jQuery(function(){
+
+		jQuery("#openUser").click(function(){
+				if(jQuery("#userLi").hasClass("open")){
+					jQuery("#userLi").removeClass("open");
+				}
+				else{
+					jQuery("#userLi").addClass("open");
+				}
+			});
+	});
+	var vis;
+	var socketCR = null;//该变量用于发送控制命令到服务端
+	
+	//socketRT与tempchart用于display温度数据
+	var socketRT = null;
+	var tempChart = null;
+	
+	//network virtual object
+	function getCurrentNodes(){
+	
+		//这里用作连接发送控制命令的socket
+		socketCR = io.connect('ws://localhost:9003');
+		socketCR.on('connect',function(){
+		});
+		//end
+	
+		//该socket用于获取zigbee网络的拓扑结构
+		var socket = io.connect('ws://localhost:9002');
+
+		socket.on('connect', function() {
+			//$("#statusDiv").append("<p>connected</p>");
+			socket.emit('GetTop', 'Now'+','+storageId); //tell the server the response the zigbee network now
+			socket.on('refresh', function(data){
+				 drawNet(data);			
+			});
+		});
+		var div_id="network";
+		var network_json = {
+		 			dataSchema: {
+                            nodes: [ { name: "label", type: "string" },
+                            		 { name: "info", type: "string"},
+                            		 { name: "type", type: "string"}
+                                ]
+                        },
+                    data: {
+                        nodes: [ { id: "0000" ,label:"0x0000",info:"0000",type:"0"}],
+                    }
+                };
+		vis=draw_pic(div_id,network_json);
+		vis.ready(function(){
+			vis.removeElements();
+			drawNet("");
+			});
+	}
+	
+	function click_node(event){
+ 			var da=event.target.data.label;
+ 			// alert(event.target.data.info);
+ 			//self.parent.frames["frame2"].src="./display.jsp?sensorAddr="+event.target.data.info;
+ 			//self.parent.frames["frame2"].location.href="./display.jsp?sensorAddr="+da;
+			if(socketRT==null){
+      			connectToServer(da);
+      		}else{
+      			socketRT.emit('ChangeSensor',da+','+storageId);
+      		}
+      		
+		    drawGraph(da);
+        }
+	
+	function drawNet(data){
+	  var div_id="network";
+	  var nodes="[{\"id\":\"0000\",\"label\":\"0000\",\"info\":\"0000\",\"type\":\"0\"},";
+	  var edges="[";
+	  var jsonObj = null;
+	  if(data == ""){
+	  	jsonObj = JSON.parse(data);
+	  }else{
+	 	  jsonObj = data;
+	  }
+	  
+	  //var jsonObj = ["FF1A"];
+	  var count = 0;
+	  for(var key in jsonObj){
+	  	nodes+=nodesInfo(key,key,key,jsonObj[key].pointType);
+	  	edges+=edgesAreaInfo(++count,jsonObj[key].parentIp,key);
+	  }
+	  /*
+	  for(var i=0;i<jsonObj.length;i++){
+	      // vis.addNode(500, 500, nodedata, true);
+	       nodes+=nodesInfo(i+1,"0x"+jsonObj[i],jsonObj[i],1);
+	       edges+=edgesAreaInfo(i+1,0,i+1);
+	  }*/
+	  nodes=nodes.substr(0,nodes.lastIndexOf(","));
+	  nodes+="]";
+	  edges = edges.substr(0, edges.lastIndexOf(","));
+	  edges+="]";
+	  var tempData ="{\"nodes\":"+nodes+",\"edges\":"+edges+"}";
+	  var graphData =  jQuery.parseJSON(tempData);
+	  var network_json={
+		 			dataSchema: {
+                            nodes: [ { name: "label", type: "string" },
+                            		 { name: "info", type: "string"},
+                            		 { name: "type", type: "string"}
+                                ]
+                        },
+                     data:graphData
+      };
+      //vis.updateData(graphData);
+	  vis=draw_pic(div_id,network_json);
+	  vis.ready(function(){
+           vis.addListener("click","nodes",function(event){
+                click_node(event);
+            }); 
+           vis.addContextMenuItem("更改数据采集频率", "nodes", function(event){
+           		changeRate(event);
+           });
+           vis.addContextMenuItem("复位传感器", "nodes", function(event){
+           		resetSensor(event);
+           });
+           vis.addContextMenuItem("停止传感器", "nodes", function(event){
+           		stopSensor(event);
+           });
+           vis.addContextMenuItem("启动传感器", "nodes", function(event){
+           		startSensor(event);
+           });          	
+      });
+	 }
+	 function changeRate(event) {
+	        		var addr = event.target.data.label;
+	        		if(addr == "0000"){
+	        			alert("不能对协调器进行此操作");
+	        		}else{
+	        				var rate = window.prompt("请输入温度采集频率(单位秒)","2");
+				     		socketCR.emit('SendCommand',{'senSorAddr':addr,'cmdId':'1','arg0':rate,'storageId':storageId});
+	        		}
+     }
+     function resetSensor(event){
+     	var addr = event.target.data.label;
+	    if(addr == "0000"){
+	        alert("不能对协调器进行此操作");
+	     }else{
+	     		socketCR.emit('SendCommand',{'senSorAddr':addr,'cmdId':'2','arg0':"",'storageId':storageId});
+				alert("命令发送成功");
+	     }
+     }
+
+     function stopSensor(event){
+     	var addr = event.target.data.label;
+	    if(addr == "0000"){
+	        alert("不能对协调器进行此操作");
+	     }else{
+	     		socketCR.emit('SendCommand',{'senSorAddr':addr,'cmdId':'3','arg0':"",'storageId':storageId});
+				alert("命令发送成功");
+	     }
+     }
+
+     function startSensor(event){
+     	var addr = event.target.data.label;
+	    if(addr == "0000"){
+	        alert("不能对协调器进行此操作");
+	     }else{
+	     		socketCR.emit('SendCommand',{'senSorAddr':addr,'cmdId':'4','arg0':"",'storageId':storageId});
+				alert("命令发送成功");
+	     }
+     }
+	
+	function  nodesInfo(id,label,info,serverType){
+		 return "{\"id\":\""+id+"\",\"label\":\""+label+"\",\"info\":\""+info+"\",\"type\":\""+serverType+"\"},";
+	}
+		   
+	function   edgesAreaInfo(id,target,source){
+		 var info="";
+		 info+="{\"id\":\""+id+"\",\"target\":\""+target+"\",\"source\":\""+source+"\"},";
+		 return info;
+	 }   
+	 
+	 function draw_pic(div_id,network_json){
+		
+		      // initialization options
+                var options = {
+                    swfPath: "$!request.getContextPath()/public/swf/CytoscapeWeb",
+                    flashInstallerPath: "$!request.getContextPath()/public/swf/playerProductInstall"
+                };
+                
+               var tmpvis = new org.cytoscapeweb.Visualization(div_id, options);
+
+                
+		     // visual style we will use
+                var visual_style = {
+                	global: {
+                        backgroundColor: "#eee"
+                    },
+                    nodes: {
+                        borderWidth: 3,
+                        borderColor: "#ffffff",
+                        size:65,
+                        color:{
+                           defaultValue: "#0B94B1",
+                           discreteMapper: {
+                                attrName: "type",
+                                entries: [
+                                    { attrValue: 0, value: "#0B94B1" },
+                                    { attrValue: 1, value: "#dddd00" },
+                                    { attrValue: 2, value: "#9A0B0B" }
+                                ]
+                            }
+                        },
+                        shape:{
+                           defaultValue:"ELLIPSE",
+                           discreteMapper:{
+                               attrName:"type",
+                               entries: [
+                                    { attrValue: 0, value: "ELLIPSE" },
+                                    { attrValue: 1, value: "RECTANGLE" },
+                                    { attrValue: 2, value: "HEXAGON" }
+                                ]
+                           }
+                        },
+                        labelHorizontalAnchor: "center"
+                    },
+                    edges: {
+                        width: 3,
+                        color: "#0B94B1"
+                    }
+                };
+
+ 
+                var draw_options = {
+                    // your data goes here
+                    network: network_json,
+                    visualStyle: visual_style,
+                    // show edge labels too
+                    edgeLabelsVisible: true,                    
+                    // let's try another layout
+                    layout: "Tree",           
+                    // hide pan zoom
+                    nodeTooltipsEnabled: true,
+                    panZoomControlVisible: true 
+                };
+                tmpvis.draw(draw_options);
+                
+                return tmpvis;
+            }
+
+	//接下来的代码用于Display动态数据
+	
+	function connectToServer(sensorIp){
+		socketRT = io.connect('ws://192.168.2.142:9001');
+		
+		if(sensorIp!=null && sensorIp!=""){
+			//alert(sensorIp);
+			socketRT.on('connect', function() {
+				
+				//$("#statusDiv").append("<p>connected</p>");
+				var temp=sensorIp.charAt(0)+sensorIp.charAt(1)+sensorIp.charAt(2)+sensorIp.charAt(3)+"";
+				socketRT.emit('SensorData', temp+','+storageId); //tell the server the device i want
+				socketRT.on('temperature', function(data){
+	
+					draw(data.time,data.temp);
+						
+				});
+			});
+
+		}
+
+	}
+
+	function draw(time,temp){
+		var series = tempChart.series[0];
+		if(temp > maxTemp || temp < minTemp){	
+
+			if(jQuery("#container").hasClass("twinkle")){
+			
+			}else{		
+				jQuery("#container").addClass("twinkle");
+			}
+		}else{
+			if(jQuery("#container").hasClass("twinkle")){
+				jQuery("#container").removeClass("twinkle");
+			}else{		
+			}
+		}
+		if(series.data == null){
+			series.addPoint([time,parseFloat(temp)]);
+		}
+		else{
+			if(series.data.length>=10){
+				series.addPoint([time,parseFloat(temp)],true,true);
+			}else{
+				series.addPoint([time,parseFloat(temp)]);
+			}
+		}
+	}
+	
+
+	function drawGraph(sensorIp){
+	
+		
+		var tempData = [];
+		var timeData = [];
+		tempChart = new Highcharts.Chart({
+	            chart: {
+	                type: 'spline',
+	                animation: Highcharts.svg,
+	                marginRight: 130,
+	                marginBottom: 25,
+	                zoomType: 'x',
+	                renderTo: 'container'
+	            },
+	            title: {
+	                text: 'Temp info',
+	                x: -20 //center
+	            },
+	            subtitle: {
+	                text: 'Source: From zigbee network',
+	                x: -20
+	            },
+	            xAxis: {
+	                categories: timeData,
+	                tickPixelInterval:150
+	            },
+	            yAxis: {
+	                title: {
+	                    text: 'Temp/C'
+	                },
+	                plotLines: [{
+    	                    value: maxTemp,
+    	                    width: 2,
+    	                    color: 'red',
+    						dashStyle: 'longdashdot'
+	                	},
+						{
+							value: minTemp,
+    	                    width: 2,
+    	                    color: 'red',
+    						dashStyle: 'longdashdot'
+						}
+					],
+					
+	            },
+	            tooltip: {
+	                valueSuffix: ''
+	            },
+	            legend: {
+	                layout: 'vertical',
+	                align: 'right',
+	                verticalAlign: 'top',
+	                x: -10,
+	                y: 100,
+	                borderWidth: 0
+	            },
+	            series: [
+	            	{
+	            	name:sensorIp,
+	            	data:tempData
+		          	}
+	            ]
+	     });		
+	}
+
+	
+	</script>
+  </head>
+  
+  <body onload="getCurrentNodes()">
+  <script src="$!request.getContextPath()/public/js/highcharts.js"></script>
+  <script src="$!request.getContextPath()/public/js/modules/exporting.js"></script>
+  <script src="$!request.getContextPath()/public/js/themes/grid.js"></script>
+  #foreach($storage in ${storageList})
+	#if($!{storage.id} == $!{workStorage})	
+	<script>	
+		var maxTemp = $!{storage.maxTemp};
+		var minTemp = $!{storage.minTemp};
+		var storageId = $!{storage.id};
+	</script>
+	#break
+	#end
+  #end
+   <div id="network" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+   <div id="container" style="min-width: 400px; height: 300px; margin-top: 10px"></div>
+  </body>
+</html>

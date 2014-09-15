@@ -1,0 +1,177 @@
+<body>
+	<div id="tab_temp" class="span10">
+			<div style="height: auto;">
+				<form>
+				    <div class="profile-settings row-fluid" style="border-bottom: 1px solid #eee;">
+						<div class="input-append ">                
+	                       <button class="btn blue" type="button">当前级别</button>
+						   <input id="level_temp" class="m-wrap" type="text" style="border:1px solid #e5e5e5 !important ; width : 130px">
+		                </div>
+		                <div class="btn-group row-fluid" style="margin-bottom: 10px;">
+	        				<a class="btn span2" id="bt_current_service_realTimeData">实时温度</a>
+	        				<a class="btn span2" id="bt_current_service_historyData">历史温度</a>
+	        				<a class="btn span2" id="bt_current_service_exceptionData">异常历史</a>
+	        				<a class="btn span2" id="bt_current_service_sensorManager">传感器管理</a>
+	        				<a class="btn span2" id="bt_current_service_storageManager">仓库管理</a>
+	        				<a class="btn span2" id="bt_current_service_tmDownload">移动监控</a>
+	        			</div>
+	        		</div>
+	        		<div class="space10"></div>
+	        		<div class="profile-settings row-fluid">
+	        			<h4> 其他可用配置 </h4>
+	        			<table class="table table-bordered table-hover" id="service_table_temp">
+							<thead>
+								<tr>
+								    <th>配置ID</th>
+									<th>实时温度</th>
+									<th>历史温度</th>
+									<th>异常历史</th>
+									<th>传感器管理</th>
+									<th>仓库管理</th>
+									<th>移动监控</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="profile-settings"> 
+						<h4>权限说明</h4>
+						<div class="accordion collapse" id="accordion1" style="height: auto;">
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse_1">
+									出入库功能介绍
+									</a>
+								</div>
+								<div id="collapse_1" class="accordion-body collapse" style="height: 0px;">
+									<div class="accordion-inner">
+										Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
+									</div>
+								</div>
+							</div>
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse_2">
+									库存功能介绍
+									</a>
+								</div>
+								<div id="collapse_2" class="accordion-body collapse" style="height: 0px;">
+									<div class="accordion-inner">
+										Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor.
+									</div>
+								</div>
+							</div>	
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse_3">
+									仓库预览功能介绍
+									</a>
+								</div>
+								<div id="collapse_3" class="accordion-body collapse" style="height: 0px;">
+									<div class="accordion-inner">
+										Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor.
+									</div>
+								</div>
+							</div>	
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse_4">
+								    RFID功能介绍
+									</a>
+								</div>
+								<div id="collapse_4" class="accordion-body collapse" style="height: 0px;">
+									<div class="accordion-inner">
+										Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor.
+									</div>
+								</div>
+							</div>			
+						</div>
+					</div>
+					</form>
+				</div>
+			</div>
+</body>
+<script>
+	jQuery(function(jQuery) {
+		setServiceTab();
+	});
+
+	var addServiceTable= function(service)
+	{
+		var trString = "<tr><td>"+service.id+"</td>";
+		for(var s in service)
+		{
+			if(s == 'id') continue;
+			if(service[s])
+			{
+				trString += "<td><span class='label label-success'>启用</span></td>";
+			}
+			else
+			{
+				trString +=　"<td><span class='label'>停用</span></td>";
+			}
+		}
+		trString += "<td><a href='#' class='btn mini blue'><i class='icon-edit'></i>申请</a></td></tr>";
+		return trString;
+	}
+
+	var setCurrentService = function(service)
+	{
+		for(var s in service)
+		{
+			var bt = $('#bt_current_service_'+s);
+			if(service[s] && !bt.hasClass('green')) 
+			{
+				bt.addClass('green');
+			}
+			else if(!service[s] && !bt.hasClass('red'))
+			{
+				bt.addClass('red');
+			}
+		}
+	}
+
+	var setServiceTable = function(datas, current_id)
+	{
+		$('#service_table_temp tbody tr').remove();
+
+		$('#level_temp').val(current_id);
+		for( var len = datas.length-1; len >= 0; len--)
+		{
+			var service = datas[len];
+			if (service.id == current_id)
+			{
+				setCurrentService(service);
+			}
+			else
+			{
+				$('#service_table_temp tbody').append(addServiceTable(service));
+			}
+		}
+	}
+
+	function setServiceTab()
+	{
+		jQuery.ajax({
+			type:"POST",
+			url:'$pageAbsUrl'+'/maintainManager/enterpriseBasic?action=get_temp',
+			error:function(request){
+				alert("fail");
+			},
+			success:function(res){
+			    if(res){
+			    	var datas = JSON.parse(res);
+			    	setServiceTable(datas.all, datas.current);
+			    }
+			    else{
+			    	alert('fail');
+			    }
+			    
+			}
+		});
+	}
+
+</script>

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans        
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context                
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+    	<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://192.168.2.142:3306/storagemanager" />
+        <property name="username" value="root" />
+        <property name="password" value="123" />
+        
+    </bean>
+    
+     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- 首先定义抽象的abstractDao，其有一个jdbcTemplate属性，从而可以让继承的子类自动继承jdbcTemplate属性注入； -->
+    <bean id="abstractDao" abstract="true">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+         
+     <!--  basic manager  -->
+     <bean id="manager" class="com.jtang.dao.BasicManagerImpl" parent="abstractDao"></bean>
+     <!--  basic manager -->
+    
+    <!-- 仓库表  -->
+    <bean id="storageService" class="com.jtang.service.impl.StorageServiceImpl">
+    	<property name="manager" ref="manager"></property>
+    </bean>
+    <!-- 商品库库存service -->
+     <bean id="proService" class="com.jtang.service.impl.InventoryServiceImpl">
+    	<property name="manager" ref="manager"></property>
+     </bean>
+     <!-- 商品库库存service -->
+     
+     <!-- 出入库 -->
+     <bean id="inoutService" class="com.jtang.service.impl.InOutServiceImpl" > 
+     	<property name="manager" ref="manager"></property>
+     </bean>
+     
+     <!-- 用户表 -->
+     <bean id="UserService" class="com.jtang.service.impl.UserServiceImpl">
+    	<property name="manager" ref="manager"></property>
+     </bean>
+     
+     <!-- 温度传感器 -->
+     <bean id="sensorService" class="com.jtang.service.impl.SensorServiceImpl">
+    		<property name="manager" ref="manager"></property>
+     </bean>
+    
+    <!-- 温度表 -->
+    <bean id="tempService" class="com.jtang.service.impl.TempServiceImpl">
+    		<property name="manager" ref="manager"></property>
+    </bean>
+    
+    <!-- 溯源查询 -->
+    <!-- 商品溯源的xx表 -->
+    <bean id="productService" class="com.jtang.service.impl.ProductServiceImpl">
+    	<property name="manager" ref="manager"></property>
+    </bean>
+     <bean id="productQueryService" class="com.jtang.service.impl.ProductQueryServiceImpl">
+    	<property  name="manager" ref="manager"></property>
+    </bean>
+    <!-- 原料表 -->
+     <bean id="rawmaterialService" class="com.jtang.service.impl.RawmaterialServiceImpl">
+    	<property name="manager" ref="manager"></property>
+    </bean>
+    <bean id="processRecordService" class="com.jtang.service.impl.ProcessRecordServiceImpl">
+    	<property name="manager" ref="manager"></property>
+    </bean>
+    <bean id="virtualProductionService" class="com.jtang.service.impl.VirtualProductionServiceImpl">
+    	<property name="manager" ref="manager"></property>
+    </bean>
+     <bean id="storeRecordService" class="com.jtang.service.impl.StoreRecordServiceImpl">
+    	<property name="manager" ref="manager"></property>
+    </bean>
+     <bean id="transRecordService" class="com.jtang.service.impl.TransRecordServiceImpl">
+    	<property name="manager" ref="manager"></property>
+    </bean>
+    <bean id="saleRecordService" class="com.jtang.service.impl.SaleRecordServiceImpl">
+    	<property name="manager" ref="manager"></property>
+    </bean>
+    
+    <!-- Message 表 -->
+    <bean id="messageService" class="com.jtang.service.impl.MessageServiceImpl">
+    		<property name="manager" ref="manager"></property>
+     </bean>
+    <!-- aop start -->
+    <bean id="privilegeUserService" class="com.jtang.service.impl.PrivilegeUserServiceImpl">
+    		<property name="manager" ref="manager"></property>
+     </bean>
+    <!-- aop end -->
+    
+    <!-- 权限表 -->
+    <bean id="privilegeService" class="com.jtang.service.impl.PrivilegeServiceImpl">
+       <property name="manager" ref="manager"></property>
+    </bean>
+    <!-- 权限表 -->
+    
+    <!-- 平台管理员  -->
+    <!-- 企业管理 -->
+    <bean id="enterpriseService" class="com.jtang.service.impl.EnterpriseServiceImpl">
+       <property name="manager" ref="manager"></property>
+    </bean> 
+    <bean id="storageSettingService" class="com.jtang.service.impl.StorageServiceSettingServiceImpl">
+       <property name="manager" ref="manager"></property>
+    </bean>
+    <bean id="tempSettingService" class="com.jtang.service.impl.TempServiceSettingServiceImpl">
+       <property name="manager" ref="manager"></property>
+    </bean>
+     <bean id="traceSettingService" class="com.jtang.service.impl.TraceSettingServiceImpl">
+       <property name="manager" ref="manager"></property>
+    </bean>
+    <!-- 企业管理 -->
+    <!-- 平台管理员  -->
+
+</beans>

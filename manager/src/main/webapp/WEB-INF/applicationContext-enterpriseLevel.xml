@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+   <!-- 企业级管理bean -->
+   
+    <!-- 用户管理 -->
+    <bean id="userListC" class="com.jtang.controller.usermanager.UserListC">
+        <property name="userS" ref="UserService"></property>
+    </bean>
+    <!-- 用户管理 -->
+    <bean id="userOpeC" class="com.jtang.controller.usermanager.UserOpeC">
+        <property name="userS" ref="UserService"></property>
+    </bean>
+
+    <bean id="storgeOpeC" class="com.jtang.controller.usermanager.StorageOpeC">
+        <property name="storageS" ref="storageService"></property>
+    </bean>
+
+    <bean id="enterpriseBasicC" class="com.jtang.controller.maintainmanager.EnterpriseBasicC">
+        <property name="enterpriseS" ref="enterpriseService"></property>
+        <property name="storageSettingS" ref="storageSettingService"></property>
+        <property name="tempSettingS" ref="tempSettingService"></property>
+        <property name="traceSettingS" ref="traceSettingService"></property>
+        <property name="messageS" ref="messageService"></property>
+    </bean>
+
+    <bean id="storageSettingApplyC" class="com.jtang.controller.maintainmanager.StorageSettingApplyC">
+    </bean>
+    <bean id="tempSettingApplyC" class="com.jtang.controller.maintainmanager.TempSettingApplyC">
+    </bean>
+    <bean id="traceSettingApplyC" class="com.jtang.controller.maintainmanager.TraceSettingApplyC">
+    </bean>
+    
+ </beans>

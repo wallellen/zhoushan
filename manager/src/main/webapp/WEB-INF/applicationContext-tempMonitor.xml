@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+   <!-- 这里面配置传感器子项目的配置文件 -->
+    <!-- this for sensor data center -->
+    	<bean id="tmDownloadC" class="com.jtang.controller.tempmonitor.TMDownloadC"></bean>
+    	<bean id="dataSaver" class="jt.sensordata.consumer.DataSaver">
+    		<property name="checkZigbee" ref="checkZigbee"></property>
+    		<property name="updateSensorWorkTime" ref="updateSensorWorkTime"></property>
+    		<property name="storeTemp" ref="storeTemp"></property>
+    		<property name="sensorHandler" ref="sensorHandler"></property>
+    	</bean>
+    	<bean id="startDataCenter" class="jt.sensordata.main.StartDataCenter">
+    		<property name="dataSaver" ref="dataSaver"></property>
+    		<property name="messageService" ref="messageService"></property>
+    	</bean>
+    	
+    	<bean id="sensorManagerC" class="com.jtang.controller.tempmonitor.SensorManagerC">
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    	<bean id="deleteSensorC" class="com.jtang.controller.tempmonitor.DeleteSensorC">
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    	<bean id="resetSensorC" class="com.jtang.controller.tempmonitor.ResetSensorC">
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    	<bean id="addSensorC" class="com.jtang.controller.tempmonitor.AddSensorC">
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    	
+    	<bean id="updateSensorC" class="com.jtang.controller.tempmonitor.UpdateSensorC">
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    	
+    	<bean id="realTimeDataC" class="com.jtang.controller.tempmonitor.RealTimeDataC">
+    	</bean>
+    	<bean id="historyDataC" class="com.jtang.controller.tempmonitor.HistoryDataC">
+    		<property name="tempService" ref="tempService"></property>
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    	
+    	<bean id="exceptionDataC" class="com.jtang.controller.tempmonitor.ExceptionDataC">
+    		<property name="tempService" ref="tempService"></property>
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    	
+    	<bean id="storageManagerC" class="com.jtang.controller.tempmonitor.StorageManagerC">
+    		<property name="storageService" ref="storageService"></property>
+    		<property name="userService" ref="UserService"></property>
+    	</bean>
+    	
+    	<bean id="checkZigbee" class="com.jtang.servicethread.CheckZigbee">
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    	<bean id="updateSensorWorkTime" class="com.jtang.servicethread.UpdateSensorWorkTime">
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+   
+    	<bean id="storeTemp" class="com.jtang.servicethread.StoreTemp">
+    		<property name="tempService" ref="tempService"></property>
+    		<property name="manager" ref="manager"></property>
+    	</bean>
+    	
+    	<bean id="sensorHandler" class="com.jtang.servicethread.SensorHandler">
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    	
+    	<bean id="querySensorC" class="com.jtang.controller.tempmonitor.QuerySensorC">
+    		<property name="sensorService" ref="sensorService"></property>
+    	</bean>
+    <!-- end -->
+    <!-- end -->
+ </beans>

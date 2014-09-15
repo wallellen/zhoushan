@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans	xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd              
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd ">
+	<!--veloctity的配置信息-->
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">  
+        <property name="resourceLoaderPath">  
+            <value>/</value>  
+        </property>  
+        <property name="velocityProperties">  
+            <props>  
+                <prop key="input.encoding">utf-8</prop>  
+                <prop key="output.encoding">utf-8</prop>  
+                <prop key="contentType">text/html;charset=utf-8</prop>  
+            </props>  
+       </property>  
+    </bean>
+    <import resource="applicationContext-dataSource.xml" />
+    <import resource="applicationContext-tempMonitor.xml"/>
+    <import resource="applicationContext-mobileservice.xml"/>
+    <import resource="applicationContext-traceability.xml"/>
+    <import resource="applicationContext-enterpriseLevel.xml"/>
+    <import resource="applicationContext-platformLevel.xml"/>
+  
+    <bean id="login" class="com.jtang.controller.common.LoginController">
+    	<property name="userService" ref="UserService"></property>
+    </bean>
+    
+    <bean id="logout" class="com.jtang.controller.common.LogoutController">
+    </bean>
+    
+    <bean id="messageManagerC" class="com.jtang.controller.common.MessageManagerC">
+    	<property name="messageService" ref="messageService"></property>
+    </bean>
+    
+    
+    <bean id="dashboard" class="com.jtang.controller.common.DashboardController">
+    	<property name="userService" ref="UserService"></property>
+    	<property name="storageService" ref="storageService"></property>
+    </bean>
+    <bean id="error" class="com.jtang.controller.common.ErrorController"></bean>
+
+  
+    
+    
+    <!-- 溯源管理bean -->
+    <bean id="datarecord" class="com.jtang.controller.DatarecordController">
+    	<property name="productService" ref="productService"></property>
+    	<property name="rawmaterialService" ref="rawmaterialService"></property>
+    	<property name="storeRecordService" ref="storeRecordService"></property>
+    	<property name="transRecordService" ref="transRecordService"></property>
+    </bean>
+    <bean id="dataquery" class="com.jtang.controller.DataqueryController">
+    	<property name="productService" ref="productService"></property>
+    	<property name="productQueryService" ref="productQueryService"></property>
+    </bean>
+	<import resource="applicationContext-waraHouse.xml" />
+    
+    <!-- ABOUT AOP -->
+    <!-- Don't remove this commit
+    <aop:config>
+       <aop:aspect id="TestAspect" ref="myInterceptor">  
+            <aop:pointcut id="servicem" expression="execution(* com.jtang.controller.*.*(..))" />   
+            <aop:before pointcut-ref="servicem" method="doAccessCheck"/>     
+            <aop:after  pointcut-ref="servicem" method="after"/>
+    		<aop:around  pointcut-ref="servicem" method="doBasicProfiling"/>
+    		<aop:after-throwing  pointcut-ref="servicem" method="doAfterThrow" throwing="ex"/>  
+        </aop:aspect>  
+    </aop:config>
+    <bean id="myInterceptor" class="com.jtang.aop.MyInterceptor"/>  
+
+     -->
+   
+    <mvc:interceptors>  
+    	<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />   
+	    <mvc:interceptor>  
+	        <mvc:mapping path="/**" />  
+	        <bean class="com.jtang.aop.CheckRight">  
+	        	<property name="pus" ref="privilegeUserService"></property>
+	        </bean>
+	    </mvc:interceptor>  
+	</mvc:interceptors>  
+    
+    <!--  AOP OVER -->
+    
+    <!-- privilege -->
+    <bean id="userInfoC" class="com.jtang.controller.extra.UserInfoC"></bean>
+    <bean id="privilegeC" class="com.jtang.controller.extra.PrivilegeC">
+         <property name="privilegeService" ref="privilegeService"></property>
+         <property name="pus" ref="privilegeUserService"></property>
+    </bean>
+    <!-- privilege -->  
+
+
+</beans>

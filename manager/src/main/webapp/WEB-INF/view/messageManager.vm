@@ -1,0 +1,111 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="$!request.getContextPath()/public/ConstantJs/submitForm.js"></script>        
+    <script src="$!request.getContextPath()/public/ConstantJs/page.js"></script>  
+    <link href="$!request.getContextPath()/public/data-tables/DT_bootstrap.css" rel="stylesheet" />
+</head>
+
+<body>
+		<!--data table start-->
+<div class="portlet box green">
+		<div class="portlet-title">
+			<h4><i class="icon-reorder"></i>收件箱</h4>
+			<div class="tools">
+				<a href="javascript:;" class="collapse"></a>
+			</div>
+		</div>
+		<div class="portlet-body">
+			<div class="row-fluid">
+        				<div class="dataTables_wrapper form-inline" role="grid">
+        				<div class="row-fluid">
+        					<label>
+        						<select size="1" name="sample_1_length" id="message_pers_page" aria-controls="sample_1" class="m-wrap xsmall"><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> 
+        					每页记录数</label>
+
+        					<a href="#" class="btn blue" id = "read_all">全部标为已读</a>
+        				</div>
+						<table class="table table-striped table-bordered table-hover dataTable" id="message_table_id" aria-describedby="sample_1_info">
+        				<thead>
+        					<tr role="row">
+        						<th role="columnheader" style="width:10%;">状态</th>
+        						<th role="columnheader" style="width:10%;">发件人</th>
+        						<th role="columnheader" style="width:50%;">主题</th>
+        						<th role="columnheader" style="width:30%;">时间</th>
+        					</tr>
+        				</thead>
+        				
+        				<tbody role="alert" aria-live="polite" aria-relevant="all">	
+        				</tbody>
+        				</table>
+        				<div class="row-fluid" id="message_table_page_id">
+						</div> <!--分页div row fluid结束-->
+						</div>
+				</div><!--outest row fluid is over-->
+			</div>
+			
+		</div> <!--portlet-body end-->
+	</div> <!--portlet end-->
+</body>
+<script type="text/javascript">
+var trOdd = "<tr class='gradeX odd'></tr>";
+var trEven = "<tr class='gradeX even'></tr>";
+var tdContent = "<td class='hidden-480 '>{0}</td>";
+var imgModel = "<img src='{0}'/>";
+var linkModel = "<a href='{0}'>{1}</a>";
+String.prototype.format = function()
+{
+    var args = arguments;
+    return this.replace(/\{(\d+)\}/g,                
+        function(m,i){
+            return args[i];
+        });
+};
+function addDefaultDataToTable( data, table){
+
+	var tbody = jQuery('#'+table+' tbody');
+	//first clear the table's tbody
+	tbody.empty();
+	
+	for(var i = 0; i < data.length; i++){
+		var needAppendTr = null;
+		if(i % 2 == 0) {
+			needAppendTr = jQuery(trOdd);
+		}else{
+			needAppendTr = jQuery(trEven);
+		}
+		var item = data[i];
+
+		var detailUrl = "$pageAbsUrl/commonFunction/messageManager?messageId=" + item.messageId;
+		var unReadImg = "$!request.getContextPath()/public/images/unread.png";
+		var readedImg = "$!request.getContextPath()/public/images/readed.png";
+		if(item.status == 1) {
+			item.readStatus = linkModel.format(detailUrl,imgModel.format(unReadImg));
+		}else{
+			item.readStatus = linkModel.format(detailUrl,imgModel.format(readedImg));
+		}
+		item.newTitle = linkModel.format(detailUrl,item.title);
+		//because json is disordered  
+		var order = new Array("readStatus","fromWho","newTitle","time"
+					);
+		for(var index in order){
+			needAppendTr.append(tdContent.format(item[order[index]]));	
+		}
+		tbody.append(needAppendTr);
+		//add click listener to select button
+	} // for is over
+}
+
+jQuery(function(){
+	var pageInfo = eval($!{pageInfo});
+	addDefaultDataToTable(pageInfo.dataList,"message_table_id");
+	createPageInfo("message_table_page_id",pageInfo,"message_pers_page","$!request.getContextPath()/commonFunction/messageManager",null);
+
+	jQuery("#read_all").on("click", function(){
+		jQuery.form('$!request.getContextPath()/commonFunction/messageManager', 
+			{ action: 'readAll'}).submit();
+	});
+
+});
+</script>
+</html>

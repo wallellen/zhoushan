@@ -1,0 +1,314 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<script src="$!request.getContextPath()/public/js/bootstrap-datetimepicker.min.js"></script>	
+	<link href="$!request.getContextPath()/public/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+	<style>
+		.myColor {
+			background-color:#28b779 !important;
+		}
+		
+
+
+    </style>
+</head>
+	
+<body>
+<script src="$!request.getContextPath()/public/js/highcharts.js"></script>
+<script src="$!request.getContextPath()/public/js/modules/exporting.js"></script>
+<script src="$!request.getContextPath()/public/js/themes/grid.js"></script>
+
+
+
+<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+
+    		<div  class="form-horizontal" id="sensorForm" > <!--Form start-->
+    			<h3 class="form-section">检索条件</h3>
+    			
+    			<!--ROW START-->
+    			<div class="row-fluid">
+                 <table class="table table-hover myColor">
+				<tr class="info">
+            	<td class = "span3">
+                    <span class="label label-important">开始时间:</span>
+                    <div id="datetimepicker1" class="input-append date">
+                    <input data-format="yyyy-MM-dd hh:mm:ss" type="text" name="startTime" id ="startTime"></input>
+                    <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                    </i>
+                    </span>
+                </div>
+        
+        		</td>
+                <td class = "span3">
+                    <span class="label label-important">结束时间:</span>
+                    <div id="datetimepicker2" class="input-append date">
+                    <input data-format="yyyy-MM-dd hh:mm:ss" type="text" name="endTime" id ="endTime"></input>
+                    <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar" >
+                    </i>
+                    </span>
+        
+                </div>
+				</td>
+				<td class = "span3">
+        		<span class="label label-important">选择传感器:</span>
+        		<select name="extAddr" id="extAddr">
+                	#foreach($sensor in ${allSensors}) 
+        			<option value="${sensor.extAddr}" sensorName="${sensor.name}">$sensor.name</option>
+					#end
+        		</select>
+       			</td>
+       			<td class = "span3">
+        		<button type="button" class="btn green" id="searchHistory">查询 &nbsp; <i class="m-icon-swapright m-icon-white"></i></button>
+				</td>
+				</tr>
+				 </table>
+    			<!--ROW END-->							    			
+    		 </div><!--Form END-->
+			</div>
+	 
+		</div> <!--THE ADD AND UPDATE ROW END-->
+     </div>
+
+
+<br>
+	
+	<table style="width:100%">
+		<tr>
+			<td colspan=2 style="width:100%"><div id="container" style="height: 300px; margin: 0 auto" ></div></td>
+		</tr>
+		<tr>
+			<td style="width:50%"><div id="topFiveContainer" style="height: 300px; margin-top:10px"></div></td>
+			<td style="width:50%"><div id="lowFiveContainer" style=" height: 300px; margin-top:10px;margin-left:10px"></div></td>
+		</tr>
+		
+	</table>
+	
+	
+<script type="text/javascript">
+ 
+
+  jQuery(function(jQuery) {
+  		//控制点击用户图标 展开操作
+       jQuery("#openUser").click(function(){
+    				if(jQuery("#userLi").hasClass("open")){
+    					jQuery("#userLi").removeClass("open");
+    				}
+    				else{
+    					jQuery("#userLi").addClass("open");
+    				}
+    			});
+  	var options = {
+	            chart: {
+	                type: 'spline',
+	                animation: Highcharts.svg,
+	                marginRight: 130,
+	                marginBottom: 25,
+	                zoomType: 'x',
+	                renderTo: 'container'
+	            },
+	            title: {
+	                text: '温度信息',
+	                x: -20 //center
+	            },
+	            subtitle: {
+	                text: 'Source: From zigbee network',
+	                x: -20
+	            },
+	            xAxis: {
+	                categories: [],
+					type: 'datetime',
+	                tickPixelInterval:150
+	            },
+	            yAxis: {
+	                title: {
+	                    text: 'Temp/C'
+	                }
+	            },
+	            tooltip: {
+	                valueSuffix: ''
+	            },
+	            legend: {
+	                layout: 'vertical',
+	                align: 'right',
+	                verticalAlign: 'top',
+	                x: -10,
+	                y: 100,
+	                borderWidth: 0
+	            },
+	            series: []
+	     }
+  
+    jQuery('#datetimepicker1').datetimepicker({
+      language: 'pt-BR'
+    });
+    jQuery('#datetimepicker2').datetimepicker({
+      language: 'pt-BR'
+    });
+	
+	jQuery("#searchHistory").click(function(){
+		var progressBar = "<div class='progress progress-striped active' id='progressbar'>";
+    		progressBar += "<div class='bar' style='width: 100%;'></div></div>";
+   		jQuery('#container').append(progressBar);
+		
+		jQuery.ajax({
+            type:"POST",
+            url:"$!request.getContextPath()/TempMonitor/historyData",
+            data:{startTime:$("#startTime").val(),endTime:$("#endTime").val(),extAddr:$("#extAddr ").val()},             
+            success:function(data){ 
+				data = JSON.parse(data);
+                draw(data.time,data.tempdata);
+				jQuery("#progressbar").detach();
+				drawTopFive(data.topFiveTime,data.topFiveData);
+				drawLowFive(data.lowFiveTime,data.lowFiveData);
+            },
+            async:true            
+         });
+		return false;
+	});
+	
+	//接下来的代码用于为柱形图计算最小值,max方法用于获取一个数组的最大值,min 方法用于获取一数组的最小值
+	Array.max = function( array ){
+    	return Math.max.apply( Math, array );
+    };
+	Array.min = function( array ){
+    	return Math.min.apply( Math, array );
+	};
+	
+	function drawTopFive(topFiveTime,topFiveData){
+		var sensorIp = $("#extAddr ").find("option:selected").text();
+		var min = Array.min(topFiveData);
+		var max = Array.max(topFiveData);
+		options.chart = {
+			 type: 'column',
+			 animation: Highcharts.svg,
+             renderTo: 'topFiveContainer'
+		};
+		options.title = {
+                text: '最高温度'
+        }
+		options.subtitle = {
+                text: 'Source: From zigbee network'
+	    }
+		options.xAxis.categories = topFiveTime;
+		options.yAxis.min = min - ((max-min) * 0.05) //minPadding 默认值为0.05
+		options.series = [];
+		options.series.push({
+	            	name:sensorIp,
+	            	data:topFiveData
+		});
+		var topFiveChart = new Highcharts.Chart(options);	
+	}
+	
+	function drawLowFive(lowFiveTime,lowFiveData){
+		var sensorIp = $("#extAddr ").find("option:selected").text();
+		var min = Array.min(lowFiveData);
+		var max = Array.max(lowFiveData);
+		options.chart = {
+			 type: 'column',
+			 animation: Highcharts.svg,
+             renderTo: 'lowFiveContainer'
+		};
+		options.title = {
+                text: '最低温度'
+        }
+		options.subtitle = {
+                text: 'Source: From zigbee network'
+	    }
+		options.xAxis.categories = lowFiveTime;
+		options.yAxis.min = min - ((max-min) * 0.05) //minPadding 默认值为0.05;
+		options.series = [];
+		options.series.push({
+	            	name:sensorIp,
+	            	data:lowFiveData
+		});
+		var topFiveChart = new Highcharts.Chart(options);	
+	}
+	
+	var optionsForSpline = {
+	            chart: {
+	                type: 'spline',
+	                animation: Highcharts.svg,
+	                marginRight: 130,
+	                marginBottom: 25,
+	                zoomType: 'x',
+	                renderTo: 'container'
+	            },
+	            title: {
+	                text: '异常温度点',
+	                x: -20 //center
+	            },
+	            subtitle: {
+	                text: 'Source: From zigbee network',
+	                x: -20
+	            },
+	            xAxis: {
+	                categories: [],
+	                tickPixelInterval:150
+	            },
+	            yAxis: {
+	                title: {
+	                    text: 'Temp/C'
+	                },
+	                plotLines: [{
+    	                    value: $maxTemp,
+    	                    width: 2,
+    	                    color: 'red',
+    						dashStyle: 'longdashdot'
+	                	},
+						{
+							value: $minTemp,
+    	                    width: 2,
+    	                    color: 'red',
+    						dashStyle: 'longdashdot'
+						}
+					],
+					
+	            },
+	            tooltip: {
+	                valueSuffix: ''
+	            },
+	            legend: {
+	                layout: 'vertical',
+	                align: 'right',
+	                verticalAlign: 'top',
+	                x: -10,
+	                y: 100,
+	                borderWidth: 0
+	            },
+	            series: [
+	            ]
+	     }
+	
+	function draw(time,tempdata){
+		
+		var sensorIp = $("#extAddr ").find("option:selected").text();
+		optionsForSpline.chart = {
+            type: 'spline',
+            animation: Highcharts.svg,
+            marginRight: 130,
+            marginBottom: 25,
+            zoomType: 'x',
+            renderTo: 'container'
+		}
+		optionsForSpline.title = {
+                text: '温度信息'
+        }
+		optionsForSpline.xAxis.categories = time;
+		optionsForSpline.yAxis.min = null;
+		optionsForSpline.series = [];
+		optionsForSpline.series.push({
+	            	name:sensorIp,
+	            	data:tempdata
+		          	});
+		var tempChart = new Highcharts.Chart(optionsForSpline);		
+	}
+  });
+</script>	
+</body>
+
+</html>
+	
