@@ -96,7 +96,7 @@ public class TempServiceImpl implements ITempService {
 				+ " and (temperature  between ? and ?)";
 		Object [] args = {extAddr,startTime,endTime,minTemp,maxTemp};
 		int [] argTypes = {Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.FLOAT,Types.FLOAT};
-		List<Map<String,Object>> numList = manager.queryForList(sql, args, argTypes);
+		List<Map<String,Object>> numList = manager.queryForListMap(sql, args, argTypes);
 		if(numList!=null && numList.size() == 1){
 			return Integer.parseInt( numList.get(0).get("num").toString());
 		}
@@ -110,7 +110,7 @@ public class TempServiceImpl implements ITempService {
 				+ " and (temperature  > ? )";
 		Object [] args = {extAddr,startTime,endTime,maxTemp};
 		int [] argTypes = {Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.FLOAT};
-		List<Map<String,Object>> numList = manager.queryForList(sql, args, argTypes);
+		List<Map<String,Object>> numList = manager.queryForListMap(sql, args, argTypes);
 		if(numList!=null && numList.size() == 1){
 			return Integer.parseInt( numList.get(0).get("num").toString());
 		}
@@ -124,7 +124,7 @@ public class TempServiceImpl implements ITempService {
 				+ " and (temperature  < ? )";
 		Object [] args = {extAddr,startTime,endTime,minTemp};
 		int [] argTypes = {Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.FLOAT};
-		List<Map<String,Object>> numList = manager.queryForList(sql, args, argTypes);
+		List<Map<String,Object>> numList = manager.queryForListMap(sql, args, argTypes);
 		if(numList!=null && numList.size() == 1){
 			return Integer.parseInt( numList.get(0).get("num").toString());
 		}
